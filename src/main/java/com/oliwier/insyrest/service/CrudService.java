@@ -7,10 +7,7 @@ import java.util.Optional;
 
 public interface CrudService<T, ID> {
     Page<T> findAll(Pageable pageable);
-
     Optional<T> findById(ID id);
-
     T save(T entity);
-
     void deleteById(ID id);
 }
