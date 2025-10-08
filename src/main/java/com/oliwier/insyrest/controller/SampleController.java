@@ -1,4 +1,6 @@
-package com.oliwier.insyrest.sample;
+package com.oliwier.insyrest.controller;
+import com.oliwier.insyrest.entity.Sample;
+import com.oliwier.insyrest.service.SampleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;

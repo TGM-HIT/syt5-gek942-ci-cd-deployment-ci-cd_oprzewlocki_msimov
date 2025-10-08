@@ -1,4 +1,4 @@
-package com.oliwier.insyrest.sample;
+package com.oliwier.insyrest.entity;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
