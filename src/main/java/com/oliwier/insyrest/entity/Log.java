@@ -26,29 +26,32 @@ public class Log implements Serializable {
     @Column(name = "info", length = 255)
     private String info;
 
-    @Column(name = "s_id", length = 13)
-    private String sId;
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "s_id", referencedColumnName = "s_id", insertable = false, updatable = false),
+            @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp", insertable = false, updatable = false)
+    })
+    private Sample sample;
 
-    @Column(name = "s_stamp")
-    private LocalDateTime sStamp;
 
-    @Column(name = "a_id")
-    private Long aId;
+    @ManyToOne
+    @JoinColumn(name = "a_id", referencedColumnName = "a_id", insertable = false, updatable = false)
+    private Analysis analysis;
 
     @Column(name = "date_exported")
     private LocalDateTime dateExported;
 
     public Log() {}
 
-    public Log(Long logId, LocalDateTime dateCreated, String level, String info,
-               String sId, LocalDateTime sStamp, Long aId, LocalDateTime dateExported) {
+    public Log(Long logId, LocalDateTime dateCreated, String level, String info, Sample sample, Analysis analysis,
+               LocalDateTime dateExported) {
         this.logId = logId;
         this.dateCreated = dateCreated;
         this.level = level;
         this.info = info;
-        this.sId = sId;
-        this.sStamp = sStamp;
-        this.aId = aId;
+        this.sample = sample;
+        this.analysis = analysis;
+
         this.dateExported = dateExported;
     }
 
@@ -64,16 +67,24 @@ public class Log implements Serializable {
     public String getInfo() { return info; }
     public void setInfo(String info) { this.info = info; }
 
-    public String getSId() { return sId; }
-    public void setSId(String sId) { this.sId = sId; }
-
-    public LocalDateTime getSStamp() { return sStamp; }
-    public void setSStamp(LocalDateTime sStamp) { this.sStamp = sStamp; }
-
-    public Long getAId() { return aId; }
-    public void setAId(Long aId) { this.aId = aId; }
 
     public LocalDateTime getDateExported() { return dateExported; }
     public void setDateExported(LocalDateTime dateExported) { this.dateExported = dateExported; }
+
+    public Analysis getAnalysis() {
+        return analysis;
+    }
+
+    public void setAnalysis(Analysis analysis) {
+        this.analysis = analysis;
+    }
+
+    public Sample getSample() {
+        return sample;
+    }
+
+    public void setSample(Sample sample) {
+        this.sample = sample;
+    }
 }
 

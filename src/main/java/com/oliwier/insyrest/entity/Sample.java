@@ -1,10 +1,13 @@
 package com.oliwier.insyrest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -70,6 +73,10 @@ public class Sample {
 
     @Column(name = "date_exported")
     private LocalDateTime dateExported;
+
+    @OneToMany(mappedBy = "sample")
+    @JsonIgnore
+    private Set<BoxPos> boxPositions = new HashSet<>();
 
     public String getName() {
         return name;
@@ -157,6 +164,14 @@ public class Sample {
 
     public void setDateExported(LocalDateTime dateExported) {
         this.dateExported = dateExported;
+    }
+
+    public Set<BoxPos> getBoxPositions() {
+        return boxPositions;
+    }
+
+    public void setBoxPositions(Set<BoxPos> boxPositions) {
+        this.boxPositions = boxPositions;
     }
 }
 

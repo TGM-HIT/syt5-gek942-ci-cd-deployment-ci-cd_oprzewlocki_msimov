@@ -10,33 +10,49 @@ public class BoxPos {
     @EmbeddedId
     private BoxPosId id;
 
-    @Column(name = "s_id", length = 13)
-    private String sId;
+    @ManyToOne
+    @MapsId("bId")
+    @JoinColumn(name = "b_id", referencedColumnName = "b_id")
+    private Box box;
 
-    @Column(name = "s_stamp")
-    private LocalDateTime sStamp;
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(name = "s_id", referencedColumnName = "s_id"),
+            @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp")
+    })
+    private Sample sample;
 
     @Column(name = "date_exported")
     private LocalDateTime dateExported;
 
     public BoxPos() {}
 
-    public BoxPos(BoxPosId id, String sId, LocalDateTime sStamp, LocalDateTime dateExported) {
+    public BoxPos(BoxPosId id, Box box, Sample sample, LocalDateTime dateExported) {
         this.id = id;
-        this.sId = sId;
-        this.sStamp = sStamp;
+        this.box = box;
+        this.sample = sample;
         this.dateExported = dateExported;
     }
 
     public BoxPosId getId() { return id; }
     public void setId(BoxPosId id) { this.id = id; }
 
-    public String getSId() { return sId; }
-    public void setSId(String sId) { this.sId = sId; }
-
-    public LocalDateTime getSStamp() { return sStamp; }
-    public void setSStamp(LocalDateTime sStamp) { this.sStamp = sStamp; }
-
     public LocalDateTime getDateExported() { return dateExported; }
     public void setDateExported(LocalDateTime dateExported) { this.dateExported = dateExported; }
+
+    public Box getBox() {
+        return box;
+    }
+
+    public void setBox(Box box) {
+        this.box = box;
+    }
+
+    public Sample getSample() {
+        return sample;
+    }
+
+    public void setSample(Sample sample) {
+        this.sample = sample;
+    }
 }

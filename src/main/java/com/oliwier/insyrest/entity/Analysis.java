@@ -73,7 +73,7 @@ public class Analysis {
 
     public Analysis() {}
 
-    public Analysis(Long aId, String sId, LocalDateTime sStamp, Sample sample, BigDecimal pol, BigDecimal nat, BigDecimal kal,
+    public Analysis(Long aId, Sample sample, BigDecimal pol, BigDecimal nat, BigDecimal kal,
                     BigDecimal an, BigDecimal glu, BigDecimal dry, LocalDateTime dateIn, LocalDateTime dateOut,
                     BigDecimal weightMea, BigDecimal weightNrm, BigDecimal weightCur, BigDecimal weightDif,
                     BigDecimal density, String aFlags, Integer lane, String comment, LocalDateTime dateExported) {
