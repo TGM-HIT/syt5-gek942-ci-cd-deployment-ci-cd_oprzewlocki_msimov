@@ -14,50 +14,45 @@ jobs:
       postgres:
         image: postgres:13-alpine
         env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: venlab
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U ${{ secrets.POSTGRES_USER }}"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-  
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        volumes:
+          - ./db/backups/restore.sql:/docker-entrypoint-initdb.d/restore.sql
 
     steps:
-      # Checkout repo
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # Wait for Postgres to be ready
-      - name: Wait for Postgres
+      - name: Wait for Postgres to be ready
         run: |
           echo "Waiting for Postgres..."
           for i in {1..10}; do
-            pg_isready -h localhost -p 5432 -U $POSTGRES_USER && break
+            pg_isready -h localhost -p 5432 -U postgres && break
             sleep 3
           done
 
-      # Run tests
       - name: Build & Run Tests
         run: mvn -B clean verify
         env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/${{ secrets.POSTGRES_DB }}
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.POSTGRES_USER }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/venlab
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
           SPRING_JPA_HIBERNATE_DDL_AUTO: update
-          SPRING_PROFILES_ACTIVE: test
 
-      # Upload test results
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
