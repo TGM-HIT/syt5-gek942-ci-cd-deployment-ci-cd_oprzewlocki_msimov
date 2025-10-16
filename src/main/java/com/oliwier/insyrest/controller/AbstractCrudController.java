@@ -1,19 +1,26 @@
 package com.oliwier.insyrest.controller;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.service.CrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 public abstract class AbstractCrudController<T, ID> {
 
     private final CrudService<T, ID> service;
 
-    protected AbstractCrudController(CrudService<T, ID> service) {
+    private final ObjectMapper mapper;
+
+
+    protected AbstractCrudController(CrudService<T, ID> service, ObjectMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
@@ -35,10 +42,13 @@ public abstract class AbstractCrudController<T, ID> {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<T> update(@PathVariable ID id, @RequestBody T updated) {
-        return service.findById(id)
-                .map(existing -> ResponseEntity.ok(service.save(updated)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<T> update(@PathVariable ID id, @RequestBody Map<String, Object> updated) throws JsonMappingException {
+        Optional<T> existingOpt = service.findById(id);
+        if (existingOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        T existing = existingOpt.get();
+        mapper.updateValue(existing, updated);
+        return ResponseEntity.ok(service.save(existing));
     }
 
     @DeleteMapping("/{id}")

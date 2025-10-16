@@ -13,7 +13,7 @@ public class Analysis {
     @Column(name = "a_id")
     private Long aId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumns({
             @JoinColumn(name = "s_id", referencedColumnName = "s_id"),
             @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp")

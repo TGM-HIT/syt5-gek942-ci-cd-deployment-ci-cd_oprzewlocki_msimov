@@ -1,4 +1,5 @@
 package com.oliwier.insyrest.controller;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.entity.BoxPos;
 import com.oliwier.insyrest.entity.Sample;
 import com.oliwier.insyrest.entity.SampleId;
@@ -15,8 +16,8 @@ import java.util.Set;
 @RequestMapping("/api/samples")
 public class SampleController extends AbstractCrudController<Sample, SampleId> {
     final SampleService sampleService;
-    protected SampleController(SampleService service) {
-        super(service);
+    protected SampleController(SampleService service, ObjectMapper objectMapper) {
+        super(service, objectMapper);
         sampleService = service;
     }
 
