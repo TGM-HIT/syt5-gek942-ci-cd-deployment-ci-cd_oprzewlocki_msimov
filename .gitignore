@@ -35,8 +35,5 @@ build/
 
 ### MISC ###
 db/*
-!db/backups/
-db/backups/*
-!db/backups/restore.sql
 .env
 application.properties

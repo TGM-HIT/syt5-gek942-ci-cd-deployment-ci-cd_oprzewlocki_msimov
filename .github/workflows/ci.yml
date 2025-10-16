@@ -24,8 +24,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-        volumes:
-          - ./db/backups/restore.sql:/docker-entrypoint-initdb.d/restore.sql
 
     steps:
       - name: Checkout code
@@ -37,7 +35,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Wait for Postgres to be ready
+      - name: Wait for Postgres
         run: |
           echo "Waiting for Postgres..."
           for i in {1..10}; do
@@ -45,13 +43,18 @@ jobs:
             sleep 3
           done
 
+      - name: Create venlab schema
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d venlab -c "CREATE SCHEMA IF NOT EXISTS venlab;"
+
       - name: Build & Run Tests
         run: mvn -B clean verify
         env:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/venlab
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: postgres
-          SPRING_JPA_HIBERNATE_DDL_AUTO: update
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+          SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: venlab
 
       - name: Upload test reports
         if: always()
