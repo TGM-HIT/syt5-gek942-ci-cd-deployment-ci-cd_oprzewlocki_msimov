@@ -3,6 +3,7 @@ package com.oliwier.insyrest.exception;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,6 +39,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
                 "error", "Unexpected error",
                 "details", ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, Object>> handleInvalidJson(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(Map.of(
+                "error", "Invalid JSON format",
+                "details", ex.getMostSpecificCause() != null
+                        ? ex.getMostSpecificCause().getMessage()
+                        : ex.getMessage()
         ));
     }
 }

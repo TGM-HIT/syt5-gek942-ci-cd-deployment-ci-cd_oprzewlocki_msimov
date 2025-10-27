@@ -46,7 +46,6 @@ public class Sample {
     private SampleId id;
 
     @Column(name = "name")
-    @NotBlank(message = "Sample name cannot be blank")
     private String name;
 
     @Column(name = "weight_net", precision = 8, scale = 2)

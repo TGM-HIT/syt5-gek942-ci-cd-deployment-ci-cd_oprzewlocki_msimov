@@ -21,7 +21,6 @@ public class Analysis {
             @JoinColumn(name = "s_id", referencedColumnName = "s_id"),
             @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp")
     })
-    @Valid
     private Sample sample;
 
     @Column(name = "pol", precision = 8, scale = 2)

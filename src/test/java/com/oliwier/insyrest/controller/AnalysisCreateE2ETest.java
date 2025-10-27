@@ -24,13 +24,23 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createWithMissingField_shouldFail() {
-        String json = buildValidJson(uniqueId()).replace("\"name\": \"Valid Sample\",", "");
+    void createAnalysisWithEmptySample_shouldSucceed() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        ResponseEntity<String> res = rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), String.class);
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        String json = """
+            {
+              "sample": {},
+              "pol": 12.5,
+              "nat": 10.2,
+              "comment": "Empty sample allowed test"
+            }
+            """;
+
+        ResponseEntity<Map> res = rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), Map.class);
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsKey("aid");
     }
 
     @Test
@@ -47,7 +57,7 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createWithExtremeWeights_shouldSucceed() {
+    void createAnalysisWithExtremeWeights_shouldSucceed() {
         String json = buildValidJson(uniqueId()).replace("\"weightNet\": 10.0", "\"weightNet\": 999999.9");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,9 +70,11 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
     void createInvalidJson_shouldReturnBadRequest() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+
         HttpEntity<String> req = new HttpEntity<>("{ bad json", headers);
 
         ResponseEntity<String> res = rest.postForEntity(baseUrl(), req, String.class);
+
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }
