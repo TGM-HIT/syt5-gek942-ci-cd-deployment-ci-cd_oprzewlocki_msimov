@@ -3,6 +3,7 @@ package com.oliwier.insyrest.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ public class Sample {
     private SampleId id;
 
     @Column(name = "name")
+    @NotBlank(message = "Sample name cannot be blank")
     private String name;
 
     @Column(name = "weight_net", precision = 8, scale = 2)

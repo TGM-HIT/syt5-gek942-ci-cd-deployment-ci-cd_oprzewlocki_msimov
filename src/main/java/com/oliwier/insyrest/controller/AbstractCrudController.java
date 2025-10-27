@@ -3,6 +3,7 @@ package com.oliwier.insyrest.controller;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.service.CrudService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public abstract class AbstractCrudController<T, ID> {
     }
 
     @PostMapping
-    public T create(@RequestBody T entity) {
+    public T create(@Valid @RequestBody T entity) {
         return service.save(entity);
     }
 
