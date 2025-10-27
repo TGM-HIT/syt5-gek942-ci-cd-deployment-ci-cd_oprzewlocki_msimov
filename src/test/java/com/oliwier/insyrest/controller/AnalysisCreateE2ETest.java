@@ -2,22 +2,20 @@ package com.oliwier.insyrest.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
-
 import java.util.Map;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class AnalysisCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createValidAnalysis_shouldReturn200AndId() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
 
-        String json = buildValidJson(uniqueId());
-        HttpEntity<String> req = new HttpEntity<>(json, headers);
-
-        ResponseEntity<Map> res = rest.postForEntity(baseUrl(), req, Map.class);
+        ResponseEntity<Map> res = rest.postForEntity(
+                baseUrl("/api/analysis"),
+                new HttpEntity<>(json, jsonHeaders()),
+                Map.class
+        );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(res.getBody()).containsKey("aid");
@@ -25,55 +23,70 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createAnalysisWithEmptySample_shouldSucceed() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
 
-        String json = """
-            {
-              "sample": {},
-              "pol": 12.5,
-              "nat": 10.2,
-              "comment": "Empty sample allowed test"
-            }
-            """;
-
-        ResponseEntity<Map> res = rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), Map.class);
+        ResponseEntity<Map> res = rest.postForEntity(
+                baseUrl("/api/analysis"),
+                new HttpEntity<>(json, jsonHeaders()),
+                Map.class
+        );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(res.getBody()).containsKey("aid");
     }
 
     @Test
-    void createWithDuplicateSampleId_shouldReturnConflictOrBadRequest() {
-        String id = uniqueId();
-        String json = buildValidJson(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    void createAnalysisWithExistingSample_shouldSucceed() {
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
 
-        rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), Map.class);
-        ResponseEntity<String> second = rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), String.class);
+        ResponseEntity<Map> sampleRes = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(sampleJson, jsonHeaders()),
+                Map.class
+        );
 
-        assertThat(second.getStatusCode()).isIn(HttpStatus.CONFLICT, HttpStatus.BAD_REQUEST);
+        assertThat(sampleRes.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        String analysisJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+
+        ResponseEntity<Map> res = rest.postForEntity(
+                baseUrl("/api/analysis"),
+                new HttpEntity<>(analysisJson, jsonHeaders()),
+                Map.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsKey("aid");
     }
 
     @Test
     void createAnalysisWithExtremeWeights_shouldSucceed() {
-        String json = buildValidJson(uniqueId()).replace("\"weightNet\": 10.0", "\"weightNet\": 999999.9");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp())
+                .replace("\"weightMea\": 1.0", "\"weightMea\": 999999.99")
+                .replace("\"weightNrm\": 1.0", "\"weightNrm\": 999999.99")
+                .replace("\"weightCur\": 1.0", "\"weightCur\": 999999.99");
 
-        ResponseEntity<Map> res = rest.postForEntity(baseUrl(), new HttpEntity<>(json, headers), Map.class);
+        ResponseEntity<Map> res = rest.postForEntity(
+                baseUrl("/api/analysis"),
+                new HttpEntity<>(json, jsonHeaders()),
+                Map.class
+        );
+
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(res.getBody()).containsKey("aid");
     }
 
     @Test
     void createInvalidJson_shouldReturnBadRequest() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        String invalid = "{ bad json";
 
-        HttpEntity<String> req = new HttpEntity<>("{ bad json", headers);
-
-        ResponseEntity<String> res = rest.postForEntity(baseUrl(), req, String.class);
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/analysis"),
+                new HttpEntity<>(invalid, jsonHeaders()),
+                String.class
+        );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }

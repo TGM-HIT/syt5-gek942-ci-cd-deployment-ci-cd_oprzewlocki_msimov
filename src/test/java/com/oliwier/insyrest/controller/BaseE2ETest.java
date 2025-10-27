@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -17,8 +18,6 @@ public abstract class BaseE2ETest {
     @Autowired
     protected TestRestTemplate rest;
 
-    protected String baseUrl;
-
     protected String uniqueId() {
         return UUID.randomUUID().toString().substring(0, 13);
     }
@@ -27,47 +26,17 @@ public abstract class BaseE2ETest {
         return LocalDateTime.now().toString();
     }
 
-    protected String buildValidJson(String sampleId) {
-        String now = timestamp();
-        return """
-        {
-          "sample": {
-              "s_id": "%s",
-              "s_stamp": "%s",
-              "name": "Valid Sample",
-              "weightNet": 10.0,
-              "weightBru": 12.0,
-              "weightTar": 2.0,
-              "quantity": 1,
-              "distance": 0.0,
-              "dateCrumbled": "%s",
-              "sFlags": "-----",
-              "lane": 0,
-              "comment": "inserted by E2E",
-              "dateExported": "%s"
-          },
-          "pol": 1.0,
-          "nat": 1.0,
-          "kal": 1.0,
-          "an": 1.0,
-          "glu": 1.0,
-          "dry": 1.0,
-          "dateIn": "%s",
-          "dateOut": "%s",
-          "weightMea": 1.00,
-          "weightNrm": 1.00,
-          "weightCur": 1.00,
-          "weightDif": 0.00,
-          "density": 1.00,
-          "lane": 1,
-          "comment": "E2E creation test",
-          "aFlags": "-",
-          "dateExported": "%s"
-        }
-        """.formatted(sampleId, now, now, now, now, now, now);
+    protected HttpHeaders jsonHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 
-    protected String baseUrl() {
-        return "http://localhost:" + port + "/api/analysis";
+    protected String baseUrl(String path) {
+        return "http://localhost:" + port + path;
+    }
+
+    protected <T> ResponseEntity<T> postJson(String url, String json, Class<T> responseType) {
+        return rest.postForEntity(url, new HttpEntity<>(json, jsonHeaders()), responseType);
     }
 }

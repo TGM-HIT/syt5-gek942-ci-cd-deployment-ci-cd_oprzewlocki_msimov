@@ -16,7 +16,7 @@ public class Analysis {
     @Column(name = "a_id")
     private Long aId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne()
     @JoinColumns({
             @JoinColumn(name = "s_id", referencedColumnName = "s_id"),
             @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp")
