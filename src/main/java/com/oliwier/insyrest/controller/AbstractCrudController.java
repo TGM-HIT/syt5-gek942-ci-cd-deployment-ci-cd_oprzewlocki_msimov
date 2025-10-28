@@ -52,6 +52,17 @@ public abstract class AbstractCrudController<T, ID> {
         return ResponseEntity.ok(service.save(existing));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<T> patch(@PathVariable ID id, @RequestBody Map<String, Object> updates) throws JsonMappingException {
+        Optional<T> existingOpt = service.findById(id);
+        if (existingOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        T existing = existingOpt.get();
+        mapper.updateValue(existing, updates);
+        return ResponseEntity.ok(service.save(existing));
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable ID id) {
         if (service.findById(id).isPresent()) {
