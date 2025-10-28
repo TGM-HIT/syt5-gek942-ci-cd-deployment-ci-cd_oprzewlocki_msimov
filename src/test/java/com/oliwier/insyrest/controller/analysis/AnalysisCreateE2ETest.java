@@ -1,5 +1,7 @@
-package com.oliwier.insyrest.controller;
+package com.oliwier.insyrest.controller.analysis;
 
+import com.oliwier.insyrest.controller.BaseE2ETest;
+import com.oliwier.insyrest.controller.SampleE2EUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;

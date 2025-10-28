@@ -1,4 +1,4 @@
-package com.oliwier.insyrest.controller;
+package com.oliwier.insyrest.controller.analysis;
 
 public class AnalysisE2EUtils {
 
