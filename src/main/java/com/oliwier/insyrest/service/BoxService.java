@@ -60,4 +60,15 @@ public class BoxService extends AbstractCrudService<Box, String>{
             }
         }
     }
+
+    @Transactional(readOnly = true)
+    public boolean hasBoxPos(String bId) {
+        return !boxPosRepository.findAllByBoxId(bId).isEmpty();
+    }
+
+    @Transactional
+    public void cascadeDeleteBox(String bId) {
+        boxPosRepository.deleteAllByBoxId(bId);
+        boxRepository.deleteById(bId);
+    }
 }
