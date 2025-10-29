@@ -1,8 +1,10 @@
 package com.oliwier.insyrest.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface CrudService<T, ID> {
@@ -10,4 +12,5 @@ public interface CrudService<T, ID> {
     Optional<T> findById(ID id);
     T save(T entity);
     void deleteById(ID id);
+    public Page<T> findAllWithFilters(PageRequest pageable, Map<String, String> filter, Map<String, String> sort);
 }

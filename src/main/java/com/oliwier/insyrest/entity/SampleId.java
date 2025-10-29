@@ -21,7 +21,7 @@ public class SampleId implements Serializable {
 
     public SampleId(String sId, LocalDateTime sStamp) {
         this.sId = sId;
-        this.sStamp = sStamp;
+        this.sStamp = sStamp.withNano(0);
     }
 
     public SampleId() {

@@ -6,9 +6,12 @@ import com.oliwier.insyrest.service.CrudService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,10 +27,34 @@ public abstract class AbstractCrudController<T, ID> {
         this.mapper = mapper;
     }
 
+
     @GetMapping
-    public Page<T> getAll(@RequestParam(defaultValue = "0") int page,
-                          @RequestParam(defaultValue = "50") int size) {
-        return service.findAll(PageRequest.of(page, size));
+    public Page<T> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam MultiValueMap<String, String> params
+    ) {
+        Map<String, String> filter = extractSubMap(params, "filter");
+        Map<String, String> sort   = extractSubMap(params, "sort");
+
+        System.out.println("FILTER = " + filter);
+        System.out.println("SORT = " + sort);
+
+        return service.findAllWithFilters(PageRequest.of(page, size), filter, sort);
+    }
+
+    private Map<String, String> extractSubMap(MultiValueMap<String, String> params, String prefix) {
+        Map<String, String> result = new HashMap<>();
+        String start = prefix + "[";
+        int startLen = start.length();
+
+        for (String key : params.keySet()) {
+            if (key.startsWith(start) && key.endsWith("]")) {
+                String subKey = key.substring(startLen, key.length() - 1); // e.g. filter[name] → "name"
+                result.put(subKey, params.getFirst(key));
+            }
+        }
+        return result;
     }
 
     @GetMapping("/{id}")
@@ -64,11 +91,24 @@ public abstract class AbstractCrudController<T, ID> {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable ID id) {
-        if (service.findById(id).isPresent()) {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> delete(@PathVariable ID id) {
+        return service.findById(id)
+                .<ResponseEntity<?>>map(e -> {
+                    try {
+                        service.deleteById(id);
+                        return ResponseEntity.noContent().build();
+                    } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+                        ex.getMostSpecificCause();
+                        String msg = ex.getMostSpecificCause().getMessage();
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body(Map.of(
+                                        "code", "FK_CONSTRAINT",
+                                        "message", "Entity is still referenced",
+                                        "detail", msg
+                                ));
+                    }
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
+
 }

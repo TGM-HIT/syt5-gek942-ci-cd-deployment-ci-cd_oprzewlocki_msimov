@@ -23,7 +23,7 @@ public abstract class BaseE2ETest {
     }
 
     protected String timestamp() {
-        return LocalDateTime.now().toString();
+        return LocalDateTime.now().withNano(0).toString();
     }
 
     protected HttpHeaders jsonHeaders() {
