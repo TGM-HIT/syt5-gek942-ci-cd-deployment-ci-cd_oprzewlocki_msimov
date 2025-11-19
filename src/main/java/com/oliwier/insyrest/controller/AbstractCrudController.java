@@ -43,7 +43,7 @@ public abstract class AbstractCrudController<T, ID> {
         return service.findAllWithFilters(PageRequest.of(page, size), filter, sort);
     }
 
-    private Map<String, String> extractSubMap(MultiValueMap<String, String> params, String prefix) {
+    Map<String, String> extractSubMap(MultiValueMap<String, String> params, String prefix) {
         Map<String, String> result = new HashMap<>();
         String start = prefix + "[";
         int startLen = start.length();

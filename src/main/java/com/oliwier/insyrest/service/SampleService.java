@@ -1,5 +1,6 @@
 package com.oliwier.insyrest.service;
 
+import com.oliwier.insyrest.dto.SampleDTO;
 import com.oliwier.insyrest.entity.Sample;
 import com.oliwier.insyrest.entity.SampleId;
 import com.oliwier.insyrest.repository.SampleRepository;

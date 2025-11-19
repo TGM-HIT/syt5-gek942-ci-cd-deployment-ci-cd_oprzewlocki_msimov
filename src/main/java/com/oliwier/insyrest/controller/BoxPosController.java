@@ -12,7 +12,6 @@ import com.oliwier.insyrest.service.CrudService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/boxpos")
@@ -35,7 +34,6 @@ public class BoxPosController extends AbstractCrudController<BoxPos, BoxPosId> {
         this.sampleRepository = sampleRepository;
     }
 
-    // --------- FLAT CREATE (kein override, eigener Pfad) ----------
     @PostMapping("/flat")
     @Transactional
     public BoxPos createFlat(@RequestBody BoxPosDto dto) {
@@ -51,7 +49,6 @@ public class BoxPosController extends AbstractCrudController<BoxPos, BoxPosId> {
         return boxPosRepository.save(pos);
     }
 
-    // --------- FLAT UPDATE ----------
     @PutMapping("/flat/{bposId},{bId}")
     @Transactional
     public BoxPos updateFlat(@PathVariable Integer bposId,
