@@ -1,5 +1,7 @@
 # INSY REST API (Spring Boot + PostgreSQL)
 
+![coverage](https://img.shields.io/badge/Coverage-0%25-lightgrey)
+
 REST-Backend für das VENLAB-System.
 CRUD für `Sample`, `Analysis`, `BoxPos` inklusive **Composite IDs**.  
 Swagger UI verfügbar. CI Pipeline auf GitHub Actions vorhanden.
