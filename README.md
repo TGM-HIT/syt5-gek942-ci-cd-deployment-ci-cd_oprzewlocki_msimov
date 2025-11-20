@@ -1,6 +1,7 @@
 # INSY REST API (Spring Boot + PostgreSQL)
 
-![Coverage](https://github.com/TGM-HIT/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/raw/gh-pages/badges/jacoco.svg?raw=true)
+[![coverage](https://raw.githubusercontent.com/TGM-HIT/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/gh-pages/badges/jacoco.svg?raw=true)](https://tgm-hit.github.io/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/)
+![CI](https://github.com/TGM-HIT/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/actions/workflows/ci.yml/badge.svg)
 
 REST-Backend für das VENLAB-System.
 CRUD für `Sample`, `Analysis`, `BoxPos` inklusive **Composite IDs**.  
