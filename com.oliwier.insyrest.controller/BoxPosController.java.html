@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoxPosController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.controller</a> &gt; <span class="el_source">BoxPosController.java</span></div><h1>BoxPosController.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oliwier.insyrest.dto.BoxPosDto;
+import com.oliwier.insyrest.entity.BoxPos;
+import com.oliwier.insyrest.entity.BoxPosId;
+import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.repository.BoxPosRepository;
+import com.oliwier.insyrest.repository.BoxRepository;
+import com.oliwier.insyrest.repository.SampleRepository;
+import com.oliwier.insyrest.service.CrudService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequestMapping(&quot;/api/boxpos&quot;)
+public class BoxPosController extends AbstractCrudController&lt;BoxPos, BoxPosId&gt; {
+
+    private final BoxPosRepository boxPosRepository;
+    private final BoxRepository boxRepository;
+    private final SampleRepository sampleRepository;
+
+    public BoxPosController(
+            CrudService&lt;BoxPos, BoxPosId&gt; service,
+            ObjectMapper mapper,
+            BoxPosRepository boxPosRepository,
+            BoxRepository boxRepository,
+            SampleRepository sampleRepository
+    ) {
+<span class="fc" id="L31">        super(service, mapper); // &lt;- behält GET (paging/filter) &amp; DELETE</span>
+<span class="fc" id="L32">        this.boxPosRepository = boxPosRepository;</span>
+<span class="fc" id="L33">        this.boxRepository = boxRepository;</span>
+<span class="fc" id="L34">        this.sampleRepository = sampleRepository;</span>
+<span class="fc" id="L35">    }</span>
+
+    @PostMapping(&quot;/flat&quot;)
+    @Transactional
+    public BoxPos createFlat(@RequestBody BoxPosDto dto) {
+<span class="nc" id="L40">        var id  = new BoxPosId(dto.bposId(), dto.bId());</span>
+<span class="nc" id="L41">        var box = boxRepository.findById(dto.bId())</span>
+<span class="nc" id="L42">                .orElseThrow(() -&gt; new RuntimeException(&quot;Box not found: &quot; + dto.bId()));</span>
+<span class="nc" id="L43">        var sampleId = new SampleId(dto.sId(), java.time.LocalDateTime.parse(dto.sStamp()));</span>
+<span class="nc" id="L44">        var sample = sampleRepository.findById(sampleId)</span>
+<span class="nc" id="L45">                .orElseThrow(() -&gt; new RuntimeException(&quot;Sample not found: &quot; + dto.sId() + &quot;,&quot; + dto.sStamp()));</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        var date = dto.dateExported() != null ? java.time.LocalDateTime.parse(dto.dateExported()) : null;</span>
+
+<span class="nc" id="L48">        var pos = new BoxPos(id, box, sample, date);</span>
+<span class="nc" id="L49">        return boxPosRepository.save(pos);</span>
+    }
+
+    @PutMapping(&quot;/flat/{bposId},{bId}&quot;)
+    @Transactional
+    public BoxPos updateFlat(@PathVariable Integer bposId,
+                             @PathVariable String bId,
+                             @RequestBody BoxPosDto dto) {
+<span class="nc" id="L57">        var id = new BoxPosId(bposId, bId);</span>
+<span class="nc" id="L58">        var pos = boxPosRepository.findById(id)</span>
+<span class="nc" id="L59">                .orElseThrow(() -&gt; new RuntimeException(&quot;BoxPos not found: &quot; + bposId + &quot;,&quot; + bId));</span>
+
+<span class="nc" id="L61">        var box = boxRepository.findById(bId)</span>
+<span class="nc" id="L62">                .orElseThrow(() -&gt; new RuntimeException(&quot;Box not found: &quot; + bId));</span>
+<span class="nc" id="L63">        var sampleId = new SampleId(dto.sId(), java.time.LocalDateTime.parse(dto.sStamp()));</span>
+<span class="nc" id="L64">        var sample = sampleRepository.findById(sampleId)</span>
+<span class="nc" id="L65">                .orElseThrow(() -&gt; new RuntimeException(&quot;Sample not found: &quot; + dto.sId() + &quot;,&quot; + dto.sStamp()));</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        var date = dto.dateExported() != null ? java.time.LocalDateTime.parse(dto.dateExported()) : null;</span>
+
+<span class="nc" id="L68">        pos.setBox(box);</span>
+<span class="nc" id="L69">        pos.setSample(sample);</span>
+<span class="nc" id="L70">        pos.setDateExported(date);</span>
+<span class="nc" id="L71">        return boxPosRepository.save(pos);</span>
+    }
+
+    // DELETE bleibt vom AbstractCrudController (@DeleteMapping(&quot;/{id}&quot;))
+    // GET (paging/filter/sort) bleibt auch vom AbstractCrudController
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

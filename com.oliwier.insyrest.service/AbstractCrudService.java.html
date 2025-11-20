@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCrudService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.service</a> &gt; <span class="el_source">AbstractCrudService.java</span></div><h1>AbstractCrudService.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.service;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+
+public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt;T, ID&gt; {
+
+    private final JpaRepository&lt;T, ID&gt; repository;
+    protected final JpaSpecificationExecutor&lt;T&gt; specRepository;
+
+<span class="fc" id="L27">    protected AbstractCrudService(JpaRepository&lt;T, ID&gt; repository, JpaSpecificationExecutor&lt;T&gt; specRepository) {</span>
+<span class="fc" id="L28">        this.repository = repository;</span>
+<span class="fc" id="L29">        this.specRepository = specRepository;</span>
+<span class="fc" id="L30">    }</span>
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page&lt;T&gt; findAll(Pageable pageable) {
+<span class="nc" id="L35">        return repository.findAll(pageable);</span>
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional&lt;T&gt; findById(ID id) {
+<span class="fc" id="L41">        return repository.findById(id);</span>
+    }
+
+    @Override
+    @Transactional
+    public T save(T entity) {
+<span class="fc" id="L47">        return repository.save(entity);</span>
+    }
+
+    @Override
+    @Transactional
+    public void deleteById(ID id) {
+<span class="fc" id="L53">        repository.deleteById(id);</span>
+<span class="fc" id="L54">    }</span>
+
+
+    @Override
+    @Transactional
+    public Page&lt;T&gt; findAllWithFilters(PageRequest pageable,
+                                      Map&lt;String, String&gt; filter,
+                                      Map&lt;String, String&gt; sort) {
+
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        filter = (filter == null) ? Collections.emptyMap() : filter;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        sort = (sort == null) ? Collections.emptyMap() : sort;</span>
+
+<span class="fc" id="L66">        Specification&lt;T&gt; spec = Specification.where(null);</span>
+
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        for (Map.Entry&lt;String, String&gt; entry : filter.entrySet()) {</span>
+<span class="nc" id="L69">            final String field = mapFieldName(entry.getKey());</span>
+<span class="nc" id="L70">            final String value = entry.getValue();</span>
+
+<span class="nc bnc" id="L72" title="All 8 branches missed.">            if (field == null || field.isBlank() || value == null || value.isBlank()) continue;</span>
+
+<span class="nc" id="L74">            Specification&lt;T&gt; fieldSpec = (root, query, cb) -&gt; {</span>
+                try {
+<span class="nc" id="L76">                    Path&lt;?&gt; p = root;</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                    for (String segment : field.split(&quot;\\.&quot;)) p = p.get(segment);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                    if (p == null) return null;</span>
+
+<span class="nc" id="L80">                    Class&lt;?&gt; type = p.getJavaType();</span>
+<span class="nc" id="L81">                    String raw = value.trim();</span>
+
+                    // Handle OR and AND filters
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                    if (raw.contains(&quot;|&quot;)) {</span>
+<span class="nc" id="L85">                        Path&lt;?&gt; finalP = p;</span>
+<span class="nc" id="L86">                        List&lt;Predicate&gt; ors = Arrays.stream(raw.split(&quot;\\|&quot;))</span>
+<span class="nc" id="L87">                                .map(v -&gt; buildPredicate(cb, finalP, type, v.trim()))</span>
+<span class="nc" id="L88">                                .filter(Objects::nonNull)</span>
+<span class="nc" id="L89">                                .toList();</span>
+<span class="nc" id="L90">                        return cb.or(ors.toArray(new Predicate[0]));</span>
+                    }
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (raw.contains(&quot;&amp;&quot;)) {</span>
+<span class="nc" id="L93">                        Path&lt;?&gt; finalP1 = p;</span>
+<span class="nc" id="L94">                        List&lt;Predicate&gt; ands = Arrays.stream(raw.split(&quot;&amp;&quot;))</span>
+<span class="nc" id="L95">                                .map(v -&gt; buildPredicate(cb, finalP1, type, v.trim()))</span>
+<span class="nc" id="L96">                                .filter(Objects::nonNull)</span>
+<span class="nc" id="L97">                                .toList();</span>
+<span class="nc" id="L98">                        return cb.and(ands.toArray(new Predicate[0]));</span>
+                    }
+
+<span class="nc" id="L101">                    return buildPredicate(cb, p, type, raw);</span>
+
+<span class="nc" id="L103">                } catch (Exception e) {</span>
+<span class="nc" id="L104">                    System.err.println(&quot;Filter skipped for field '&quot; + field + &quot;': &quot; + e.getMessage());</span>
+<span class="nc" id="L105">                    return null;</span>
+                }
+            };
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            spec = (spec == null) ? fieldSpec : spec.and(fieldSpec);</span>
+<span class="nc" id="L110">        }</span>
+
+        // ===== SORT =====
+<span class="fc" id="L113">        Pageable sortedPageable = pageable;</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (!sort.isEmpty()) {</span>
+            try {
+<span class="nc" id="L116">                List&lt;Sort.Order&gt; orders = sort.entrySet().stream()</span>
+<span class="nc bnc" id="L117" title="All 4 branches missed.">                        .filter(e -&gt; e.getKey() != null &amp;&amp; !e.getKey().isBlank())</span>
+<span class="nc" id="L118">                        .map(e -&gt; new Sort.Order(</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                                &quot;desc&quot;.equalsIgnoreCase(e.getValue()) ? Sort.Direction.DESC : Sort.Direction.ASC,</span>
+<span class="nc" id="L120">                                mapFieldName(e.getKey())</span>
+                        ))
+<span class="nc" id="L122">                        .toList();</span>
+
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                if (!orders.isEmpty()) {</span>
+<span class="nc" id="L125">                    sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));</span>
+                }
+<span class="nc" id="L127">            } catch (Exception e) {</span>
+<span class="nc" id="L128">                System.err.println(&quot;Sorting skipped: &quot; + e.getMessage());</span>
+<span class="nc" id="L129">            }</span>
+        }
+
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        Specification&lt;T&gt; finalSpec = (spec != null) ? spec : (root, query, cb) -&gt; cb.conjunction();</span>
+<span class="fc" id="L133">        return specRepository.findAll(finalSpec, sortedPageable);</span>
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    private static Predicate buildPredicate(CriteriaBuilder cb, Path&lt;?&gt; p, Class&lt;?&gt; type, String raw) {
+        try {
+            // Detect operator
+<span class="nc" id="L140">            String[] ops = {&quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;!=&quot;, &quot;&gt;&quot;, &quot;&lt;&quot;, &quot;~&quot;, &quot;=&quot;};</span>
+<span class="nc" id="L141">            String op = &quot;=&quot;;</span>
+<span class="nc" id="L142">            String value = raw;</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            for (String o : ops) {</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">                if (raw.contains(o)) {</span>
+<span class="nc" id="L145">                    op = o;</span>
+<span class="nc" id="L146">                    value = raw.substring(raw.indexOf(o) + o.length()).trim();</span>
+<span class="nc" id="L147">                    break;</span>
+                }
+            }
+
+            // ===== NULL checks =====
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (&quot;null&quot;.equalsIgnoreCase(value))  return cb.isNull(p);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (&quot;!null&quot;.equalsIgnoreCase(value)) return cb.isNotNull(p);</span>
+
+            // ===== STRING =====
+<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (String.class.equals(type)) {</span>
+<span class="nc" id="L157">                Expression&lt;String&gt; expr = p.as(String.class);</span>
+<span class="nc" id="L158">                String valLower = value.toLowerCase();</span>
+<span class="nc bnc" id="L159" title="All 3 branches missed.">                return switch (op) {</span>
+<span class="nc" id="L160">                    case &quot;~&quot;  -&gt; cb.like(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
+<span class="nc" id="L161">                    case &quot;!=&quot; -&gt; cb.notLike(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
+<span class="nc" id="L162">                    default   -&gt; cb.like(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
+                };
+            }
+
+            // ===== NUMBER =====
+<span class="nc bnc" id="L167" title="All 2 branches missed.">            if (Number.class.isAssignableFrom(type)) {</span>
+<span class="nc" id="L168">                Expression&lt;BigDecimal&gt; expr = p.as(BigDecimal.class);</span>
+
+                // Range syntax: 10..20
+<span class="nc bnc" id="L171" title="All 2 branches missed.">                if (value.contains(&quot;..&quot;)) {</span>
+<span class="nc" id="L172">                    String[] parts = value.split(&quot;\\.\\.&quot;);</span>
+<span class="nc" id="L173">                    var start = new BigDecimal(parts[0]);</span>
+<span class="nc" id="L174">                    var end = new BigDecimal(parts[1]);</span>
+<span class="nc" id="L175">                    return cb.and(</span>
+<span class="nc" id="L176">                            cb.greaterThanOrEqualTo(expr, start),</span>
+<span class="nc" id="L177">                            cb.lessThanOrEqualTo(expr, end)</span>
+                    );
+                }
+
+<span class="nc" id="L181">                BigDecimal num = new BigDecimal(value);</span>
+<span class="nc bnc" id="L182" title="All 6 branches missed.">                return switch (op) {</span>
+<span class="nc" id="L183">                    case &quot;&gt;&quot;  -&gt; cb.greaterThan(expr, num);</span>
+<span class="nc" id="L184">                    case &quot;&lt;&quot;  -&gt; cb.lessThan(expr, num);</span>
+<span class="nc" id="L185">                    case &quot;&gt;=&quot; -&gt; cb.greaterThanOrEqualTo(expr, num);</span>
+<span class="nc" id="L186">                    case &quot;&lt;=&quot; -&gt; cb.lessThanOrEqualTo(expr, num);</span>
+<span class="nc" id="L187">                    case &quot;!=&quot; -&gt; cb.notEqual(expr, num);</span>
+<span class="nc" id="L188">                    default   -&gt; cb.equal(expr, num);</span>
+                };
+            }
+
+            // ===== DATES =====
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (java.time.temporal.Temporal.class.isAssignableFrom(type)) {</span>
+<span class="nc" id="L194">                Expression&lt;?&gt; expr = p.as(type);</span>
+
+                // Range with ..
+<span class="nc bnc" id="L197" title="All 2 branches missed.">                if (value.contains(&quot;..&quot;)) {</span>
+<span class="nc" id="L198">                    String[] parts = value.split(&quot;\\.\\.&quot;);</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                    if (type.equals(LocalDateTime.class)) {</span>
+<span class="nc" id="L200">                        var start = LocalDateTime.parse(parts[0]);</span>
+<span class="nc" id="L201">                        var end = LocalDateTime.parse(parts[1]);</span>
+<span class="nc" id="L202">                        return cb.between((Expression&lt;LocalDateTime&gt;) expr, start, end);</span>
+                    } else {
+<span class="nc" id="L204">                        var start = LocalDate.parse(parts[0]);</span>
+<span class="nc" id="L205">                        var end = LocalDate.parse(parts[1]);</span>
+<span class="nc" id="L206">                        return cb.between((Expression&lt;LocalDate&gt;) expr, start, end);</span>
+                    }
+                }
+
+                // Try full parse
+                try {
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                    if (type.equals(LocalDateTime.class)) {</span>
+<span class="nc" id="L213">                        var dt = LocalDateTime.parse(value);</span>
+<span class="nc bnc" id="L214" title="All 6 branches missed.">                        return switch (op) {</span>
+<span class="nc" id="L215">                            case &quot;&gt;&quot;  -&gt; cb.greaterThan((Expression&lt;LocalDateTime&gt;) expr, dt);</span>
+<span class="nc" id="L216">                            case &quot;&lt;&quot;  -&gt; cb.lessThan((Expression&lt;LocalDateTime&gt;) expr, dt);</span>
+<span class="nc" id="L217">                            case &quot;&gt;=&quot; -&gt; cb.greaterThanOrEqualTo((Expression&lt;LocalDateTime&gt;) expr, dt);</span>
+<span class="nc" id="L218">                            case &quot;&lt;=&quot; -&gt; cb.lessThanOrEqualTo((Expression&lt;LocalDateTime&gt;) expr, dt);</span>
+<span class="nc" id="L219">                            case &quot;!=&quot; -&gt; cb.notEqual(expr, dt);</span>
+<span class="nc" id="L220">                            default   -&gt; cb.equal(expr, dt);</span>
+                        };
+                    } else {
+<span class="nc" id="L223">                        var d = LocalDate.parse(value);</span>
+<span class="nc bnc" id="L224" title="All 6 branches missed.">                        return switch (op) {</span>
+<span class="nc" id="L225">                            case &quot;&gt;&quot;  -&gt; cb.greaterThan((Expression&lt;LocalDate&gt;) expr, d);</span>
+<span class="nc" id="L226">                            case &quot;&lt;&quot;  -&gt; cb.lessThan((Expression&lt;LocalDate&gt;) expr, d);</span>
+<span class="nc" id="L227">                            case &quot;&gt;=&quot; -&gt; cb.greaterThanOrEqualTo((Expression&lt;LocalDate&gt;) expr, d);</span>
+<span class="nc" id="L228">                            case &quot;&lt;=&quot; -&gt; cb.lessThanOrEqualTo((Expression&lt;LocalDate&gt;) expr, d);</span>
+<span class="nc" id="L229">                            case &quot;!=&quot; -&gt; cb.notEqual(expr, d);</span>
+<span class="nc" id="L230">                            default   -&gt; cb.equal(expr, d);</span>
+                        };
+                    }
+<span class="nc" id="L233">                } catch (DateTimeParseException ignored) {</span>
+                    // Partial date (year/month)
+<span class="nc bnc" id="L235" title="All 2 branches missed.">                    if (type.equals(LocalDateTime.class)) {</span>
+<span class="nc" id="L236">                        Expression&lt;String&gt; dateStr = cb.function(&quot;TO_CHAR&quot;, String.class, p,</span>
+<span class="nc" id="L237">                                cb.literal(&quot;YYYY-MM-DD\&quot;T\&quot;HH24:MI:SS&quot;));</span>
+<span class="nc" id="L238">                        return cb.like(dateStr, value + &quot;%&quot;);</span>
+                    } else {
+<span class="nc" id="L240">                        Expression&lt;String&gt; dateStr = cb.function(&quot;TO_CHAR&quot;, String.class, p,</span>
+<span class="nc" id="L241">                                cb.literal(&quot;YYYY-MM-DD&quot;));</span>
+<span class="nc" id="L242">                        return cb.like(dateStr, value + &quot;%&quot;);</span>
+                    }
+                }
+            }
+
+            // ===== BOOLEAN =====
+<span class="nc bnc" id="L248" title="All 4 branches missed.">            if (Boolean.class.equals(type) || boolean.class.equals(type)) {</span>
+<span class="nc" id="L249">                Boolean b = Boolean.parseBoolean(value);</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">                return switch (op) {</span>
+<span class="nc" id="L251">                    case &quot;!=&quot; -&gt; cb.notEqual(p, b);</span>
+<span class="nc" id="L252">                    default   -&gt; cb.equal(p, b);</span>
+                };
+            }
+
+            // ===== FALLBACK =====
+<span class="nc" id="L257">            return cb.equal(p, value);</span>
+
+<span class="nc" id="L259">        } catch (Exception e) {</span>
+<span class="nc" id="L260">            System.err.println(&quot;Predicate failed: &quot; + e.getMessage());</span>
+<span class="nc" id="L261">            return null;</span>
+        }
+    }
+
+
+
+    private String mapFieldName(String field) {
+<span class="nc bnc" id="L268" title="All 3 branches missed.">        return switch (field) {</span>
+<span class="nc" id="L269">            case &quot;s_stamp&quot; -&gt; &quot;id.sStamp&quot;;</span>
+<span class="nc" id="L270">            case &quot;s_id&quot; -&gt; &quot;id.sId&quot;;</span>
+<span class="nc" id="L271">            default -&gt; field;</span>
+        };
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

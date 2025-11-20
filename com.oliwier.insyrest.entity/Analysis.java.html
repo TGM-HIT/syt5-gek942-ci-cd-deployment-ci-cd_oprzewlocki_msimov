@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Analysis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.entity</a> &gt; <span class="el_source">Analysis.java</span></div><h1>Analysis.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.entity;
+
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = &quot;analysis&quot;, schema = &quot;venlab&quot;)
+public class Analysis {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = &quot;a_id&quot;)
+    private Long aId;
+
+    @ManyToOne()
+    @JoinColumns({
+            @JoinColumn(name = &quot;s_id&quot;, referencedColumnName = &quot;s_id&quot;),
+            @JoinColumn(name = &quot;s_stamp&quot;, referencedColumnName = &quot;s_stamp&quot;)
+    })
+    private Sample sample;
+
+    @Column(name = &quot;pol&quot;, precision = 8, scale = 2)
+    private BigDecimal pol;
+
+    @Column(name = &quot;nat&quot;, precision = 8, scale = 2)
+    private BigDecimal nat;
+
+    @Column(name = &quot;kal&quot;, precision = 8, scale = 2)
+    private BigDecimal kal;
+
+    @Column(name = &quot;an&quot;, precision = 8, scale = 2)
+    private BigDecimal an;
+
+    @Column(name = &quot;glu&quot;, precision = 8, scale = 2)
+    private BigDecimal glu;
+
+    @Column(name = &quot;dry&quot;, precision = 8, scale = 2)
+    private BigDecimal dry;
+
+    @Column(name = &quot;date_in&quot;)
+    private LocalDateTime dateIn;
+
+    @Column(name = &quot;date_out&quot;)
+    private LocalDateTime dateOut;
+
+    @Column(name = &quot;weight_mea&quot;, precision = 8, scale = 2)
+    private BigDecimal weightMea;
+
+    @Column(name = &quot;weight_nrm&quot;, precision = 8, scale = 2)
+    private BigDecimal weightNrm;
+
+    @Column(name = &quot;weight_cur&quot;, precision = 8, scale = 2)
+    private BigDecimal weightCur;
+
+    @Column(name = &quot;weight_dif&quot;, precision = 8, scale = 2)
+    private BigDecimal weightDif;
+
+    @Column(name = &quot;density&quot;, precision = 8, scale = 2)
+    private BigDecimal density;
+
+    @Column(name = &quot;a_flags&quot;, length = 15)
+    private String aFlags;
+
+    @Column(name = &quot;lane&quot;)
+    private Integer lane;
+
+    @Column(name = &quot;comment&quot;, length = 255)
+    private String comment;
+
+    @Column(name = &quot;date_exported&quot;)
+    private LocalDateTime dateExported;
+
+<span class="fc" id="L77">    public Analysis() {}</span>
+
+    public Analysis(Long aId, Sample sample, BigDecimal pol, BigDecimal nat, BigDecimal kal,
+                    BigDecimal an, BigDecimal glu, BigDecimal dry, LocalDateTime dateIn, LocalDateTime dateOut,
+                    BigDecimal weightMea, BigDecimal weightNrm, BigDecimal weightCur, BigDecimal weightDif,
+<span class="nc" id="L82">                    BigDecimal density, String aFlags, Integer lane, String comment, LocalDateTime dateExported) {</span>
+<span class="nc" id="L83">        this.aId = aId;</span>
+<span class="nc" id="L84">        this.sample = sample;</span>
+<span class="nc" id="L85">        this.pol = pol;</span>
+<span class="nc" id="L86">        this.nat = nat;</span>
+<span class="nc" id="L87">        this.kal = kal;</span>
+<span class="nc" id="L88">        this.an = an;</span>
+<span class="nc" id="L89">        this.glu = glu;</span>
+<span class="nc" id="L90">        this.dry = dry;</span>
+<span class="nc" id="L91">        this.dateIn = dateIn;</span>
+<span class="nc" id="L92">        this.dateOut = dateOut;</span>
+<span class="nc" id="L93">        this.weightMea = weightMea;</span>
+<span class="nc" id="L94">        this.weightNrm = weightNrm;</span>
+<span class="nc" id="L95">        this.weightCur = weightCur;</span>
+<span class="nc" id="L96">        this.weightDif = weightDif;</span>
+<span class="nc" id="L97">        this.density = density;</span>
+<span class="nc" id="L98">        this.aFlags = aFlags;</span>
+<span class="nc" id="L99">        this.lane = lane;</span>
+<span class="nc" id="L100">        this.comment = comment;</span>
+<span class="nc" id="L101">        this.dateExported = dateExported;</span>
+<span class="nc" id="L102">    }</span>
+
+<span class="fc" id="L104">    public Long getAId() { return aId; }</span>
+<span class="nc" id="L105">    public void setAId(Long aId) { this.aId = aId; }</span>
+
+
+<span class="fc" id="L108">    public BigDecimal getPol() { return pol; }</span>
+<span class="fc" id="L109">    public void setPol(BigDecimal pol) { this.pol = pol; }</span>
+
+<span class="fc" id="L111">    public BigDecimal getNat() { return nat; }</span>
+<span class="fc" id="L112">    public void setNat(BigDecimal nat) { this.nat = nat; }</span>
+
+<span class="fc" id="L114">    public BigDecimal getKal() { return kal; }</span>
+<span class="fc" id="L115">    public void setKal(BigDecimal kal) { this.kal = kal; }</span>
+
+<span class="fc" id="L117">    public BigDecimal getAn() { return an; }</span>
+<span class="fc" id="L118">    public void setAn(BigDecimal an) { this.an = an; }</span>
+
+<span class="fc" id="L120">    public BigDecimal getGlu() { return glu; }</span>
+<span class="fc" id="L121">    public void setGlu(BigDecimal glu) { this.glu = glu; }</span>
+
+<span class="fc" id="L123">    public BigDecimal getDry() { return dry; }</span>
+<span class="fc" id="L124">    public void setDry(BigDecimal dry) { this.dry = dry; }</span>
+
+<span class="fc" id="L126">    public LocalDateTime getDateIn() { return dateIn; }</span>
+<span class="fc" id="L127">    public void setDateIn(LocalDateTime dateIn) { this.dateIn = dateIn; }</span>
+
+<span class="fc" id="L129">    public LocalDateTime getDateOut() { return dateOut; }</span>
+<span class="fc" id="L130">    public void setDateOut(LocalDateTime dateOut) { this.dateOut = dateOut; }</span>
+
+<span class="fc" id="L132">    public BigDecimal getWeightMea() { return weightMea; }</span>
+<span class="fc" id="L133">    public void setWeightMea(BigDecimal weightMea) { this.weightMea = weightMea; }</span>
+
+<span class="fc" id="L135">    public BigDecimal getWeightNrm() { return weightNrm; }</span>
+<span class="fc" id="L136">    public void setWeightNrm(BigDecimal weightNrm) { this.weightNrm = weightNrm; }</span>
+
+<span class="fc" id="L138">    public BigDecimal getWeightCur() { return weightCur; }</span>
+<span class="fc" id="L139">    public void setWeightCur(BigDecimal weightCur) { this.weightCur = weightCur; }</span>
+
+<span class="fc" id="L141">    public BigDecimal getWeightDif() { return weightDif; }</span>
+<span class="fc" id="L142">    public void setWeightDif(BigDecimal weightDif) { this.weightDif = weightDif; }</span>
+
+<span class="fc" id="L144">    public BigDecimal getDensity() { return density; }</span>
+<span class="fc" id="L145">    public void setDensity(BigDecimal density) { this.density = density; }</span>
+
+<span class="fc" id="L147">    public String getAFlags() { return aFlags; }</span>
+<span class="nc" id="L148">    public void setAFlags(String aFlags) { this.aFlags = aFlags; }</span>
+
+<span class="fc" id="L150">    public Integer getLane() { return lane; }</span>
+<span class="fc" id="L151">    public void setLane(Integer lane) { this.lane = lane; }</span>
+
+<span class="fc" id="L153">    public String getComment() { return comment; }</span>
+<span class="fc" id="L154">    public void setComment(String comment) { this.comment = comment; }</span>
+
+<span class="fc" id="L156">    public LocalDateTime getDateExported() { return dateExported; }</span>
+<span class="fc" id="L157">    public void setDateExported(LocalDateTime dateExported) { this.dateExported = dateExported; }</span>
+
+    public Sample getSample() {
+<span class="fc" id="L160">        return sample;</span>
+    }
+
+    public void setSample(Sample sample) {
+<span class="fc" id="L164">        this.sample = sample;</span>
+<span class="fc" id="L165">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
