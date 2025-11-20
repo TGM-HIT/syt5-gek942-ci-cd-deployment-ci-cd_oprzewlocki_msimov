@@ -56,28 +56,15 @@ jobs:
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
           SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA: venlab
 
-      - name: Upload test reports
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
         with:
-          name: surefire-reports
-          path: target/surefire-reports/
+          jacoco-report-path: target/site/jacoco/jacoco.xml
+          badges-directory: target/site/jacoco/badges
 
-      - name: Upload JaCoCo Coverage
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Publish coverage report to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          name: jacoco-report
-          path: target/site/jacoco/jacoco.xml
-
-      - name: Extract coverage percentage
-        id: coverage
-        run: |
-          PERCENT=$(grep -oP 'line-rate="\K[0-9.]+' target/site/jacoco/jacoco.xml | awk '{sum+=$1} END {printf("%.2f", sum*100)}')
-          echo "percent=$PERCENT" >> $GITHUB_OUTPUT
-
-      - name: Commit README update
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update coverage badge"
-          file_pattern: README.md
+          branch: gh-pages
+          folder: target/site/jacoco
+          clean: true
