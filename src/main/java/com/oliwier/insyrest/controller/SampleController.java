@@ -139,7 +139,7 @@ public class SampleController extends AbstractCrudController<Sample, SampleId> {
         dto.quantity = s.getQuantity();
         dto.distance = s.getDistance();
         dto.dateCrumbled = s.getDateCrumbled();
-        dto.sFlags = s.getsFlags();
+        dto.sFlags = s.getSFlags();
         dto.lane = s.getLane();
         dto.comment = s.getComment();
         dto.dateExported = s.getDateExported();
