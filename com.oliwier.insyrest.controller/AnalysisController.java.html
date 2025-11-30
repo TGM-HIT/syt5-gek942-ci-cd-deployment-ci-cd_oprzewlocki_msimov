@@ -3,9 +3,8 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.dto.AnalysisDTO;
 import com.oliwier.insyrest.entity.Analysis;
-import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.service.AnalysisService;
-import com.oliwier.insyrest.service.CrudService;
 import com.oliwier.insyrest.service.SampleService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -24,43 +23,43 @@ public class AnalysisController extends AbstractCrudController&lt;Analysis, Long
 
 
     protected AnalysisController(AnalysisService service, ObjectMapper objectMapper, SampleService sampleService, AnalysisService analysisService) {
-<span class="fc" id="L27">        super(service, objectMapper);</span>
-<span class="fc" id="L28">        this.sampleService = sampleService;</span>
-<span class="fc" id="L29">        this.analysisService = analysisService;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L26">        super(service, objectMapper);</span>
+<span class="fc" id="L27">        this.sampleService = sampleService;</span>
+<span class="fc" id="L28">        this.analysisService = analysisService;</span>
+<span class="fc" id="L29">    }</span>
 
     private AnalysisDTO toDto(Analysis a) {
-<span class="nc" id="L33">        AnalysisDTO dto = new AnalysisDTO();</span>
+<span class="nc" id="L32">        AnalysisDTO dto = new AnalysisDTO();</span>
 
-<span class="nc" id="L35">        dto.aId = a.getAId();</span>
+<span class="nc" id="L34">        dto.aId = a.getAId();</span>
 
-<span class="nc" id="L37">        dto.sId = a.getSample().getId().getsId();</span>
-<span class="nc" id="L38">        dto.sStamp = a.getSample().getId().getsStamp();</span>
+<span class="nc" id="L36">        dto.sId = a.getSample().getId().getsId();</span>
+<span class="nc" id="L37">        dto.sStamp = a.getSample().getId().getsStamp();</span>
 
-<span class="nc" id="L40">        var bp = a.getSample().getBoxPositions();</span>
-<span class="nc bnc" id="L41" title="All 4 branches missed.">        if (bp == null || bp.isEmpty()) {</span>
-<span class="nc" id="L42">            dto.boxposString = &quot;-&quot;;</span>
+<span class="nc" id="L39">        var bp = a.getSample().getBoxPositions();</span>
+<span class="nc bnc" id="L40" title="All 4 branches missed.">        if (bp == null || bp.isEmpty()) {</span>
+<span class="nc" id="L41">            dto.boxposString = &quot;-&quot;;</span>
         } else {
-<span class="nc" id="L44">            var first = bp.iterator().next();</span>
-<span class="nc" id="L45">            var bid = first.getId().getBId();</span>
-<span class="nc" id="L46">            var pos = first.getId().getBposId();</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">            var sep = bp.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
-<span class="nc" id="L48">            dto.boxposString = bid + sep + pos;</span>
+<span class="nc" id="L43">            var first = bp.iterator().next();</span>
+<span class="nc" id="L44">            var bid = first.getId().getBId();</span>
+<span class="nc" id="L45">            var pos = first.getId().getBposId();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            var sep = bp.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
+<span class="nc" id="L47">            dto.boxposString = bid + sep + pos;</span>
         }
 
-<span class="nc" id="L51">        dto.pol = a.getPol();</span>
-<span class="nc" id="L52">        dto.nat = a.getNat();</span>
-<span class="nc" id="L53">        dto.kal = a.getKal();</span>
-<span class="nc" id="L54">        dto.an = a.getAn();</span>
-<span class="nc" id="L55">        dto.glu = a.getGlu();</span>
-<span class="nc" id="L56">        dto.dry = a.getDry();</span>
+<span class="nc" id="L50">        dto.pol = a.getPol();</span>
+<span class="nc" id="L51">        dto.nat = a.getNat();</span>
+<span class="nc" id="L52">        dto.kal = a.getKal();</span>
+<span class="nc" id="L53">        dto.an = a.getAn();</span>
+<span class="nc" id="L54">        dto.glu = a.getGlu();</span>
+<span class="nc" id="L55">        dto.dry = a.getDry();</span>
 
-<span class="nc" id="L58">        dto.lane = a.getLane();</span>
-<span class="nc" id="L59">        dto.comment = a.getComment();</span>
-<span class="nc" id="L60">        dto.dateIn = a.getDateIn();</span>
-<span class="nc" id="L61">        dto.dateOut = a.getDateOut();</span>
+<span class="nc" id="L57">        dto.lane = a.getLane();</span>
+<span class="nc" id="L58">        dto.comment = a.getComment();</span>
+<span class="nc" id="L59">        dto.dateIn = a.getDateIn();</span>
+<span class="nc" id="L60">        dto.dateOut = a.getDateOut();</span>
 
-<span class="nc" id="L63">        return dto;</span>
+<span class="nc" id="L62">        return dto;</span>
     }
 
 
@@ -70,12 +69,12 @@ public class AnalysisController extends AbstractCrudController&lt;Analysis, Long
             @RequestParam String s_stamp
     ) {
         try {
-<span class="nc" id="L73">            LocalDateTime stamp = LocalDateTime.parse(s_stamp); // ← convert string to LocalDateTime</span>
-<span class="nc" id="L74">            SampleId id = new SampleId(s_id, stamp);</span>
-<span class="nc" id="L75">            boolean exists = sampleService.findById(id).isPresent();</span>
-<span class="nc" id="L76">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
-<span class="nc" id="L77">        } catch (DateTimeParseException e) {</span>
-<span class="nc" id="L78">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
+<span class="nc" id="L72">            LocalDateTime stamp = LocalDateTime.parse(s_stamp); // ← convert string to LocalDateTime</span>
+<span class="nc" id="L73">            SampleId id = new SampleId(s_id, stamp);</span>
+<span class="nc" id="L74">            boolean exists = sampleService.findById(id).isPresent();</span>
+<span class="nc" id="L75">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
+<span class="nc" id="L76">        } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L77">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
         }
     }
 
@@ -85,24 +84,24 @@ public class AnalysisController extends AbstractCrudController&lt;Analysis, Long
             @RequestParam(defaultValue = &quot;50&quot;) int size,
             @RequestParam MultiValueMap&lt;String, String&gt; params
     ) {
-<span class="nc" id="L88">        var filter = extractSubMap(params, &quot;filter&quot;);</span>
-<span class="nc" id="L89">        var sort   = extractSubMap(params, &quot;sort&quot;);</span>
+<span class="nc" id="L87">        var filter = extractSubMap(params, &quot;filter&quot;);</span>
+<span class="nc" id="L88">        var sort   = extractSubMap(params, &quot;sort&quot;);</span>
 
-<span class="nc" id="L91">        var result = analysisService.findAllWithFilters(</span>
-<span class="nc" id="L92">                PageRequest.of(page, size),</span>
+<span class="nc" id="L90">        var result = analysisService.findAllWithFilters(</span>
+<span class="nc" id="L91">                PageRequest.of(page, size),</span>
                 filter,
                 sort
         );
 
-<span class="nc" id="L97">        return ResponseEntity.ok(result.map(this::toDto));</span>
+<span class="nc" id="L96">        return ResponseEntity.ok(result.map(this::toDto));</span>
     }
 
 
     @GetMapping(&quot;/dto/{id}&quot;)
     public ResponseEntity&lt;?&gt; getOneDto(@PathVariable Long id) {
-<span class="nc" id="L103">        return analysisService.findById(id)</span>
-<span class="nc" id="L104">                .map(a -&gt; ResponseEntity.ok(toDto(a)))</span>
-<span class="nc" id="L105">                .orElse(ResponseEntity.notFound().build());</span>
+<span class="nc" id="L102">        return analysisService.findById(id)</span>
+<span class="nc" id="L103">                .map(a -&gt; ResponseEntity.ok(toDto(a)))</span>
+<span class="nc" id="L104">                .orElse(ResponseEntity.notFound().build());</span>
     }
 
 }
