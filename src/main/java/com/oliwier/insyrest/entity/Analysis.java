@@ -3,11 +3,16 @@ package com.oliwier.insyrest.entity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "analysis", schema = "venlab")
 public class Analysis {
 
@@ -73,95 +78,4 @@ public class Analysis {
 
     @Column(name = "date_exported")
     private LocalDateTime dateExported;
-
-    public Analysis() {}
-
-    public Analysis(Long aId, Sample sample, BigDecimal pol, BigDecimal nat, BigDecimal kal,
-                    BigDecimal an, BigDecimal glu, BigDecimal dry, LocalDateTime dateIn, LocalDateTime dateOut,
-                    BigDecimal weightMea, BigDecimal weightNrm, BigDecimal weightCur, BigDecimal weightDif,
-                    BigDecimal density, String aFlags, Integer lane, String comment, LocalDateTime dateExported) {
-        this.aId = aId;
-        this.sample = sample;
-        this.pol = pol;
-        this.nat = nat;
-        this.kal = kal;
-        this.an = an;
-        this.glu = glu;
-        this.dry = dry;
-        this.dateIn = dateIn;
-        this.dateOut = dateOut;
-        this.weightMea = weightMea;
-        this.weightNrm = weightNrm;
-        this.weightCur = weightCur;
-        this.weightDif = weightDif;
-        this.density = density;
-        this.aFlags = aFlags;
-        this.lane = lane;
-        this.comment = comment;
-        this.dateExported = dateExported;
-    }
-
-    public Long getAId() { return aId; }
-    public void setAId(Long aId) { this.aId = aId; }
-
-
-    public BigDecimal getPol() { return pol; }
-    public void setPol(BigDecimal pol) { this.pol = pol; }
-
-    public BigDecimal getNat() { return nat; }
-    public void setNat(BigDecimal nat) { this.nat = nat; }
-
-    public BigDecimal getKal() { return kal; }
-    public void setKal(BigDecimal kal) { this.kal = kal; }
-
-    public BigDecimal getAn() { return an; }
-    public void setAn(BigDecimal an) { this.an = an; }
-
-    public BigDecimal getGlu() { return glu; }
-    public void setGlu(BigDecimal glu) { this.glu = glu; }
-
-    public BigDecimal getDry() { return dry; }
-    public void setDry(BigDecimal dry) { this.dry = dry; }
-
-    public LocalDateTime getDateIn() { return dateIn; }
-    public void setDateIn(LocalDateTime dateIn) { this.dateIn = dateIn; }
-
-    public LocalDateTime getDateOut() { return dateOut; }
-    public void setDateOut(LocalDateTime dateOut) { this.dateOut = dateOut; }
-
-    public BigDecimal getWeightMea() { return weightMea; }
-    public void setWeightMea(BigDecimal weightMea) { this.weightMea = weightMea; }
-
-    public BigDecimal getWeightNrm() { return weightNrm; }
-    public void setWeightNrm(BigDecimal weightNrm) { this.weightNrm = weightNrm; }
-
-    public BigDecimal getWeightCur() { return weightCur; }
-    public void setWeightCur(BigDecimal weightCur) { this.weightCur = weightCur; }
-
-    public BigDecimal getWeightDif() { return weightDif; }
-    public void setWeightDif(BigDecimal weightDif) { this.weightDif = weightDif; }
-
-    public BigDecimal getDensity() { return density; }
-    public void setDensity(BigDecimal density) { this.density = density; }
-
-    public String getAFlags() { return aFlags; }
-    public void setAFlags(String aFlags) { this.aFlags = aFlags; }
-
-    public Integer getLane() { return lane; }
-    public void setLane(Integer lane) { this.lane = lane; }
-
-    public String getComment() { return comment; }
-    public void setComment(String comment) { this.comment = comment; }
-
-    public LocalDateTime getDateExported() { return dateExported; }
-    public void setDateExported(LocalDateTime dateExported) { this.dateExported = dateExported; }
-
-    public Sample getSample() {
-        return sample;
-    }
-
-    public void setSample(Sample sample) {
-        this.sample = sample;
-    }
-
 }

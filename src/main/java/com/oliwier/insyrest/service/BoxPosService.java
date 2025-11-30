@@ -1,12 +1,11 @@
 package com.oliwier.insyrest.service;
 
 import com.oliwier.insyrest.entity.BoxPos;
-import com.oliwier.insyrest.entity.BoxPosId;
-import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.entity.id.BoxPosId;
+import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.repository.BoxPosRepository;
 import com.oliwier.insyrest.repository.BoxRepository;
 import com.oliwier.insyrest.repository.SampleRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

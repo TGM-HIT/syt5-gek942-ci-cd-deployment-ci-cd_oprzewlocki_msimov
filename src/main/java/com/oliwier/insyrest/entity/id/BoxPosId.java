@@ -1,4 +1,4 @@
-package com.oliwier.insyrest.entity;
+package com.oliwier.insyrest.entity.id;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

@@ -2,8 +2,12 @@ package com.oliwier.insyrest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.oliwier.insyrest.entity.id.SampleId;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,35 +16,12 @@ import java.util.Set;
 
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "sample", schema = "venlab")
 public class Sample {
-
-    public Sample(SampleId id, String name, BigDecimal weightNet, BigDecimal weightBru, BigDecimal weightTar, Integer quantity, BigDecimal distance, LocalDateTime dateCrumbled, String sFlags, Integer lane, String comment, LocalDateTime dateExported) {
-        this.id = id;
-        this.name = name;
-        this.weightNet = weightNet;
-        this.weightBru = weightBru;
-        this.weightTar = weightTar;
-        this.quantity = quantity;
-        this.distance = distance;
-        this.dateCrumbled = dateCrumbled;
-        this.sFlags = sFlags;
-        this.lane = lane;
-        this.comment = comment;
-        this.dateExported = dateExported;
-    }
-
-    public Sample() {
-    }
-
-    public SampleId getId() {
-        return id;
-    }
-
-    public void setId(SampleId id) {
-        this.id = id;
-    }
-
     @EmbeddedId
     @JsonUnwrapped   // Damit JSON flach ausgegeben wird
     private SampleId id;
@@ -78,101 +59,5 @@ public class Sample {
     @OneToMany(mappedBy = "sample")
     @JsonIgnore
     private Set<BoxPos> boxPositions = new HashSet<>();
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public BigDecimal getWeightNet() {
-        return weightNet;
-    }
-
-    public void setWeightNet(BigDecimal weightNet) {
-        this.weightNet = weightNet;
-    }
-
-    public BigDecimal getWeightBru() {
-        return weightBru;
-    }
-
-    public void setWeightBru(BigDecimal weightBru) {
-        this.weightBru = weightBru;
-    }
-
-    public BigDecimal getWeightTar() {
-        return weightTar;
-    }
-
-    public void setWeightTar(BigDecimal weightTar) {
-        this.weightTar = weightTar;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getDistance() {
-        return distance;
-    }
-
-    public void setDistance(BigDecimal distance) {
-        this.distance = distance;
-    }
-
-    public LocalDateTime getDateCrumbled() {
-        return dateCrumbled;
-    }
-
-    public void setDateCrumbled(LocalDateTime dateCrumbled) {
-        this.dateCrumbled = dateCrumbled;
-    }
-
-    public String getsFlags() {
-        return sFlags;
-    }
-
-    public void setsFlags(String sFlags) {
-        this.sFlags = sFlags;
-    }
-
-    public Integer getLane() {
-        return lane;
-    }
-
-    public void setLane(Integer lane) {
-        this.lane = lane;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public LocalDateTime getDateExported() {
-        return dateExported;
-    }
-
-    public void setDateExported(LocalDateTime dateExported) {
-        this.dateExported = dateExported;
-    }
-
-    public Set<BoxPos> getBoxPositions() {
-        return boxPositions;
-    }
-
-    public void setBoxPositions(Set<BoxPos> boxPositions) {
-        this.boxPositions = boxPositions;
-    }
 }
 

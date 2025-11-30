@@ -1,4 +1,4 @@
-package com.oliwier.insyrest.entity;
+package com.oliwier.insyrest.entity.id;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;

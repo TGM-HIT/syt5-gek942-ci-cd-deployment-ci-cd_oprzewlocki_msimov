@@ -1,6 +1,8 @@
 package com.oliwier.insyrest.repository;
 
 import com.oliwier.insyrest.entity.*;
+import com.oliwier.insyrest.entity.id.BoxPosId;
+import com.oliwier.insyrest.entity.id.SampleId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;

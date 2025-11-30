@@ -1,6 +1,6 @@
 package com.oliwier.insyrest.converter;
 
-import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.entity.id.SampleId;
 import org.springframework.stereotype.Component;
 import org.springframework.core.convert.converter.Converter;
 

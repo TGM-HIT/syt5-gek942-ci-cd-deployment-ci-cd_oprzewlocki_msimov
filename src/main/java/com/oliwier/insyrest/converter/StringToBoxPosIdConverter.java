@@ -1,7 +1,6 @@
 package com.oliwier.insyrest.converter;
 
-import com.oliwier.insyrest.entity.BoxPosId;
-import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.entity.id.BoxPosId;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

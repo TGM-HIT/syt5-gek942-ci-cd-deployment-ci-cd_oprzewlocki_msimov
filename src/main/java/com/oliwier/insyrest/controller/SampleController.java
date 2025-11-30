@@ -3,7 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.dto.SampleDTO;
 import com.oliwier.insyrest.entity.BoxPos;
 import com.oliwier.insyrest.entity.Sample;
-import com.oliwier.insyrest.entity.SampleId;
+import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.service.*;
 
 import org.springframework.data.domain.PageRequest;

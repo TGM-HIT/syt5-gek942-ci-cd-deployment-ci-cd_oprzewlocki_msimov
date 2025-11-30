@@ -1,9 +1,19 @@
 package com.oliwier.insyrest.entity;
 
+import com.oliwier.insyrest.entity.id.BoxPosId;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "boxpos", schema = "venlab")
 public class BoxPos {
 
@@ -24,35 +34,4 @@ public class BoxPos {
 
     @Column(name = "date_exported")
     private LocalDateTime dateExported;
-
-    public BoxPos() {}
-
-    public BoxPos(BoxPosId id, Box box, Sample sample, LocalDateTime dateExported) {
-        this.id = id;
-        this.box = box;
-        this.sample = sample;
-        this.dateExported = dateExported;
-    }
-
-    public BoxPosId getId() { return id; }
-    public void setId(BoxPosId id) { this.id = id; }
-
-    public LocalDateTime getDateExported() { return dateExported; }
-    public void setDateExported(LocalDateTime dateExported) { this.dateExported = dateExported; }
-
-    public Box getBox() {
-        return box;
-    }
-
-    public void setBox(Box box) {
-        this.box = box;
-    }
-
-    public Sample getSample() {
-        return sample;
-    }
-
-    public void setSample(Sample sample) {
-        this.sample = sample;
-    }
 }

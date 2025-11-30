@@ -1,10 +1,19 @@
 package com.oliwier.insyrest.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "threshold", schema = "venlab")
 public class Threshold {
 
@@ -20,25 +29,4 @@ public class Threshold {
 
     @Column(name = "date_changed")
     private LocalDateTime dateChanged;
-
-    public Threshold() {}
-
-    public Threshold(String thId, BigDecimal valueMin, BigDecimal valueMax, LocalDateTime dateChanged) {
-        this.thId = thId;
-        this.valueMin = valueMin;
-        this.valueMax = valueMax;
-        this.dateChanged = dateChanged;
-    }
-
-    public String getThId() { return thId; }
-    public void setThId(String thId) { this.thId = thId; }
-
-    public BigDecimal getValueMin() { return valueMin; }
-    public void setValueMin(BigDecimal valueMin) { this.valueMin = valueMin; }
-
-    public BigDecimal getValueMax() { return valueMax; }
-    public void setValueMax(BigDecimal valueMax) { this.valueMax = valueMax; }
-
-    public LocalDateTime getDateChanged() { return dateChanged; }
-    public void setDateChanged(LocalDateTime dateChanged) { this.dateChanged = dateChanged; }
 }
