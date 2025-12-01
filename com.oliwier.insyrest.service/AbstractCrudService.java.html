@@ -65,16 +65,16 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 
 <span class="fc" id="L66">        Specification&lt;T&gt; spec = Specification.where(null);</span>
 
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        for (Map.Entry&lt;String, String&gt; entry : filter.entrySet()) {</span>
-<span class="nc" id="L69">            final String field = mapFieldName(entry.getKey());</span>
-<span class="nc" id="L70">            final String value = entry.getValue();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; entry : filter.entrySet()) {</span>
+<span class="fc" id="L69">            final String field = mapFieldName(entry.getKey());</span>
+<span class="fc" id="L70">            final String value = entry.getValue();</span>
 
-<span class="nc bnc" id="L72" title="All 8 branches missed.">            if (field == null || field.isBlank() || value == null || value.isBlank()) continue;</span>
+<span class="pc bpc" id="L72" title="4 of 8 branches missed.">            if (field == null || field.isBlank() || value == null || value.isBlank()) continue;</span>
 
-<span class="nc" id="L74">            Specification&lt;T&gt; fieldSpec = (root, query, cb) -&gt; {</span>
+<span class="fc" id="L74">            Specification&lt;T&gt; fieldSpec = (root, query, cb) -&gt; {</span>
                 try {
-<span class="nc" id="L76">                    Path&lt;?&gt; p = root;</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">                    for (String segment : field.split(&quot;\\.&quot;)) p = p.get(segment);</span>
+<span class="fc" id="L76">                    Path&lt;?&gt; p = root;</span>
+<span class="pc bnc" id="L77" title="All 2 branches missed.">                    for (String segment : field.split(&quot;\\.&quot;)) p = p.get(segment);</span>
 <span class="nc bnc" id="L78" title="All 2 branches missed.">                    if (p == null) return null;</span>
 
 <span class="nc" id="L80">                    Class&lt;?&gt; type = p.getJavaType();</span>
@@ -100,14 +100,14 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 
 <span class="nc" id="L101">                    return buildPredicate(cb, p, type, raw);</span>
 
-<span class="nc" id="L103">                } catch (Exception e) {</span>
-<span class="nc" id="L104">                    System.err.println(&quot;Filter skipped for field '&quot; + field + &quot;': &quot; + e.getMessage());</span>
-<span class="nc" id="L105">                    return null;</span>
+<span class="fc" id="L103">                } catch (Exception e) {</span>
+<span class="fc" id="L104">                    System.err.println(&quot;Filter skipped for field '&quot; + field + &quot;': &quot; + e.getMessage());</span>
+<span class="fc" id="L105">                    return null;</span>
                 }
             };
 
-<span class="nc bnc" id="L109" title="All 2 branches missed.">            spec = (spec == null) ? fieldSpec : spec.and(fieldSpec);</span>
-<span class="nc" id="L110">        }</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">            spec = (spec == null) ? fieldSpec : spec.and(fieldSpec);</span>
+<span class="fc" id="L110">        }</span>
 
         // ===== SORT =====
 <span class="fc" id="L113">        Pageable sortedPageable = pageable;</span>
@@ -265,10 +265,10 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 
 
     private String mapFieldName(String field) {
-<span class="nc bnc" id="L268" title="All 3 branches missed.">        return switch (field) {</span>
+<span class="pc bpc" id="L268" title="2 of 3 branches missed.">        return switch (field) {</span>
 <span class="nc" id="L269">            case &quot;s_stamp&quot; -&gt; &quot;id.sStamp&quot;;</span>
 <span class="nc" id="L270">            case &quot;s_id&quot; -&gt; &quot;id.sId&quot;;</span>
-<span class="nc" id="L271">            default -&gt; field;</span>
+<span class="fc" id="L271">            default -&gt; field;</span>
         };
     }
 }

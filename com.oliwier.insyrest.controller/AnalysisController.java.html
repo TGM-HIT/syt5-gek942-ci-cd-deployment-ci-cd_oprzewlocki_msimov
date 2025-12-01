@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnalysisController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.controller</a> &gt; <span class="el_source">AnalysisController.java</span></div><h1>AnalysisController.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.controller;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AnalysisController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.controller</a> &gt; <span class="el_source">AnalysisController.java</span></div><h1>AnalysisController.java</h1><pre class="source lang-java linenums">// src/main/java/com/oliwier/insyrest/controller/AnalysisController.java
+package com.oliwier.insyrest.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oliwier.insyrest.dto.AnalysisDTO;
+import com.oliwier.insyrest.dto.request.AnalysisRequest;
+import com.oliwier.insyrest.dto.response.AnalysisResponse;
 import com.oliwier.insyrest.entity.Analysis;
 import com.oliwier.insyrest.entity.id.SampleId;
+import com.oliwier.insyrest.mapper.AnalysisMapper;
 import com.oliwier.insyrest.service.AnalysisService;
 import com.oliwier.insyrest.service.SampleService;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -17,51 +17,18 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(&quot;/api/analysis&quot;)
-public class AnalysisController extends AbstractCrudController&lt;Analysis, Long&gt; {
+public class AnalysisController extends AbstractCrudController&lt;Analysis, Long, AnalysisRequest, AnalysisResponse&gt; {
+
     private final SampleService sampleService;
-    private final AnalysisService analysisService;
 
-
-    protected AnalysisController(AnalysisService service, ObjectMapper objectMapper, SampleService sampleService, AnalysisService analysisService) {
-<span class="fc" id="L26">        super(service, objectMapper);</span>
-<span class="fc" id="L27">        this.sampleService = sampleService;</span>
-<span class="fc" id="L28">        this.analysisService = analysisService;</span>
-<span class="fc" id="L29">    }</span>
-
-    private AnalysisDTO toDto(Analysis a) {
-<span class="nc" id="L32">        AnalysisDTO dto = new AnalysisDTO();</span>
-
-<span class="nc" id="L34">        dto.aId = a.getAId();</span>
-
-<span class="nc" id="L36">        dto.sId = a.getSample().getId().getsId();</span>
-<span class="nc" id="L37">        dto.sStamp = a.getSample().getId().getsStamp();</span>
-
-<span class="nc" id="L39">        var bp = a.getSample().getBoxPositions();</span>
-<span class="nc bnc" id="L40" title="All 4 branches missed.">        if (bp == null || bp.isEmpty()) {</span>
-<span class="nc" id="L41">            dto.boxposString = &quot;-&quot;;</span>
-        } else {
-<span class="nc" id="L43">            var first = bp.iterator().next();</span>
-<span class="nc" id="L44">            var bid = first.getId().getBId();</span>
-<span class="nc" id="L45">            var pos = first.getId().getBposId();</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">            var sep = bp.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
-<span class="nc" id="L47">            dto.boxposString = bid + sep + pos;</span>
-        }
-
-<span class="nc" id="L50">        dto.pol = a.getPol();</span>
-<span class="nc" id="L51">        dto.nat = a.getNat();</span>
-<span class="nc" id="L52">        dto.kal = a.getKal();</span>
-<span class="nc" id="L53">        dto.an = a.getAn();</span>
-<span class="nc" id="L54">        dto.glu = a.getGlu();</span>
-<span class="nc" id="L55">        dto.dry = a.getDry();</span>
-
-<span class="nc" id="L57">        dto.lane = a.getLane();</span>
-<span class="nc" id="L58">        dto.comment = a.getComment();</span>
-<span class="nc" id="L59">        dto.dateIn = a.getDateIn();</span>
-<span class="nc" id="L60">        dto.dateOut = a.getDateOut();</span>
-
-<span class="nc" id="L62">        return dto;</span>
-    }
-
+    public AnalysisController(
+            AnalysisService analysisService,
+            AnalysisMapper analysisMapper,
+            SampleService sampleService
+    ) {
+<span class="fc" id="L29">        super(analysisService, analysisMapper);</span>
+<span class="fc" id="L30">        this.sampleService = sampleService;</span>
+<span class="fc" id="L31">    }</span>
 
     @GetMapping(&quot;/validate-sample&quot;)
     public ResponseEntity&lt;?&gt; validateSample(
@@ -69,40 +36,13 @@ public class AnalysisController extends AbstractCrudController&lt;Analysis, Long
             @RequestParam String s_stamp
     ) {
         try {
-<span class="nc" id="L72">            LocalDateTime stamp = LocalDateTime.parse(s_stamp); // ← convert string to LocalDateTime</span>
-<span class="nc" id="L73">            SampleId id = new SampleId(s_id, stamp);</span>
-<span class="nc" id="L74">            boolean exists = sampleService.findById(id).isPresent();</span>
-<span class="nc" id="L75">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
-<span class="nc" id="L76">        } catch (DateTimeParseException e) {</span>
-<span class="nc" id="L77">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
+<span class="nc" id="L39">            LocalDateTime stamp = LocalDateTime.parse(s_stamp);</span>
+<span class="nc" id="L40">            SampleId id = new SampleId(s_id, stamp);</span>
+<span class="nc" id="L41">            boolean exists = sampleService.findById(id).isPresent();</span>
+<span class="nc" id="L42">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
+<span class="nc" id="L43">        } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L44">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
         }
     }
-
-    @GetMapping(&quot;/dto&quot;)
-    public ResponseEntity&lt;?&gt; getAllDto(
-            @RequestParam(defaultValue = &quot;0&quot;) int page,
-            @RequestParam(defaultValue = &quot;50&quot;) int size,
-            @RequestParam MultiValueMap&lt;String, String&gt; params
-    ) {
-<span class="nc" id="L87">        var filter = extractSubMap(params, &quot;filter&quot;);</span>
-<span class="nc" id="L88">        var sort   = extractSubMap(params, &quot;sort&quot;);</span>
-
-<span class="nc" id="L90">        var result = analysisService.findAllWithFilters(</span>
-<span class="nc" id="L91">                PageRequest.of(page, size),</span>
-                filter,
-                sort
-        );
-
-<span class="nc" id="L96">        return ResponseEntity.ok(result.map(this::toDto));</span>
-    }
-
-
-    @GetMapping(&quot;/dto/{id}&quot;)
-    public ResponseEntity&lt;?&gt; getOneDto(@PathVariable Long id) {
-<span class="nc" id="L102">        return analysisService.findById(id)</span>
-<span class="nc" id="L103">                .map(a -&gt; ResponseEntity.ok(toDto(a)))</span>
-<span class="nc" id="L104">                .orElse(ResponseEntity.notFound().build());</span>
-    }
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThresholdMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.mapper</a> &gt; <span class="el_source">ThresholdMapper.java</span></div><h1>ThresholdMapper.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.mapper;
+
+import com.oliwier.insyrest.dto.request.ThresholdRequest;
+import com.oliwier.insyrest.dto.response.ThresholdResponse;
+import com.oliwier.insyrest.entity.Threshold;
+import org.springframework.stereotype.Component;
+
+@Component
+<span class="fc" id="L9">public class ThresholdMapper implements EntityMapper&lt;Threshold, ThresholdRequest, ThresholdResponse&gt; {</span>
+
+    @Override
+    public Threshold toEntity(ThresholdRequest request) {
+<span class="nc" id="L13">        Threshold threshold = new Threshold();</span>
+<span class="nc" id="L14">        threshold.setThId(request.getThId());</span>
+<span class="nc" id="L15">        threshold.setValueMin(request.getValueMin());</span>
+<span class="nc" id="L16">        threshold.setValueMax(request.getValueMax());</span>
+<span class="nc" id="L17">        threshold.setDateChanged(request.getDateChanged());</span>
+<span class="nc" id="L18">        return threshold;</span>
+    }
+
+    @Override
+    public ThresholdResponse toResponse(Threshold entity) {
+<span class="nc" id="L23">        ThresholdResponse response = new ThresholdResponse();</span>
+<span class="nc" id="L24">        response.setThId(entity.getThId());</span>
+<span class="nc" id="L25">        response.setValueMin(entity.getValueMin());</span>
+<span class="nc" id="L26">        response.setValueMax(entity.getValueMax());</span>
+<span class="nc" id="L27">        response.setDateChanged(entity.getDateChanged());</span>
+<span class="nc" id="L28">        return response;</span>
+    }
+
+    @Override
+    public void updateEntity(Threshold entity, ThresholdRequest request) {
+        // Don't update thId - it's the primary key
+<span class="nc" id="L34">        entity.setValueMin(request.getValueMin());</span>
+<span class="nc" id="L35">        entity.setValueMax(request.getValueMax());</span>
+<span class="nc" id="L36">        entity.setDateChanged(request.getDateChanged());</span>
+<span class="nc" id="L37">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

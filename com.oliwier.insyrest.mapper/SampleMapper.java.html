@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SampleMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.mapper</a> &gt; <span class="el_source">SampleMapper.java</span></div><h1>SampleMapper.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.mapper;
+
+import com.oliwier.insyrest.dto.request.SampleRequest;
+import com.oliwier.insyrest.dto.response.SampleResponse;
+import com.oliwier.insyrest.entity.BoxPos;
+import com.oliwier.insyrest.entity.Sample;
+import com.oliwier.insyrest.entity.id.SampleId;
+import org.springframework.stereotype.Component;
+
+import java.util.Set;
+
+@Component
+<span class="fc" id="L13">public class SampleMapper implements EntityMapper&lt;Sample, SampleRequest, SampleResponse&gt; {</span>
+
+    @Override
+    public Sample toEntity(SampleRequest request) {
+<span class="fc" id="L17">        Sample sample = new Sample();</span>
+<span class="fc" id="L18">        sample.setId(new SampleId(request.getS_id(), request.getS_stamp()));</span>
+<span class="fc" id="L19">        sample.setName(request.getName());</span>
+<span class="fc" id="L20">        sample.setWeightNet(request.getWeightNet());</span>
+<span class="fc" id="L21">        sample.setWeightBru(request.getWeightBru());</span>
+<span class="fc" id="L22">        sample.setWeightTar(request.getWeightTar());</span>
+<span class="fc" id="L23">        sample.setQuantity(request.getQuantity());</span>
+<span class="fc" id="L24">        sample.setDistance(request.getDistance());</span>
+<span class="fc" id="L25">        sample.setDateCrumbled(request.getDateCrumbled());</span>
+<span class="fc" id="L26">        sample.setSFlags(request.getSFlags());</span>
+<span class="fc" id="L27">        sample.setLane(request.getLane());</span>
+<span class="fc" id="L28">        sample.setComment(request.getComment());</span>
+<span class="fc" id="L29">        sample.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L30">        return sample;</span>
+    }
+
+    @Override
+    public SampleResponse toResponse(Sample entity) {
+<span class="fc" id="L35">        SampleResponse response = new SampleResponse();</span>
+<span class="fc" id="L36">        response.setS_id(entity.getId().getsId());</span>
+<span class="fc" id="L37">        response.setS_stamp(entity.getId().getsStamp());</span>
+<span class="fc" id="L38">        response.setName(entity.getName());</span>
+<span class="fc" id="L39">        response.setWeightNet(entity.getWeightNet());</span>
+<span class="fc" id="L40">        response.setWeightBru(entity.getWeightBru());</span>
+<span class="fc" id="L41">        response.setWeightTar(entity.getWeightTar());</span>
+<span class="fc" id="L42">        response.setQuantity(entity.getQuantity());</span>
+<span class="fc" id="L43">        response.setDistance(entity.getDistance());</span>
+<span class="fc" id="L44">        response.setDateCrumbled(entity.getDateCrumbled());</span>
+<span class="fc" id="L45">        response.setSFlags(entity.getSFlags());</span>
+<span class="fc" id="L46">        response.setLane(entity.getLane());</span>
+<span class="fc" id="L47">        response.setComment(entity.getComment());</span>
+<span class="fc" id="L48">        response.setDateExported(entity.getDateExported());</span>
+
+        // Computed field: boxposString
+<span class="fc" id="L51">        response.setBoxposString(computeBoxposString(entity.getBoxPositions()));</span>
+
+<span class="fc" id="L53">        return response;</span>
+    }
+
+    @Override
+    public void updateEntity(Sample entity, SampleRequest request) {
+        // Don't update ID - it's immutable
+<span class="nc" id="L59">        entity.setName(request.getName());</span>
+<span class="nc" id="L60">        entity.setWeightNet(request.getWeightNet());</span>
+<span class="nc" id="L61">        entity.setWeightBru(request.getWeightBru());</span>
+<span class="nc" id="L62">        entity.setWeightTar(request.getWeightTar());</span>
+<span class="nc" id="L63">        entity.setQuantity(request.getQuantity());</span>
+<span class="nc" id="L64">        entity.setDistance(request.getDistance());</span>
+<span class="nc" id="L65">        entity.setDateCrumbled(request.getDateCrumbled());</span>
+<span class="nc" id="L66">        entity.setSFlags(request.getSFlags());</span>
+<span class="nc" id="L67">        entity.setLane(request.getLane());</span>
+<span class="nc" id="L68">        entity.setComment(request.getComment());</span>
+<span class="nc" id="L69">        entity.setDateExported(request.getDateExported());</span>
+<span class="nc" id="L70">    }</span>
+
+    private String computeBoxposString(Set&lt;BoxPos&gt; positions) {
+<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (positions == null || positions.isEmpty()) {</span>
+<span class="fc" id="L74">            return &quot;-&quot;;</span>
+        }
+<span class="nc" id="L76">        var first = positions.iterator().next();</span>
+<span class="nc" id="L77">        var bid = first.getId().getBId();</span>
+<span class="nc" id="L78">        var pos = first.getId().getBposId();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        var sep = positions.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
+<span class="nc" id="L80">        return bid + sep + pos;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

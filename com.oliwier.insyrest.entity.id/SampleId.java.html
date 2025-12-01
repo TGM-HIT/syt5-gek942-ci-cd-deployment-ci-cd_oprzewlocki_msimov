@@ -19,10 +19,10 @@ public class SampleId implements Serializable {
     @Column(name = &quot;s_stamp&quot;, nullable = false)
     private LocalDateTime sStamp;
 
-<span class="nc" id="L22">    public SampleId(String sId, LocalDateTime sStamp) {</span>
-<span class="nc" id="L23">        this.sId = sId;</span>
-<span class="nc" id="L24">        this.sStamp = sStamp.withNano(0);</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L22">    public SampleId(String sId, LocalDateTime sStamp) {</span>
+<span class="fc" id="L23">        this.sId = sId;</span>
+<span class="fc" id="L24">        this.sStamp = sStamp.withNano(0);</span>
+<span class="fc" id="L25">    }</span>
 
 <span class="fc" id="L27">    public SampleId() {</span>
 <span class="fc" id="L28">    }</span>
@@ -32,15 +32,15 @@ public class SampleId implements Serializable {
     }
 
     public void setsId(String sId) {
-<span class="fc" id="L35">        this.sId = sId;</span>
-<span class="fc" id="L36">    }</span>
+<span class="nc" id="L35">        this.sId = sId;</span>
+<span class="nc" id="L36">    }</span>
 
     public LocalDateTime getsStamp() {
 <span class="fc" id="L39">        return sStamp;</span>
     }
 
     public void setsStamp(LocalDateTime sStamp) {
-<span class="fc" id="L43">        this.sStamp = sStamp;</span>
-<span class="fc" id="L44">    }</span>
+<span class="nc" id="L43">        this.sStamp = sStamp;</span>
+<span class="nc" id="L44">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractCrudController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.controller</a> &gt; <span class="el_source">AbstractCrudController.java</span></div><h1>AbstractCrudController.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.controller;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oliwier.insyrest.mapper.EntityMapper;
 import com.oliwier.insyrest.service.CrudService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -15,101 +15,119 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractCrudController&lt;T, ID&gt; {
+/**
+ * Abstract CRUD controller that works with DTOs
+ *
+ * @param &lt;ENTITY&gt; Entity type
+ * @param &lt;ID&gt; Entity ID type
+ * @param &lt;REQUEST&gt; Request DTO type
+ * @param &lt;RESPONSE&gt; Response DTO type
+ */
+@AllArgsConstructor
+public abstract class AbstractCrudController&lt;ENTITY, ID, REQUEST, RESPONSE&gt; {
 
-    private final CrudService&lt;T, ID&gt; service;
-
-    private final ObjectMapper mapper;
-
-
-<span class="fc" id="L25">    protected AbstractCrudController(CrudService&lt;T, ID&gt; service, ObjectMapper mapper) {</span>
-<span class="fc" id="L26">        this.service = service;</span>
-<span class="fc" id="L27">        this.mapper = mapper;</span>
-<span class="fc" id="L28">    }</span>
-
+    protected final CrudService&lt;ENTITY, ID&gt; service;
+    protected final EntityMapper&lt;ENTITY, REQUEST, RESPONSE&gt; mapper;
 
     @GetMapping
-    public Page&lt;T&gt; getAll(
+    public Page&lt;RESPONSE&gt; getAll(
             @RequestParam(defaultValue = &quot;0&quot;) int page,
             @RequestParam(defaultValue = &quot;50&quot;) int size,
             @RequestParam MultiValueMap&lt;String, String&gt; params
     ) {
-<span class="fc" id="L37">        Map&lt;String, String&gt; filter = extractSubMap(params, &quot;filter&quot;);</span>
-<span class="fc" id="L38">        Map&lt;String, String&gt; sort   = extractSubMap(params, &quot;sort&quot;);</span>
+<span class="fc" id="L38">        Map&lt;String, String&gt; filter = extractSubMap(params, &quot;filter&quot;);</span>
+<span class="fc" id="L39">        Map&lt;String, String&gt; sort = extractSubMap(params, &quot;sort&quot;);</span>
 
-<span class="fc" id="L40">        System.out.println(&quot;FILTER = &quot; + filter);</span>
-<span class="fc" id="L41">        System.out.println(&quot;SORT = &quot; + sort);</span>
+<span class="fc" id="L41">        Page&lt;ENTITY&gt; entities = service.findAllWithFilters(PageRequest.of(page, size), filter, sort);</span>
 
-<span class="fc" id="L43">        return service.findAllWithFilters(PageRequest.of(page, size), filter, sort);</span>
-    }
-
-    Map&lt;String, String&gt; extractSubMap(MultiValueMap&lt;String, String&gt; params, String prefix) {
-<span class="fc" id="L47">        Map&lt;String, String&gt; result = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L48">        String start = prefix + &quot;[&quot;;</span>
-<span class="fc" id="L49">        int startLen = start.length();</span>
-
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (String key : params.keySet()) {</span>
-<span class="pc bpc" id="L52" title="3 of 4 branches missed.">            if (key.startsWith(start) &amp;&amp; key.endsWith(&quot;]&quot;)) {</span>
-<span class="nc" id="L53">                String subKey = key.substring(startLen, key.length() - 1); // e.g. filter[name] → &quot;name&quot;</span>
-<span class="nc" id="L54">                result.put(subKey, params.getFirst(key));</span>
-            }
-<span class="fc" id="L56">        }</span>
-<span class="fc" id="L57">        return result;</span>
+<span class="fc" id="L43">        return mapper.toResponsePage(entities);</span>
     }
 
     @GetMapping(&quot;/{id}&quot;)
-    public ResponseEntity&lt;T&gt; getById(@PathVariable ID id) {
-<span class="fc" id="L62">        Optional&lt;T&gt; entity = service.findById(id);</span>
-<span class="fc" id="L63">        return entity.map(ResponseEntity::ok)</span>
-<span class="fc" id="L64">                .orElse(ResponseEntity.notFound().build());</span>
+    public ResponseEntity&lt;RESPONSE&gt; getById(@PathVariable ID id) {
+<span class="fc" id="L48">        Optional&lt;ENTITY&gt; entity = service.findById(id);</span>
+<span class="fc" id="L49">        return entity</span>
+<span class="fc" id="L50">                .map(mapper::toResponse)</span>
+<span class="fc" id="L51">                .map(ResponseEntity::ok)</span>
+<span class="fc" id="L52">                .orElse(ResponseEntity.notFound().build());</span>
     }
 
     @PostMapping
-    public T create(@Valid @RequestBody T entity) {
-<span class="fc" id="L69">        return service.save(entity);</span>
+    public ResponseEntity&lt;RESPONSE&gt; create(@Valid @RequestBody REQUEST request) {
+<span class="fc" id="L57">        ENTITY entity = mapper.toEntity(request);</span>
+<span class="fc" id="L58">        ENTITY saved = service.save(entity);</span>
+<span class="fc" id="L59">        RESPONSE response = mapper.toResponse(saved);</span>
+<span class="fc" id="L60">        return ResponseEntity.status(HttpStatus.CREATED).body(response);</span>
     }
 
     @PutMapping(&quot;/{id}&quot;)
-    public ResponseEntity&lt;T&gt; update(@PathVariable ID id, @RequestBody Map&lt;String, Object&gt; updated) throws JsonMappingException {
-<span class="fc" id="L74">        Optional&lt;T&gt; existingOpt = service.findById(id);</span>
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (existingOpt.isEmpty()) return ResponseEntity.notFound().build();</span>
+    public ResponseEntity&lt;RESPONSE&gt; update(
+            @PathVariable ID id,
+            @Valid @RequestBody REQUEST request
+    ) {
+<span class="fc" id="L68">        Optional&lt;ENTITY&gt; existingOpt = service.findById(id);</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (existingOpt.isEmpty()) {</span>
+<span class="fc" id="L70">            return ResponseEntity.notFound().build();</span>
+        }
 
-<span class="fc" id="L77">        T existing = existingOpt.get();</span>
-<span class="fc" id="L78">        mapper.updateValue(existing, updated);</span>
-<span class="fc" id="L79">        return ResponseEntity.ok(service.save(existing));</span>
+<span class="fc" id="L73">        ENTITY existing = existingOpt.get();</span>
+<span class="fc" id="L74">        mapper.updateEntity(existing, request);</span>
+<span class="fc" id="L75">        ENTITY updated = service.save(existing);</span>
+<span class="fc" id="L76">        RESPONSE response = mapper.toResponse(updated);</span>
+
+<span class="fc" id="L78">        return ResponseEntity.ok(response);</span>
     }
 
     @PatchMapping(&quot;/{id}&quot;)
-    public ResponseEntity&lt;T&gt; patch(@PathVariable ID id, @RequestBody Map&lt;String, Object&gt; updates) throws JsonMappingException {
-<span class="fc" id="L84">        Optional&lt;T&gt; existingOpt = service.findById(id);</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (existingOpt.isEmpty()) return ResponseEntity.notFound().build();</span>
+    public ResponseEntity&lt;RESPONSE&gt; patch(
+            @PathVariable ID id,
+            @RequestBody REQUEST request
+    ) {
+<span class="fc" id="L86">        Optional&lt;ENTITY&gt; existingOpt = service.findById(id);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (existingOpt.isEmpty()) {</span>
+<span class="nc" id="L88">            return ResponseEntity.notFound().build();</span>
+        }
 
-<span class="fc" id="L87">        T existing = existingOpt.get();</span>
-<span class="fc" id="L88">        mapper.updateValue(existing, updates);</span>
-<span class="fc" id="L89">        return ResponseEntity.ok(service.save(existing));</span>
+<span class="fc" id="L91">        ENTITY existing = existingOpt.get();</span>
+<span class="fc" id="L92">        mapper.updateEntity(existing, request);</span>
+<span class="fc" id="L93">        ENTITY updated = service.save(existing);</span>
+<span class="fc" id="L94">        RESPONSE response = mapper.toResponse(updated);</span>
+
+<span class="fc" id="L96">        return ResponseEntity.ok(response);</span>
     }
-
 
     @DeleteMapping(&quot;/{id}&quot;)
     public ResponseEntity&lt;?&gt; delete(@PathVariable ID id) {
-<span class="fc" id="L95">        return service.findById(id)</span>
-<span class="fc" id="L96">                .&lt;ResponseEntity&lt;?&gt;&gt;map(e -&gt; {</span>
+<span class="fc" id="L101">        return service.findById(id)</span>
+<span class="fc" id="L102">                .&lt;ResponseEntity&lt;?&gt;&gt;map(entity -&gt; {</span>
                     try {
-<span class="fc" id="L98">                        service.deleteById(id);</span>
-<span class="fc" id="L99">                        return ResponseEntity.noContent().build();</span>
-<span class="nc" id="L100">                    } catch (org.springframework.dao.DataIntegrityViolationException ex) {</span>
-<span class="nc" id="L101">                        ex.getMostSpecificCause();</span>
-<span class="nc" id="L102">                        String msg = ex.getMostSpecificCause().getMessage();</span>
-<span class="nc" id="L103">                        return ResponseEntity.status(HttpStatus.CONFLICT)</span>
-<span class="nc" id="L104">                                .body(Map.of(</span>
+<span class="fc" id="L104">                        service.deleteById(id);</span>
+<span class="fc" id="L105">                        return ResponseEntity.noContent().build();</span>
+<span class="nc" id="L106">                    } catch (org.springframework.dao.DataIntegrityViolationException ex) {</span>
+<span class="nc" id="L107">                        String msg = ex.getMostSpecificCause().getMessage();</span>
+<span class="nc" id="L108">                        return ResponseEntity.status(HttpStatus.CONFLICT)</span>
+<span class="nc" id="L109">                                .body(Map.of(</span>
                                         &quot;code&quot;, &quot;FK_CONSTRAINT&quot;,
                                         &quot;message&quot;, &quot;Entity is still referenced&quot;,
                                         &quot;detail&quot;, msg
                                 ));
                     }
                 })
-<span class="fc" id="L111">                .orElse(ResponseEntity.notFound().build());</span>
+<span class="fc" id="L116">                .orElse(ResponseEntity.notFound().build());</span>
     }
 
+    protected Map&lt;String, String&gt; extractSubMap(MultiValueMap&lt;String, String&gt; params, String prefix) {
+<span class="fc" id="L120">        Map&lt;String, String&gt; result = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L121">        String start = prefix + &quot;[&quot;;</span>
+<span class="fc" id="L122">        int startLen = start.length();</span>
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for (String key : params.keySet()) {</span>
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">            if (key.startsWith(start) &amp;&amp; key.endsWith(&quot;]&quot;)) {</span>
+<span class="fc" id="L126">                String subKey = key.substring(startLen, key.length() - 1);</span>
+<span class="fc" id="L127">                result.put(subKey, params.getFirst(key));</span>
+            }
+<span class="fc" id="L129">        }</span>
+<span class="fc" id="L130">        return result;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
