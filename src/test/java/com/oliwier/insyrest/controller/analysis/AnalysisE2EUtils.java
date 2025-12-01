@@ -5,7 +5,8 @@ public class AnalysisE2EUtils {
     public static String buildValidJson(String sId, String sStamp, String timestamp) {
         return """
             {
-              "sample": %s,
+              "sId": %s,
+              "sStamp": %s,
               "pol": 1.0,
               "nat": 1.0,
               "kal": 1.0,
@@ -25,9 +26,8 @@ public class AnalysisE2EUtils {
               "dateExported": "%s"
             }
             """.formatted(
-                (sId == null ? "null" :
-                        "{\"s_id\":\"" + sId + "\",\"s_stamp\":\"" + sStamp + "\"}"
-                ),
+                (sId == null ? "null" : "\"" + sId + "\""),
+                (sStamp == null ? "null" : "\"" + sStamp + "\""),
                 timestamp, timestamp, timestamp
         );
     }

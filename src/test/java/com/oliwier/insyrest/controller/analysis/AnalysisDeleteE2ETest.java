@@ -12,18 +12,23 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteExistingAnalysis_shouldReturn204() {
-        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
                 Map.class
         );
 
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         ResponseEntity<Void> deleted = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.DELETE,
                 new HttpEntity<>(jsonHeaders()),
                 Void.class
@@ -32,7 +37,7 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
         assertThat(deleted.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
         ResponseEntity<String> getAfterDelete = rest.getForEntity(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 String.class
         );
         assertThat(getAfterDelete.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -51,16 +56,21 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteSameAnalysisTwice_shouldReturn204Then404() {
-        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
                 Map.class
         );
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         ResponseEntity<Void> first = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.DELETE,
                 new HttpEntity<>(jsonHeaders()),
                 Void.class
@@ -68,7 +78,7 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
         assertThat(first.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
 
         ResponseEntity<Void> second = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.DELETE,
                 new HttpEntity<>(jsonHeaders()),
                 Void.class
@@ -86,7 +96,7 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
                 new HttpEntity<>(sampleJson, jsonHeaders()),
                 Map.class
         );
-        assertThat(sampleRes.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(sampleRes.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         String analysisJson = AnalysisE2EUtils.buildValidJson(sid, stamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
@@ -94,10 +104,10 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
                 new HttpEntity<>(analysisJson, jsonHeaders()),
                 Map.class
         );
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         ResponseEntity<Void> deleted = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.DELETE,
                 new HttpEntity<>(jsonHeaders()),
                 Void.class

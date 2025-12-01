@@ -1,16 +1,18 @@
 package com.oliwier.insyrest.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oliwier.insyrest.dto.request.LogRequest;
+import com.oliwier.insyrest.dto.response.LogResponse;
 import com.oliwier.insyrest.entity.Log;
-import com.oliwier.insyrest.service.CrudService;
-import org.springframework.web.bind.annotation.*;
+import com.oliwier.insyrest.mapper.LogMapper;
+import com.oliwier.insyrest.service.LogService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/logs")
-public class LogController extends AbstractCrudController<Log, Long> {
+public class LogController extends AbstractCrudController<Log, Long, LogRequest, LogResponse> {
 
-    protected LogController(CrudService<Log, Long> service, ObjectMapper objectMapper) {
-        super(service, objectMapper);
+    public LogController(LogService logService, LogMapper logMapper) {
+        super(logService, logMapper);
     }
 }
-

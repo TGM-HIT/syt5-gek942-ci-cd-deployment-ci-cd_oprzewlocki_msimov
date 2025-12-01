@@ -1,6 +1,5 @@
 package com.oliwier.insyrest.controller.analysis;
 
-
 import com.oliwier.insyrest.controller.BaseE2ETest;
 import com.oliwier.insyrest.controller.SampleE2EUtils;
 import org.junit.jupiter.api.Test;
@@ -23,23 +22,28 @@ class AnalysisReadE2ETest extends BaseE2ETest {
 
     @Test
     void getExistingAnalysisById_shouldReturn200AndCorrectData() {
-        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
                 Map.class
         );
 
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 Map.class
         );
 
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(((Number) fetched.getBody().get("aid")).longValue()).isEqualTo(aid);
+        assertThat(((Number) fetched.getBody().get("aId")).longValue()).isEqualTo(aId);
     }
 
     @Test
@@ -66,10 +70,10 @@ class AnalysisReadE2ETest extends BaseE2ETest {
                 Map.class
         );
 
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/analysis?s_id=" + sId + "&s_stamp=" + sStamp),
+                baseUrl("/api/analysis?filter[sId]=" + sId),
                 Map.class
         );
 

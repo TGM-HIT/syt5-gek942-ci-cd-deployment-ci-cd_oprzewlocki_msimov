@@ -1,6 +1,5 @@
 package com.oliwier.insyrest.controller.analysis;
 
-
 import com.oliwier.insyrest.controller.BaseE2ETest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
@@ -11,30 +10,38 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateExistingAnalysis_shouldReturn200AndPersistChanges() {
-        String createJson = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),
                 Map.class
         );
 
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         String updateJson = createJson.replace("\"comment\": \"E2E Analysis Test\"", "\"comment\": \"Updated E2E Test\"");
-        rest.exchange(baseUrl("/api/analysis/" + aid),
-                HttpMethod.PUT, new HttpEntity<>(updateJson, jsonHeaders()), Void.class);
+        ResponseEntity<Map> updated = rest.exchange(baseUrl("/api/analysis/" + aId),
+                HttpMethod.PUT, new HttpEntity<>(updateJson, jsonHeaders()), Map.class);
 
-        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aid), Map.class);
+        assertThat(updated.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aId), Map.class);
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat((String) fetched.getBody().get("comment")).isEqualTo("Updated E2E Test");
-
-        rest.exchange(baseUrl("/api/analysis/" + aid), HttpMethod.DELETE, new HttpEntity<>(jsonHeaders()), Void.class);
     }
 
     @Test
     void updateNonexistentAnalysis_shouldReturn404() {
-        String fakeUpdate = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String fakeUpdate = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+
         ResponseEntity<String> res = rest.exchange(
                 baseUrl("/api/analysis/99999999"),
                 HttpMethod.PUT,
@@ -59,50 +66,60 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void partialUpdateWithPatch_shouldSucceedIfSupported() {
-        String createJson = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+    void partialUpdateWithPatch_shouldSucceed() {
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),
                 Map.class
         );
 
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         String patchJson = """
             {
+              "sId": "%s",
+              "sStamp": "%s",
               "comment": "Patched comment",
               "density": 5.5
             }
-            """;
+            """.formatted(sId, sStamp);
 
         ResponseEntity<Map> patched = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(patchJson, jsonHeaders()),
                 Map.class
         );
 
-        assertThat(patched.getStatusCode()).isIn(HttpStatus.OK, HttpStatus.NO_CONTENT);
+        assertThat(patched.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aid), Map.class);
+        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aId), Map.class);
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(((Number) fetched.getBody().get("density")).doubleValue()).isEqualTo(5.5);
-
-        rest.exchange(baseUrl("/api/analysis/" + aid), HttpMethod.DELETE, new HttpEntity<>(jsonHeaders()), Void.class);
     }
 
     @Test
     void updateAnalysisWithExtremeValues_shouldStillWork() {
-        String createJson = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
+
+        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),
                 Map.class
         );
 
-        Long aid = ((Number) created.getBody().get("aid")).longValue();
+        Long aId = ((Number) created.getBody().get("aId")).longValue();
 
         String extremeUpdate = createJson
                 .replace("\"weightMea\": 1.0", "\"weightMea\": 999999.99")
@@ -110,7 +127,7 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
                 .replace("\"comment\": \"E2E Analysis Test\"", "\"comment\": \"Extreme update test\"");
 
         ResponseEntity<Map> res = rest.exchange(
-                baseUrl("/api/analysis/" + aid),
+                baseUrl("/api/analysis/" + aId),
                 HttpMethod.PUT,
                 new HttpEntity<>(extremeUpdate, jsonHeaders()),
                 Map.class
@@ -118,10 +135,8 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aid), Map.class);
+        ResponseEntity<Map> fetched = rest.getForEntity(baseUrl("/api/analysis/" + aId), Map.class);
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(fetched.getBody().get("comment")).isEqualTo("Extreme update test");
-
-        rest.exchange(baseUrl("/api/analysis/" + aid), HttpMethod.DELETE, new HttpEntity<>(jsonHeaders()), Void.class);
     }
 }
