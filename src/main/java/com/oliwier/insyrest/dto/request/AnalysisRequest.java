@@ -1,6 +1,5 @@
 package com.oliwier.insyrest.dto.request;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AnalysisRequest {
 
-    @NotNull(message = "Sample ID is required")
     private String sId;
-
-    @NotNull(message = "Sample timestamp is required")
     private LocalDateTime sStamp;
 
     private BigDecimal pol;

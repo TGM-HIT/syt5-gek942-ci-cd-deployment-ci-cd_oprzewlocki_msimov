@@ -24,11 +24,11 @@ public class AnalysisMapper implements EntityMapper<Analysis, AnalysisRequest, A
     public Analysis toEntity(AnalysisRequest request) {
         Analysis analysis = new Analysis();
 
-        // Fetch and set sample reference
-        SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());
-        Sample sample = sampleRepository.findById(sampleId)
-                .orElseThrow(() -> new RuntimeException("Sample not found: " + request.getSId() + "," + request.getSStamp()));
-        analysis.setSample(sample);
+        if (request.getSId() != null && request.getSStamp() != null) {
+            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());
+            Sample sample = sampleRepository.findById(sampleId).orElse(null);
+            analysis.setSample(sample);
+        }
 
         analysis.setPol(request.getPol());
         analysis.setNat(request.getNat());
@@ -56,11 +56,14 @@ public class AnalysisMapper implements EntityMapper<Analysis, AnalysisRequest, A
         AnalysisResponse response = new AnalysisResponse();
 
         response.setAId(entity.getAId());
-        response.setSId(entity.getSample().getId().getsId());
-        response.setSStamp(entity.getSample().getId().getsStamp());
 
-        // Computed field: boxposString
-        response.setBoxposString(computeBoxposString(entity.getSample().getBoxPositions()));
+        if (entity.getSample() != null) {
+            response.setSId(entity.getSample().getId().getsId());
+            response.setSStamp(entity.getSample().getId().getsStamp());
+            response.setBoxposString(computeBoxposString(entity.getSample().getBoxPositions()));
+        } else {
+            response.setBoxposString("-");
+        }
 
         response.setPol(entity.getPol());
         response.setNat(entity.getNat());
@@ -85,11 +88,11 @@ public class AnalysisMapper implements EntityMapper<Analysis, AnalysisRequest, A
 
     @Override
     public void updateEntity(Analysis entity, AnalysisRequest request) {
-        // Update sample reference if changed
-        SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());
-        Sample sample = sampleRepository.findById(sampleId)
-                .orElseThrow(() -> new RuntimeException("Sample not found: " + request.getSId() + "," + request.getSStamp()));
-        entity.setSample(sample);
+        if (request.getSId() != null && request.getSStamp() != null) {
+            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());
+            Sample sample = sampleRepository.findById(sampleId).orElse(null);
+            entity.setSample(sample);
+        }
 
         entity.setPol(request.getPol());
         entity.setNat(request.getNat());
