@@ -33,7 +33,7 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.BAD_REQUEST);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
