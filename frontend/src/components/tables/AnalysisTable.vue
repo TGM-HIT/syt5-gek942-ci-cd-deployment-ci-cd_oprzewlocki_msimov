@@ -24,9 +24,8 @@ const tableRef = ref<any>(null);
 
 defineExpose({
   openCreate: () => tableRef.value?.openCreate?.({
-    aId: '',
     sId: '',
-    s_stamp: new Date().toISOString().slice(0, 19),
+    sStamp: '',
     lane: 1,
     pol: 0,
     nat: 0,

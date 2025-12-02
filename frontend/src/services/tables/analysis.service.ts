@@ -48,8 +48,8 @@ export async function fetchAnalysis(
 
 export async function createAnalysis(a: Analysis) {
   const payload = {
-    sId: a.sId || null,
-    sStamp: a.sStamp || null,
+    sid: a.sId || null,
+    sstamp: a.sStamp || null,
     pol: a.pol,
     nat: a.nat,
     kal: a.kal,
@@ -65,7 +65,7 @@ export async function createAnalysis(a: Analysis) {
     density: a.density,
     lane: a.lane,
     comment: a.comment,
-    aFlags: a.aFlags || "-",
+    aflags: a.aFlags || "-",
     dateExported: a.dateExported || new Date().toISOString()
   };
   const { data } = await http.post(`/analysis`, payload);
