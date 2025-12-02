@@ -1,51 +1,72 @@
 <script setup lang="ts">
-import GenericCrudTable from '@/components/crud/GenericCrudTable.vue';
-import { createAnalysis, updateAnalysis, deleteAnalysis, validateSampleRef } from '@/services/tables/analysis.service';
 import { ref } from 'vue';
+import GenericCrudTable from '@/components/crud/GenericCrudTable.vue';
+import { createAnalysis, updateAnalysis, deleteAnalysis } from '@/services/tables/analysis.service';
 
 const headers = [
-  { key: 'aId', title: 'Analysis ID' },
+  { key: 'aId', title: 'ID' },
   { key: 'sId', title: 'Sample ID' },
-  { key: 'sStamp', title: 'Sample Timestamp' },
-  { key: 'boxposString', title: 'BoxPos' },
-  { key: 'pol', title: 'Pol' },
-  { key: 'nat', title: 'Nat' },
-  { key: 'kal', title: 'Kal' },
-  { key: 'an', title: 'An' },
-  { key: 'glu', title: 'Glu' },
-  { key: 'dry', title: 'Dry' },
-  { key: 'lane', title: 'Lane' },
+  { key: 'sStamp', title: 'Sample Stamp' },
+  { key: 'boxposString', title: 'Box Position' },
+  { key: 'pol', title: 'POL' },
+  { key: 'nat', title: 'NAT' },
   { key: 'comment', title: 'Comment' },
-  { key: 'dateIn', title: 'Date In' },
-  { key: 'dateOut', title: 'Date Out' },
 ];
 
-
 const tableRef = ref<any>(null);
-defineExpose({ openCreate: () => tableRef.value?.openCreate?.() });
+defineExpose({
+  openCreate: () => tableRef.value?.openCreate?.({
+    sId: null,
+    sStamp: null,
+    pol: 0,
+    nat: 0,
+    kal: 0,
+    an: 0,
+    glu: 0,
+    dry: 0,
+    lane: 0,
+    dateIn: new Date().toISOString(),
+    dateOut: new Date().toISOString()
+  })
+});
 
+// Accept both ID string and row object
+function handleDelete(id: any, row: any) {
+  console.log('Delete analysis - ID param:', id, 'Row:', row);
 
-const validateForm = async (form: any) => {
-  if (!form.s_id || !form.s_stamp)
-    return { ok: false, message: 's_id and s_stamp are required' };
+  // Try to extract aId from multiple sources
+  const aId = row.aId ?? row.aid ?? row.a_id ?? id;
 
-  const ok = await validateSampleRef(form.s_id, form.s_stamp);
-  return ok ? { ok: true } : { ok: false, message: 'Invalid Sample reference.' };
-};
+  console.log('Extracted aId:', aId, 'type:', typeof aId);
+
+  if (!aId || aId === 'undefined') {
+    console.error('Invalid analysis ID. Full row:', JSON.stringify(row, null, 2));
+    throw new Error('Invalid analysis ID');
+  }
+
+  const numericId = typeof aId === 'number' ? aId : parseInt(String(aId), 10);
+
+  if (isNaN(numericId)) {
+    console.error('aId is not a number:', aId);
+    throw new Error('Analysis ID must be numeric');
+  }
+
+  console.log('Deleting analysis with ID:', numericId);
+  return deleteAnalysis(numericId);
+}
 </script>
 
 <template>
   <v-container fluid>
     <GenericCrudTable
         ref="tableRef"
-      api-path="/analysis/dto"
-      :headers="headers"
-      default-sort="aId"
-      :createFn="createAnalysis"
-      :updateFn="updateAnalysis"
-      :deleteFn="(id) => deleteAnalysis(id as number)"
-      :validateForm="validateForm"
-      :getId="row => row.aId"
+        api-path="/analysis"
+        :headers="headers"
+        default-sort="aId"
+        :createFn="createAnalysis"
+        :updateFn="updateAnalysis"
+        :deleteFn="handleDelete"
+        :getId="row => row.aId ?? row.aid ?? row.a_id"
     />
   </v-container>
 </template>

@@ -18,12 +18,11 @@ const tableRef = ref<any>(null);
 defineExpose({
   async openCreate() {
     const latest = await fetchLatestBox();
-    const lastId = latest?.bId ?? latest?.bid ?? latest?.b_id;
+    const lastId = latest?.bId;
     const nextId = nextBoxIdFrom(lastId);
 
     tableRef.value?.openCreate?.({
       bId: nextId,
-      bid: nextId,
       name: nextId,
       dateExported: new Date().toISOString().slice(0, 19),
       numMax: 40,
@@ -34,8 +33,8 @@ defineExpose({
 });
 
 async function validateForm(form: any) {
-  const id = form.bId ?? form.bid;
-  if (!/^V\d{3}$/i.test(id))
+  const id = form.bId;
+  if (!/^[A-Z]\d{3}$/i.test(id))
     return { ok: false, message: "ID must be format V### (e.g., V018)" };
 
   if (!(form.numMax > 0 && form.numMax < 1000))
@@ -46,22 +45,36 @@ async function validateForm(form: any) {
 
   return { ok: true };
 }
+
+// Use normalized bId from GenericCrudTable
+function handleDelete(id: any, row: any) {
+  console.log('Delete box - ID param:', id, 'Row:', row);
+
+  const bId = row.bId ?? id;
+
+  console.log('Extracted bId:', bId);
+
+  if (!bId) {
+    console.error('Invalid box ID. Full row:', JSON.stringify(row, null, 2));
+    throw new Error('Invalid box ID');
+  }
+
+  return deleteBoxWithCheck(bId);
+}
 </script>
 
 <template>
   <v-container fluid>
     <GenericCrudTable
-      ref="tableRef"
-      api-path="/box"
-      :headers="headers"
-      default-sort="bId"
-      :createFn="createBox"
-      :updateFn="updateBox"
-
-      :deleteFn="deleteBoxWithCheck"
-
-      :getId="row => row.bId"
-      :validateForm="validateForm"
+        ref="tableRef"
+        api-path="/boxes"
+        :headers="headers"
+        default-sort="bId"
+        :createFn="createBox"
+        :updateFn="updateBox"
+        :deleteFn="handleDelete"
+        :getId="row => row.bId"
+        :validateForm="validateForm"
     />
   </v-container>
 </template>

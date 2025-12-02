@@ -1,4 +1,4 @@
-import { http, encodeCompositeKey } from "../http";
+import { http, encodeCompositeKey } from '../http';
 
 export interface BoxPos {
   bposId: number;
@@ -8,55 +8,55 @@ export interface BoxPos {
   dateExported?: string;
 }
 
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
+export interface Page<T> { content: T[]; totalElements: number; }
+
+export async function fetchBoxPos(
+    page = 0,
+    size = 25,
+    filters: Record<string, string> = {},
+    sorts: Record<string, string> = {}
+): Promise<Page<BoxPos>> {
+  const params = new URLSearchParams();
+  params.append('page', String(page));
+  params.append('size', String(size));
+
+  Object.entries(filters).forEach(([k, v]) => {
+    if (v?.trim()) params.append(`filter[${k}]`, v);
+  });
+  Object.entries(sorts).forEach(([k, dir]) => {
+    if (dir) params.append(`sort[${k}]`, dir);
+  });
+
+  const url = `/boxpos?${params.toString()}`;
+  const { data } = await http.get(url);
+  return Array.isArray(data) ? { content: data, totalElements: data.length } : data;
 }
 
-export async function fetchBoxPos(page=0, size=25, filters={}, sorts={}): Promise<Page<BoxPos>> {
-  const params = new URLSearchParams();
-  params.append("page", String(page));
-  params.append("size", String(size));
+export async function createBoxPos(bp: BoxPos) {
+  const payload = {
+    bposId: bp.bposId,
+    bId: bp.bId,
+    sId: bp.sId,
+    sStamp: bp.sStamp,
+    dateExported: bp.dateExported || new Date().toISOString()
+  };
+  const { data } = await http.post(`/boxpos`, payload);
+  return data;
+}
 
-  Object.entries(filters).forEach(([k,v]) => v && params.append(`filter[${k}]`, v));
-  Object.entries(sorts).forEach(([k,v]) => v && params.append(`sort[${k}]`, v));
-
-  const { data } = await http.get(`/boxpos?${params.toString()}`);
-  const pageData = Array.isArray(data) ? { content: data, totalElements: data.length } : data;
-
-  pageData.content = pageData.content.map((bp: any) => ({
-    bposId: bp.id?.bposId ?? bp.bposId,
-    bId: bp.id?.bId ?? bp.id?.bid,
+export async function updateBoxPos(bp: BoxPos) {
+  const key = encodeCompositeKey([bp.bposId, bp.bId]);
+  const payload = {
+    bposId: bp.bposId,
+    bId: bp.bId,
     sId: bp.sId,
     sStamp: bp.sStamp,
     dateExported: bp.dateExported
-  }));
-
-  return pageData;
+  };
+  return http.put(`/boxpos/${key}`, payload);
 }
-
-export async function createBoxPos(data: any) {
-  return http.post(`/boxpos/flat`, {
-    bposId: Number(data.bposId),
-    bId: data.bId,
-    sId: data.sId,
-    sStamp: data.sStamp,
-    dateExported: data.dateExported ?? null
-  });
-}
-
-export async function updateBoxPos(data: any) {
-  return http.put(`/boxpos/flat/${data.bposId},${data.bId}`, {
-    bposId: Number(data.bposId),
-    bId: data.bId,
-    sId: data.sId,
-    sStamp: data.sStamp,
-    dateExported: data.dateExported ?? null
-  });
-}
-
 
 export async function deleteBoxPos(bposId: number, bId: string) {
   const key = encodeCompositeKey([bposId, bId]);
-  return http.delete(`/boxpos/${key}`);
+  await http.delete(`/boxpos/${key}`);
 }

@@ -287,7 +287,7 @@ async function remove() {
       return;
     }
 
-    alert("Bro... löschen blockiert. Da hängt noch irgendwas dran.");
+    alert("löschen blockiert. Da hängt noch irgendwas dran.");
   }
 }
 
