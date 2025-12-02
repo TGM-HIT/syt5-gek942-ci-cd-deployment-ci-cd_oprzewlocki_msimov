@@ -4,55 +4,84 @@ import GenericCrudTable from '@/components/crud/GenericCrudTable.vue';
 import { createAnalysis, updateAnalysis, deleteAnalysis } from '@/services/tables/analysis.service';
 
 const headers = [
-  { key: 'aId', title: 'ID' },
+  { key: 'aId', title: 'Analysis ID' },
   { key: 'sId', title: 'Sample ID' },
-  { key: 'sStamp', title: 'Sample Stamp' },
-  { key: 'boxposString', title: 'Box Position' },
+  { key: 'sStamp', title: 'Sample Timestamp' },
+  { key: 'lane', title: 'Lane' },
   { key: 'pol', title: 'POL' },
   { key: 'nat', title: 'NAT' },
+  { key: 'kal', title: 'KAL' },
+  { key: 'an', title: 'AN' },
+  { key: 'glu', title: 'GLU' },
+  { key: 'dry', title: 'DRY' },
+  { key: 'dateIn', title: 'Date In' },
+  { key: 'dateOut', title: 'Date Out' },
+  { key: 'boxposString', title: 'Box Position' },
   { key: 'comment', title: 'Comment' },
 ];
 
 const tableRef = ref<any>(null);
+
 defineExpose({
   openCreate: () => tableRef.value?.openCreate?.({
-    sId: null,
-    sStamp: null,
+    aId: '',
+    sId: '',
+    s_stamp: new Date().toISOString().slice(0, 19),
+    lane: 1,
     pol: 0,
     nat: 0,
     kal: 0,
     an: 0,
     glu: 0,
     dry: 0,
-    lane: 0,
-    dateIn: new Date().toISOString(),
-    dateOut: new Date().toISOString()
+    dateIn: new Date().toISOString().slice(0, 19),
+    dateOut: new Date().toISOString().slice(0, 19),
+    comment: ''
   })
 });
 
-// Accept both ID string and row object
-function handleDelete(id: any, row: any) {
-  console.log('Delete analysis - ID param:', id, 'Row:', row);
-
-  // Try to extract aId from multiple sources
-  const aId = row.aId ?? row.aid ?? row.a_id ?? id;
-
-  console.log('Extracted aId:', aId, 'type:', typeof aId);
-
-  if (!aId || aId === 'undefined') {
-    console.error('Invalid analysis ID. Full row:', JSON.stringify(row, null, 2));
-    throw new Error('Invalid analysis ID');
+// MINIMAL validation - only for fields shown in form
+async function validateForm(form: any) {
+  // sId and sStamp are user input (reference to existing sample)
+  if (!form.sId || form.sId.trim().length === 0) {
+    return {
+      ok: false,
+      message: 'Sample ID (sId) is required'
+    };
   }
 
-  const numericId = typeof aId === 'number' ? aId : parseInt(String(aId), 10);
-
-  if (isNaN(numericId)) {
-    console.error('aId is not a number:', aId);
-    throw new Error('Analysis ID must be numeric');
+  if (!form.sStamp) {
+    return {
+      ok: false,
+      message: 'Sample Timestamp (sStamp) is required'
+    };
   }
 
-  console.log('Deleting analysis with ID:', numericId);
-  return deleteAnalysis(numericId);
+  // boxposString is readonly/auto
+
+  // Validate pol (0-100)
+  if (form.pol !== null && form.pol !== undefined && form.pol !== '') {
+    const polVal = parseFloat(form.pol);
+    if (isNaN(polVal) || polVal < 0 || polVal > 100) {
+      return {
+        ok: false,
+        message: 'POL must be between 0 and 100'
+      };
+    }
+  }
+
+  // Validate nat (0-100)
+  if (form.nat !== null && form.nat !== undefined && form.nat !== '') {
+    const natVal = parseFloat(form.nat);
+    if (isNaN(natVal) || natVal < 0 || natVal > 100) {
+      return {
+        ok: false,
+        message: 'NAT must be between 0 and 100'
+      };
+    }
+  }
+
+  return { ok: true };
 }
 </script>
 
@@ -65,8 +94,9 @@ function handleDelete(id: any, row: any) {
         default-sort="aId"
         :createFn="createAnalysis"
         :updateFn="updateAnalysis"
-        :deleteFn="handleDelete"
-        :getId="row => row.aId ?? row.aid ?? row.a_id"
+        :deleteFn="deleteAnalysis"
+        :getId="row => row.aId"
+        :validateForm="validateForm"
     />
   </v-container>
 </template>

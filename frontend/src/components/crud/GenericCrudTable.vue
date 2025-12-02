@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount, computed, readonly } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount, computed, reactive } from "vue";
 import { http } from "@/services/http";
 import CrudDialog from "./CrudDialog.vue";
 import DeleteChoiceDialog from "./DeleteChoiceDialog.vue";
-
 
 const props = defineProps<{
   apiPath: string;
   headers: { key: string; title: string }[];
   defaultSort?: string;
-  getId?: (row: Record<string, any>) => string;
+  getId: (row: Record<string, any>) => string;
   createFn: (form: any) => Promise<any>;
   updateFn: (form: any) => Promise<any>;
   deleteFn: (id: any, row?: any) => Promise<any>;
   keyMap?: Record<string, string>;
+  // Added validateForm prop
+  validateForm?: (form: any) => Promise<{ ok: boolean; message?: string }>;
 }>();
 
 const isSampleTable = computed(() => props.apiPath.includes("/samples"));
@@ -30,12 +31,12 @@ const total = ref(0);
 const loading = ref(false);
 const page = ref(1);
 const sortBy = ref<{ key: string; order: "asc" | "desc" }[]>([
-  { key: props.defaultSort || props.headers[0].key, order: "desc" },
+  { key: props.defaultSort || props.headers[0]?.key || 'id', order: "desc" },
 ]);
 
 // Filters (auto-created from headers)
 const filters = ref<Record<string, string>>(
-  Object.fromEntries(props.headers.map((h) => [h.key, ""]))
+    Object.fromEntries(props.headers.map((h) => [h.key, ""]))
 );
 
 const visibleFields = computed(() => {
@@ -70,6 +71,16 @@ const boxDelete = ref({ visible: false, target: null as Record<string, any> | nu
 const advancedDelete = ref({ visible: false, target: null as Record<string, any> | null });
 const boxCascade = ref({ visible: false, target: null as any });
 
+// Error Dialog State
+const errorDialog = reactive({
+  visible: false,
+  message: ''
+});
+
+function showError(message: string) {
+  errorDialog.message = message;
+  errorDialog.visible = true;
+}
 
 // ========== Lifecycle ==========
 onMounted(() => {
@@ -87,7 +98,7 @@ function mapKey(key: string) {
   if (key === 'sStamp') return 'sample.id.sStamp';
 
   // ANALYSIS (nothing special)
-  
+
   // **BOXPOS (composite ID)**
   if (props.apiPath.includes("/boxpos")) {
     if (key === "bposId") return "id.bposId";
@@ -103,12 +114,10 @@ function mapKey(key: string) {
   return key;
 }
 
-
-
 async function load() {
   loading.value = true;
   try {
-    const sort = sortBy.value[0] ?? { key: props.headers[0].key, order: "asc" };
+    const sort = sortBy.value[0] ?? { key: props.headers[0]?.key, order: "asc" };
 
     const mappedFilters: Record<string, string> = {};
     for (const [k, v] of Object.entries(filters.value)) {
@@ -127,52 +136,49 @@ async function load() {
     });
 
     function normalizeRow(a: any) {
-  const id = a.id ?? {};
+      const id = a.id ?? {};
 
-  return {
-    ...a,
+      return {
+        ...a,
 
-    // ===== Normalize ID naming across all tables =====
-    bId: (
-      a.bId ??
-      id.bId ??
-      a.bid ?? 
-      id.bid ??
-      a.b_id ??
-      a.BID ??
-      null
-    ),
+        // ===== Normalize ID naming across all tables =====
+        bId: (
+            a.bId ??
+            id.bId ??
+            a.bid ??
+            id.bid ??
+            a.b_id ??
+            a.BID ??
+            null
+        ),
 
-    // ===== normalize BoxPos ID =====
-    bposId: a.bposId ?? id.bposId ?? null,
+        // ===== normalize BoxPos ID =====
+        bposId: a.bposId ?? id.bposId ?? null,
 
-    // ===== normalize Sample foreign keys =====
-    sId: (
-      a.sId ??
-      a.s_id ??
-      a.sample?.id?.sId ??
-      a.sample?.s_id ??
-      null
-    ),
-    sStamp: (
-      a.sStamp ??
-      a.s_stamp ??
-      a.sample?.id?.sStamp ??
-      a.sample?.s_stamp ??
-      null
-    ),
+        // ===== normalize Sample foreign keys =====
+        sId: (
+            a.sId ??
+            a.s_id ??
+            a.sample?.id?.sId ??
+            a.sample?.s_id ??
+            null
+        ),
+        sStamp: (
+            a.sStamp ??
+            a.s_stamp ??
+            a.sample?.id?.sStamp ??
+            a.sample?.s_stamp ??
+            null
+        ),
 
-    // ===== Date normalization =====
-    dateExported: a.dateExported ?? a.date_exported ?? null,
+        // ===== Date normalization =====
+        dateExported: a.dateExported ?? a.date_exported ?? null,
 
-    id // keep raw but never display directly
-  };
-}
+        id // keep raw but never display directly
+      };
+    }
 
-  rows.value = (data.content ?? []).map(normalizeRow);
-
-
-
+    rows.value = (data.content ?? []).map(normalizeRow);
     total.value = data.totalElements ?? 0;
 
   } catch (err) {
@@ -191,8 +197,6 @@ const readonlyKeys = computed(() => {
   return autoIds;
 });
 
-
-
 watch([page, itemsPerPage, sortBy, filters], load, { deep: true, immediate: true });
 
 // ========== CRUD Actions ==========
@@ -200,13 +204,13 @@ function openCreate(defaults?: Record<string, any>) {
   dialog.value.mode = "create";
 
   const base = props.apiPath.includes("/samples")
-    ? {
+      ? {
         s_id: String(Math.floor(Math.random() * 1e13)).padStart(13, "0"),
         s_stamp: new Date().toISOString().slice(0, 19),
       }
-    : {};
+      : {};
 
-  dialog.value.form = { ...base, ...(defaults ?? {}) }; // <- DEFAULTS HIER REIN
+  dialog.value.form = { ...base, ...(defaults ?? {}) };
   dialog.value.visible = true;
 }
 
@@ -216,11 +220,31 @@ function openEdit(item: any) {
   dialog.value = { visible: true, mode: "edit", form: { ...item } };
 }
 
-
+// FIXED SAVE FUNCTION WITH VALIDATION
 async function save(payload?: any) {
   const mode = dialog.value.mode;
   const form = payload ?? dialog.value.form;
 
+  // 1. Perform Validation BEFORE saving
+  if (props.validateForm) {
+    loading.value = true;
+    try {
+      const validation = await props.validateForm(form);
+
+      if (!validation.ok) {
+        showError(validation.message ?? 'Validation failed');
+        loading.value = false;
+        return; // STOP HERE if validation fails
+      }
+    } catch (e) {
+      console.error("Validation error:", e);
+      showError("An error occurred during validation");
+      loading.value = false;
+      return;
+    }
+  }
+
+  // 2. Proceed with Save if Validation passes
   try {
     if (mode === "create") {
       console.log("SAVE FORM = ", JSON.stringify(form, null, 2));
@@ -232,8 +256,11 @@ async function save(payload?: any) {
     }
     dialog.value.visible = false;
     load();
-  } catch (err) {
+  } catch (err: any) {
     console.error("Save failed:", err);
+    showError(err.message || "Save operation failed");
+  } finally {
+    loading.value = false;
   }
 }
 
@@ -242,13 +269,11 @@ function updateItemsPerPage(v: number | boolean) {
   if (v !== false) itemsPerPage.value = Number(v);
 }
 
-
 async function remove() {
   const target = confirm.value.target;
   if (!target) return;
 
   try {
-    // === Normaler Delete Versuch ===
     await props.deleteFn(props.getId ? props.getId(target) : target.id, target);
 
     confirm.value.visible = false;
@@ -259,17 +284,16 @@ async function remove() {
     const status = err.response?.status;
 
     if (
-      props.apiPath.includes("/box") &&
-      (err?.code === "NEEDS_CASCADE" || status === 409)
+        props.apiPath.includes("/box") &&
+        (err?.code === "NEEDS_CASCADE" || status === 409)
     ) {
-
       console.log(target)
       confirm.value.visible = false;
 
       const ok = window.confirm(
-        `Die Box "${target.bId}" hat noch BoxPos Einträge.\n` +
-        `Willst du die Box *komplett inkl. allen BoxPos löschen?*\n\n` +
-        `→ OK = CASCADE\n→ Cancel = nix passiert`
+          `Die Box "${target.bId}" hat noch BoxPos Einträge.\n` +
+          `Willst du die Box *komplett inkl. allen BoxPos löschen?*\n\n` +
+          `→ OK = CASCADE\n→ Cancel = nix passiert`
       );
 
       if (ok) {
@@ -290,8 +314,6 @@ async function remove() {
     alert("löschen blockiert. Da hängt noch irgendwas dran.");
   }
 }
-
-
 
 async function performAdvancedDelete(action: "cascade" | "detach") {
   const t = advancedDelete.value.target;
@@ -315,70 +337,62 @@ async function performAdvancedDelete(action: "cascade" | "detach") {
 
     const raw = err.response?.data;
     const message =
-      typeof raw === "string"
-        ? raw
-        : typeof raw === "object"
-          ? JSON.stringify(raw)
-          : "";
+        typeof raw === "string"
+            ? raw
+            : typeof raw === "object"
+                ? JSON.stringify(raw)
+                : "";
 
-    // --- Linked analyses ---
     if (err.response?.status === 409 && message.includes("analysis")) {
-      // Show the same analysis popup again
       advancedDelete.value = { visible: true, target: t };
       return;
     }
 
-    // --- Linked boxes (new) ---
     if (err.response?.status === 409 && message.includes("boxpos")) {
-      // Show box popup
       boxDelete.value = { visible: true, target: t };
       return;
     }
 
-    // --- Fallback ---
     if (err.response?.status === 409) {
       alert("Delete blocked — related data (analysis or boxpos) still exists.");
       return;
     }
 
-    // Anything else
     console.error("Unexpected delete error:", err);
   }
 }
 
-
 function askDelete(item: any) {
   confirm.value = { visible: true, target: item };
 }
-
 </script>
 
 <template>
   <v-card flat>
     <v-data-table-server
-      :headers="[...props.headers, { key: 'actions', title: 'Actions' }]"
-      :items="rows"
-      :items-length="total"
-      :loading="loading"
-      :page="page"
-      :items-per-page="itemsPerPage"
-      :sort-by="sortBy"
-      @update:page="page = $event"
-      @update:items-per-page="updateItemsPerPage"
-      @update:sort-by="sortBy = $event"
-      density="comfortable"
+        :headers="[...props.headers, { key: 'actions', title: 'Actions' }]"
+        :items="rows"
+        :items-length="total"
+        :loading="loading"
+        :page="page"
+        :items-per-page="itemsPerPage"
+        :sort-by="sortBy"
+        @update:page="page = $event"
+        @update:items-per-page="updateItemsPerPage"
+        @update:sort-by="sortBy = $event"
+        density="comfortable"
     >
       <!-- Filters -->
       <template #top>
         <v-row class="pa-2" align="center">
           <v-col v-for="h in props.headers" :key="h.key" cols="12" sm="2">
             <v-text-field
-              :label="`Filter ${h.key}`"
-              v-model="filters[h.key]"
-              variant="outlined"
-              density="comfortable"
-              hide-details
-              clearable
+                :label="`Filter ${h.key}`"
+                v-model="filters[h.key]"
+                variant="outlined"
+                density="comfortable"
+                hide-details
+                clearable
             />
           </v-col>
         </v-row>
@@ -398,17 +412,14 @@ function askDelete(item: any) {
 
     <!-- Create/Edit Dialog -->
     <CrudDialog
-      v-model:visible="dialog.visible"
-      :mode="dialog.mode"
-      :form="dialog.form"
-      :fields="visibleFields"
-      :readonlyKeys="readonlyKeys"
-      @save="save"
-      @cancel="dialog.visible = false"
+        v-model:visible="dialog.visible"
+        :mode="dialog.mode"
+        :form="dialog.form"
+        :fields="visibleFields"
+        :readonlyKeys="readonlyKeys"
+        @save="save"
+        @cancel="dialog.visible = false"
     />
-
-
-
 
     <!-- Delete Confirmation -->
     <v-dialog v-model="confirm.visible" width="420">
@@ -426,11 +437,28 @@ function askDelete(item: any) {
     </v-dialog>
 
     <DeleteChoiceDialog
-      v-model:visible="advancedDelete.visible"
-      :target-name="advancedDelete.target?.name"
-      @cancel="advancedDelete.visible = false"
-      @choose="performAdvancedDelete"
+        v-model:visible="advancedDelete.visible"
+        :target-name="advancedDelete.target?.name"
+        @cancel="advancedDelete.visible = false"
+        @choose="performAdvancedDelete"
     />
+
+    <!-- Error / Validation Dialog -->
+    <v-dialog v-model="errorDialog.visible" max-width="400">
+      <v-card>
+        <v-card-title class="text-h5 text-error">
+          <v-icon color="error" class="mr-2">mdi-alert-circle</v-icon>
+          Validation Error
+        </v-card-title>
+        <v-card-text class="pt-4">
+          {{ errorDialog.message }}
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" variant="text" @click="errorDialog.visible = false">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
   </v-card>
 </template>

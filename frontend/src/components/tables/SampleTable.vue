@@ -15,7 +15,6 @@ const headers = [
 
 const tableRef = ref<any>(null);
 
-// Generate sample ID: YYMMDDHHMMSSN (13 digits)
 async function generateSampleId(): Promise<string> {
   const now = new Date();
 
@@ -26,10 +25,8 @@ async function generateSampleId(): Promise<string> {
   const min = String(now.getMinutes()).padStart(2, '0');
   const ss = String(now.getSeconds()).padStart(2, '0');
 
-  // Base: YYMMDDHHMM SS (12 digits)
   const base = `${yy}${mm}${dd}${hh}${min}${ss}`;
 
-  // Fetch latest sample to determine incrementing digit
   try {
     const result = await fetchSamples(0, 1, {}, { s_id: 'desc' });
 
@@ -37,7 +34,6 @@ async function generateSampleId(): Promise<string> {
       const latestId = result.content[0].s_id ?? result.content[0].sId;
 
       if (latestId && latestId.startsWith(base)) {
-        // Same second, increment last digit
         const lastDigit = parseInt(latestId.charAt(12), 10);
         const nextDigit = (lastDigit + 1) % 10;
         return base + nextDigit;
@@ -47,7 +43,6 @@ async function generateSampleId(): Promise<string> {
     console.warn('Could not fetch latest sample:', err);
   }
 
-  // Different second or first sample, use digit 0
   return base + '0';
 }
 
@@ -83,6 +78,34 @@ function handleDelete(id: string, row: any) {
 
   return deleteSample(sId, sStamp);
 }
+
+// MINIMAL validation - only for fields shown in form
+async function validateForm(form: any) {
+  // s_id and s_stamp are auto-generated, readonly
+
+  if (!form.name || form.name.trim().length === 0) {
+    return {
+      ok: false,
+      message: 'Name is required'
+    };
+  }
+
+  if (form.weightNet < 0) {
+    return {
+      ok: false,
+      message: 'Weight Net cannot be negative'
+    };
+  }
+
+  if (form.lane < 1 || form.lane > 20) {
+    return {
+      ok: false,
+      message: 'Lane must be between 1 and 20'
+    };
+  }
+
+  return { ok: true };
+}
 </script>
 
 <template>
@@ -96,6 +119,7 @@ function handleDelete(id: string, row: any) {
         :updateFn="updateSample"
         :deleteFn="handleDelete"
         :getId="row => `${row.sId},${row.sStamp}`"
+        :validateForm="validateForm"
     />
   </v-container>
 </template>

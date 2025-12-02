@@ -103,14 +103,14 @@ export async function deleteAnalysis(aId: number) {
 
 export async function validateSample(sId: string, sStamp: string) {
   const { data } = await http.get(`/analysis/validate-sample`, {
-    params: { s_id: sId, s_stamp: sStamp },
+    params: { sId: sId, sStamp: sStamp },
   });
   return data.valid as boolean;
 }
 
 export async function validateSampleRef(sId: string, sStamp: string) {
   const { data } = await http.get('/analysis/validate-sample', {
-    params: { s_id: sId, s_stamp: sStamp },
+    params: { sId: sId, sStamp: sStamp },
   });
   return !!data.valid;
 }
