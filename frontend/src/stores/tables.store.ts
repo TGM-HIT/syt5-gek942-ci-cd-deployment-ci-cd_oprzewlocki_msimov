@@ -2,7 +2,15 @@ import { defineStore } from 'pinia';
 
 export const useTablesStore = defineStore("tables", {
   state: () => ({
-    tables: ["samples", "analysis", "box", "thresholds", "boxpos", "log"],
+    tables: [
+      "samples",
+      "analysis",
+      "box",
+      "thresholds",
+      "boxpos",
+      "log",
+      "Sample-BoxPos View"
+    ],
 
     active: "samples",
 
@@ -17,7 +25,7 @@ export const useTablesStore = defineStore("tables", {
         "dateIn", "dateOut"
       ],
 
-      box: [                                  // <— NEU
+      box: [
         "b_id",
         "name",
         "num_max",
@@ -36,7 +44,13 @@ export const useTablesStore = defineStore("tables", {
         "dateExported"
       ],
 
-      log: ["logId","dateCreated","level","info","sId","sStamp","aId","dateExported"]
+      log: ["logId","dateCreated","level","info","sId","sStamp","aId","dateExported"],
+
+      "Sample-BoxPos View": [
+        "s_id",
+        "s_stamp",
+        "boxpos"
+      ]
     }
   }),
 

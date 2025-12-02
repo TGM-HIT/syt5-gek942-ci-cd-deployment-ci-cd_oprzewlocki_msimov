@@ -7,6 +7,7 @@ import BoxTable from '@/components/tables/BoxTable.vue';
 import ThresholdTable from "@/components/tables/ThresholdTable.vue";
 import LogTable from "@/components/tables/LogTable.vue";
 import BoxPosTable from "@/components/tables/BoxPosTable.vue";
+import SampleBoxPosViewTable from "@/components/tables/SampleBoxPosViewTable.vue";
 
 const route = useRoute();
 const name = computed(() => route.params.name as string);
@@ -17,7 +18,8 @@ const tableMap: Record<string, any> = {
   box: BoxTable,
   thresholds: ThresholdTable,
   log: LogTable,
-  boxpos: BoxPosTable
+  boxpos: BoxPosTable,
+  'sample-boxpos': SampleBoxPosViewTable,
 };
 
 const tableComponent = computed(() => tableMap[name.value] ?? SampleTable);
