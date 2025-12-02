@@ -89,6 +89,6 @@ class AnalysisReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody()).containsKeys("content", "totalElements");
+        assertThat(res.getBody()).containsKeys("content", "total_elements");
     }
 }
