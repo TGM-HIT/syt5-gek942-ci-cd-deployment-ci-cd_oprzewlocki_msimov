@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 
     @Override
     public BoxPosId convert(String source) {
-<span class="nc" id="L12">        String[] parts = source.split(&quot;,&quot;, 2);</span>
-<span class="nc bnc" id="L13" title="All 2 branches missed.">        if (parts.length != 2) {</span>
-<span class="nc" id="L14">            throw new IllegalArgumentException(&quot;Invalid BoxPosId format. Expected: bpos_id,b_id&quot;);</span>
+<span class="fc" id="L12">        String[] parts = source.split(&quot;,&quot;, 2);</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">        if (parts.length != 2) {</span>
+<span class="fc" id="L14">            throw new IllegalArgumentException(&quot;Invalid BoxPosId format. Expected: bpos_id,b_id&quot;);</span>
         }
 
-<span class="nc" id="L17">        Integer bPosId = Integer.valueOf(parts[0].trim());</span>
-<span class="nc" id="L18">        String bId = parts[1].trim();</span>
+<span class="fc" id="L17">        Integer bPosId = Integer.valueOf(parts[0].trim());</span>
+<span class="fc" id="L18">        String bId = parts[1].trim();</span>
 
 
-<span class="nc" id="L21">        return new BoxPosId(bPosId, bId);</span>
+<span class="fc" id="L21">        return new BoxPosId(bPosId, bId);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

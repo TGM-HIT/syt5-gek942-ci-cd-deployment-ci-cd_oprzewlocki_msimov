@@ -265,9 +265,9 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 
 
     private String mapFieldName(String field) {
-<span class="pc bpc" id="L268" title="2 of 3 branches missed.">        return switch (field) {</span>
+<span class="pc bpc" id="L268" title="1 of 3 branches missed.">        return switch (field) {</span>
 <span class="nc" id="L269">            case &quot;s_stamp&quot; -&gt; &quot;id.sStamp&quot;;</span>
-<span class="nc" id="L270">            case &quot;s_id&quot; -&gt; &quot;id.sId&quot;;</span>
+<span class="fc" id="L270">            case &quot;s_id&quot; -&gt; &quot;id.sId&quot;;</span>
 <span class="fc" id="L271">            default -&gt; field;</span>
         };
     }
