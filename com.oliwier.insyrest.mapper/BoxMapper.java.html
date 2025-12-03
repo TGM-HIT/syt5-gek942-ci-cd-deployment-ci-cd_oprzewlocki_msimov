@@ -10,36 +10,36 @@ import org.springframework.stereotype.Component;
 
     @Override
     public Box toEntity(BoxRequest request) {
-<span class="nc" id="L13">        Box box = new Box();</span>
-<span class="nc" id="L14">        box.setBId(request.getBId());</span>
-<span class="nc" id="L15">        box.setName(request.getName());</span>
-<span class="nc" id="L16">        box.setNumMax(request.getNumMax());</span>
-<span class="nc" id="L17">        box.setType(request.getType());</span>
-<span class="nc" id="L18">        box.setComment(request.getComment());</span>
-<span class="nc" id="L19">        box.setDateExported(request.getDateExported());</span>
-<span class="nc" id="L20">        return box;</span>
+<span class="fc" id="L13">        Box box = new Box();</span>
+<span class="fc" id="L14">        box.setBId(request.getBId());</span>
+<span class="fc" id="L15">        box.setName(request.getName());</span>
+<span class="fc" id="L16">        box.setNumMax(request.getNumMax());</span>
+<span class="fc" id="L17">        box.setType(request.getType());</span>
+<span class="fc" id="L18">        box.setComment(request.getComment());</span>
+<span class="fc" id="L19">        box.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L20">        return box;</span>
     }
 
     @Override
     public BoxResponse toResponse(Box entity) {
-<span class="nc" id="L25">        BoxResponse response = new BoxResponse();</span>
-<span class="nc" id="L26">        response.setBId(entity.getBId());</span>
-<span class="nc" id="L27">        response.setName(entity.getName());</span>
-<span class="nc" id="L28">        response.setNumMax(entity.getNumMax());</span>
-<span class="nc" id="L29">        response.setType(entity.getType());</span>
-<span class="nc" id="L30">        response.setComment(entity.getComment());</span>
-<span class="nc" id="L31">        response.setDateExported(entity.getDateExported());</span>
-<span class="nc" id="L32">        return response;</span>
+<span class="fc" id="L25">        BoxResponse response = new BoxResponse();</span>
+<span class="fc" id="L26">        response.setBId(entity.getBId());</span>
+<span class="fc" id="L27">        response.setName(entity.getName());</span>
+<span class="fc" id="L28">        response.setNumMax(entity.getNumMax());</span>
+<span class="fc" id="L29">        response.setType(entity.getType());</span>
+<span class="fc" id="L30">        response.setComment(entity.getComment());</span>
+<span class="fc" id="L31">        response.setDateExported(entity.getDateExported());</span>
+<span class="fc" id="L32">        return response;</span>
     }
 
     @Override
     public void updateEntity(Box entity, BoxRequest request) {
         // Don't update bId - it's the primary key
-<span class="nc" id="L38">        entity.setName(request.getName());</span>
-<span class="nc" id="L39">        entity.setNumMax(request.getNumMax());</span>
-<span class="nc" id="L40">        entity.setType(request.getType());</span>
-<span class="nc" id="L41">        entity.setComment(request.getComment());</span>
-<span class="nc" id="L42">        entity.setDateExported(request.getDateExported());</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L38">        entity.setName(request.getName());</span>
+<span class="fc" id="L39">        entity.setNumMax(request.getNumMax());</span>
+<span class="fc" id="L40">        entity.setType(request.getType());</span>
+<span class="fc" id="L41">        entity.setComment(request.getComment());</span>
+<span class="fc" id="L42">        entity.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

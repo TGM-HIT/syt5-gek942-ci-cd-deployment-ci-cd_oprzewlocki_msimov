@@ -17,7 +17,7 @@ INSY-REST,com.oliwier.insyrest.converter,StringToBoxPosIdConverter,31,3,2,0,6,1,
 INSY-REST,com.oliwier.insyrest.mapper,EntityMapper,9,5,0,0,3,1,1,1,1,1
 INSY-REST,com.oliwier.insyrest.mapper,LogMapper,168,9,16,0,37,4,11,1,3,1
 INSY-REST,com.oliwier.insyrest.mapper,SampleMapper,26,180,4,2,5,45,3,5,0,5
-INSY-REST,com.oliwier.insyrest.mapper,BoxMapper,81,3,0,0,22,1,3,1,3,1
+INSY-REST,com.oliwier.insyrest.mapper,BoxMapper,0,84,0,0,0,23,0,4,0,4
 INSY-REST,com.oliwier.insyrest.mapper,BoxPosMapper,148,9,0,0,23,4,7,1,7,1
 INSY-REST,com.oliwier.insyrest.mapper,ThresholdMapper,57,3,0,0,16,1,3,1,3,1
 INSY-REST,com.oliwier.insyrest.mapper,AnalysisMapper,97,239,13,3,16,64,9,4,1,4
