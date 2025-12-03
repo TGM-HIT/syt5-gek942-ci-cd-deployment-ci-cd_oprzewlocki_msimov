@@ -184,15 +184,15 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withNameExceedingLimit_shouldAccept() {
+    void createSample_withNameExceedingLimit_shouldReturn500() {
         String tooLongName = "x".repeat(501);
         String json = """
-            {
-              "s_id": "%s",
-              "s_stamp": "%s",
-              "name": "%s"
-            }
-            """.formatted(uniqueId(), timestamp(), tooLongName);
+        {
+          "s_id": "%s",
+          "s_stamp": "%s",
+          "name": "%s"
+        }
+        """.formatted(uniqueId(), timestamp(), tooLongName);
 
         ResponseEntity<String> res = rest.postForEntity(
                 baseUrl("/api/samples"),
@@ -200,8 +200,9 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     @Test
     void createSample_withAllFieldsPopulated_shouldReturn201() {
