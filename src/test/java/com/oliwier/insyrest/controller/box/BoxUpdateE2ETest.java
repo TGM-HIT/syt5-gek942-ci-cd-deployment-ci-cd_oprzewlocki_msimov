@@ -18,9 +18,9 @@ class BoxUpdateE2ETest extends BaseE2ETest {
 
         String updateJson = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "name": "Updated Box",
-              "num_max": 200,
+              "numMax": 200,
               "type": 2
             }
             """.formatted(bId);
@@ -41,7 +41,7 @@ class BoxUpdateE2ETest extends BaseE2ETest {
     void updateNonexistentBox_shouldReturn404() {
         String json = """
             {
-              "b_id": "ZZZZ",
+              "bid": "ZZZZ",
               "name": "Nonexistent"
             }
             """;

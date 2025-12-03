@@ -13,7 +13,7 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String maxName = "x".repeat(255);
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "name": "%s"
             }
             """.formatted(bId, maxName);
@@ -33,7 +33,7 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String tooLongName = "x".repeat(256);
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "name": "%s"
             }
             """.formatted(bId, tooLongName);
@@ -53,7 +53,7 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String maxComment = "x".repeat(255);
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "comment": "%s"
             }
             """.formatted(bId, maxComment);
@@ -73,7 +73,7 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String tooLongComment = "x".repeat(256);
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "comment": "%s"
             }
             """.formatted(bId, tooLongComment);
@@ -92,8 +92,8 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "b_id": "%s",
-              "num_max": -10
+              "bid": "%s",
+              "numMax": -10
             }
             """.formatted(bId);
 
@@ -111,8 +111,8 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "b_id": "%s",
-              "num_max": 999999
+              "bid": "%s",
+              "numMax": 999999
             }
             """.formatted(bId);
 
@@ -130,7 +130,7 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "type": -1
             }
             """.formatted(bId);

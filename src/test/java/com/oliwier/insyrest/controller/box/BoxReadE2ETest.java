@@ -39,7 +39,7 @@ class BoxReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(fetched.getBody().get("bId")).isEqualTo(bId);
+        assertThat(fetched.getBody().get("bid")).isEqualTo(bId);
         assertThat(fetched.getBody().get("name")).isEqualTo("E2E Test Box");
     }
 
@@ -61,6 +61,6 @@ class BoxReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody()).containsKeys("content", "total_elements");
+        assertThat(res.getBody()).containsKeys("content", "totalElements");
     }
 }

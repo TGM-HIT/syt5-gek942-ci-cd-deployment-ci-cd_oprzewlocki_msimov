@@ -21,8 +21,8 @@ class BoxCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody()).containsKeys("bId", "name");
-        assertThat(res.getBody().get("bId")).isEqualTo(bId);
+        assertThat(res.getBody()).containsKey("bid");
+        assertThat(res.getBody().get("bid")).isEqualTo(bId);
     }
 
     @Test
@@ -30,7 +30,7 @@ class BoxCreateE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "b_id": "%s"
+              "bid": "%s"
             }
             """.formatted(bId);
 
@@ -41,7 +41,7 @@ class BoxCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("bId")).isEqualTo(bId);
+        assertThat(res.getBody().get("bid")).isEqualTo(bId);
     }
 
     @Test
@@ -96,12 +96,12 @@ class BoxCreateE2ETest extends BaseE2ETest {
         String ts = timestamp();
         String json = """
             {
-              "b_id": "%s",
+              "bid": "%s",
               "name": "Complete Box",
-              "num_max": 250,
+              "numMax": 250,
               "type": 2,
               "comment": "Fully populated test box",
-              "date_exported": "%s"
+              "dateExported": "%s"
             }
             """.formatted(bId, ts);
 
