@@ -56,18 +56,18 @@ import java.util.Set;
     @Override
     public void updateEntity(Sample entity, SampleRequest request) {
         // Don't update ID - it's immutable
-<span class="nc" id="L59">        entity.setName(request.getName());</span>
-<span class="nc" id="L60">        entity.setWeightNet(request.getWeightNet());</span>
-<span class="nc" id="L61">        entity.setWeightBru(request.getWeightBru());</span>
-<span class="nc" id="L62">        entity.setWeightTar(request.getWeightTar());</span>
-<span class="nc" id="L63">        entity.setQuantity(request.getQuantity());</span>
-<span class="nc" id="L64">        entity.setDistance(request.getDistance());</span>
-<span class="nc" id="L65">        entity.setDateCrumbled(request.getDateCrumbled());</span>
-<span class="nc" id="L66">        entity.setSFlags(request.getSFlags());</span>
-<span class="nc" id="L67">        entity.setLane(request.getLane());</span>
-<span class="nc" id="L68">        entity.setComment(request.getComment());</span>
-<span class="nc" id="L69">        entity.setDateExported(request.getDateExported());</span>
-<span class="nc" id="L70">    }</span>
+<span class="fc" id="L59">        entity.setName(request.getName());</span>
+<span class="fc" id="L60">        entity.setWeightNet(request.getWeightNet());</span>
+<span class="fc" id="L61">        entity.setWeightBru(request.getWeightBru());</span>
+<span class="fc" id="L62">        entity.setWeightTar(request.getWeightTar());</span>
+<span class="fc" id="L63">        entity.setQuantity(request.getQuantity());</span>
+<span class="fc" id="L64">        entity.setDistance(request.getDistance());</span>
+<span class="fc" id="L65">        entity.setDateCrumbled(request.getDateCrumbled());</span>
+<span class="fc" id="L66">        entity.setSFlags(request.getSFlags());</span>
+<span class="fc" id="L67">        entity.setLane(request.getLane());</span>
+<span class="fc" id="L68">        entity.setComment(request.getComment());</span>
+<span class="fc" id="L69">        entity.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L70">    }</span>
 
     private String computeBoxposString(Set&lt;BoxPos&gt; positions) {
 <span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (positions == null || positions.isEmpty()) {</span>

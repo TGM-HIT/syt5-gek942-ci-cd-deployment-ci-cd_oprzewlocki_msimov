@@ -15,22 +15,22 @@ import java.time.format.DateTimeFormatter;
 
     @Override
     public SampleId convert(String source) {
-<span class="nc" id="L18">        String[] parts = source.split(&quot;,&quot;, 2);</span>
-<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (parts.length != 2) {</span>
-<span class="nc" id="L20">            throw new IllegalArgumentException(&quot;Invalid SampleId format. Expected: s_id,yyyy-MM-dd'T'HH:mm:ss&quot;);</span>
+<span class="fc" id="L18">        String[] parts = source.split(&quot;,&quot;, 2);</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">        if (parts.length != 2) {</span>
+<span class="fc" id="L20">            throw new IllegalArgumentException(&quot;Invalid SampleId format. Expected: s_id,yyyy-MM-dd'T'HH:mm:ss&quot;);</span>
         }
 
-<span class="nc" id="L23">        String sId = parts[0].trim();</span>
-<span class="nc" id="L24">        String rawStamp = parts[1].trim();</span>
+<span class="fc" id="L23">        String sId = parts[0].trim();</span>
+<span class="fc" id="L24">        String rawStamp = parts[1].trim();</span>
 
         LocalDateTime parsedStamp;
         try {
-<span class="nc" id="L28">            parsedStamp = LocalDateTime.parse(rawStamp, ISO);</span>
+<span class="fc" id="L28">            parsedStamp = LocalDateTime.parse(rawStamp, ISO);</span>
 <span class="nc" id="L29">        } catch (Exception e) {</span>
 <span class="nc" id="L30">            parsedStamp = LocalDateTime.parse(rawStamp, SPACE);</span>
-<span class="nc" id="L31">        }</span>
+<span class="fc" id="L31">        }</span>
 
-<span class="nc" id="L33">        return new SampleId(sId, parsedStamp);</span>
+<span class="fc" id="L33">        return new SampleId(sId, parsedStamp);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

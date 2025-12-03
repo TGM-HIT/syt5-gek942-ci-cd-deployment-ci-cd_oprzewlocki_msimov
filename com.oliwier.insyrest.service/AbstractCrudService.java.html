@@ -74,14 +74,14 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 <span class="fc" id="L74">            Specification&lt;T&gt; fieldSpec = (root, query, cb) -&gt; {</span>
                 try {
 <span class="fc" id="L76">                    Path&lt;?&gt; p = root;</span>
-<span class="pc bnc" id="L77" title="All 2 branches missed.">                    for (String segment : field.split(&quot;\\.&quot;)) p = p.get(segment);</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">                    if (p == null) return null;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                    for (String segment : field.split(&quot;\\.&quot;)) p = p.get(segment);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                    if (p == null) return null;</span>
 
-<span class="nc" id="L80">                    Class&lt;?&gt; type = p.getJavaType();</span>
-<span class="nc" id="L81">                    String raw = value.trim();</span>
+<span class="fc" id="L80">                    Class&lt;?&gt; type = p.getJavaType();</span>
+<span class="fc" id="L81">                    String raw = value.trim();</span>
 
                     // Handle OR and AND filters
-<span class="nc bnc" id="L84" title="All 2 branches missed.">                    if (raw.contains(&quot;|&quot;)) {</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">                    if (raw.contains(&quot;|&quot;)) {</span>
 <span class="nc" id="L85">                        Path&lt;?&gt; finalP = p;</span>
 <span class="nc" id="L86">                        List&lt;Predicate&gt; ors = Arrays.stream(raw.split(&quot;\\|&quot;))</span>
 <span class="nc" id="L87">                                .map(v -&gt; buildPredicate(cb, finalP, type, v.trim()))</span>
@@ -89,7 +89,7 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 <span class="nc" id="L89">                                .toList();</span>
 <span class="nc" id="L90">                        return cb.or(ors.toArray(new Predicate[0]));</span>
                     }
-<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (raw.contains(&quot;&amp;&quot;)) {</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                    if (raw.contains(&quot;&amp;&quot;)) {</span>
 <span class="nc" id="L93">                        Path&lt;?&gt; finalP1 = p;</span>
 <span class="nc" id="L94">                        List&lt;Predicate&gt; ands = Arrays.stream(raw.split(&quot;&amp;&quot;))</span>
 <span class="nc" id="L95">                                .map(v -&gt; buildPredicate(cb, finalP1, type, v.trim()))</span>
@@ -98,7 +98,7 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
 <span class="nc" id="L98">                        return cb.and(ands.toArray(new Predicate[0]));</span>
                     }
 
-<span class="nc" id="L101">                    return buildPredicate(cb, p, type, raw);</span>
+<span class="fc" id="L101">                    return buildPredicate(cb, p, type, raw);</span>
 
 <span class="fc" id="L103">                } catch (Exception e) {</span>
 <span class="fc" id="L104">                    System.err.println(&quot;Filter skipped for field '&quot; + field + &quot;': &quot; + e.getMessage());</span>
@@ -137,11 +137,11 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
     private static Predicate buildPredicate(CriteriaBuilder cb, Path&lt;?&gt; p, Class&lt;?&gt; type, String raw) {
         try {
             // Detect operator
-<span class="nc" id="L140">            String[] ops = {&quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;!=&quot;, &quot;&gt;&quot;, &quot;&lt;&quot;, &quot;~&quot;, &quot;=&quot;};</span>
-<span class="nc" id="L141">            String op = &quot;=&quot;;</span>
-<span class="nc" id="L142">            String value = raw;</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">            for (String o : ops) {</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">                if (raw.contains(o)) {</span>
+<span class="fc" id="L140">            String[] ops = {&quot;&gt;=&quot;, &quot;&lt;=&quot;, &quot;!=&quot;, &quot;&gt;&quot;, &quot;&lt;&quot;, &quot;~&quot;, &quot;=&quot;};</span>
+<span class="fc" id="L141">            String op = &quot;=&quot;;</span>
+<span class="fc" id="L142">            String value = raw;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (String o : ops) {</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if (raw.contains(o)) {</span>
 <span class="nc" id="L145">                    op = o;</span>
 <span class="nc" id="L146">                    value = raw.substring(raw.indexOf(o) + o.length()).trim();</span>
 <span class="nc" id="L147">                    break;</span>
@@ -149,17 +149,17 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
             }
 
             // ===== NULL checks =====
-<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (&quot;null&quot;.equalsIgnoreCase(value))  return cb.isNull(p);</span>
-<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (&quot;!null&quot;.equalsIgnoreCase(value)) return cb.isNotNull(p);</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (&quot;null&quot;.equalsIgnoreCase(value))  return cb.isNull(p);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">            if (&quot;!null&quot;.equalsIgnoreCase(value)) return cb.isNotNull(p);</span>
 
             // ===== STRING =====
-<span class="nc bnc" id="L156" title="All 2 branches missed.">            if (String.class.equals(type)) {</span>
-<span class="nc" id="L157">                Expression&lt;String&gt; expr = p.as(String.class);</span>
-<span class="nc" id="L158">                String valLower = value.toLowerCase();</span>
-<span class="nc bnc" id="L159" title="All 3 branches missed.">                return switch (op) {</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">            if (String.class.equals(type)) {</span>
+<span class="fc" id="L157">                Expression&lt;String&gt; expr = p.as(String.class);</span>
+<span class="fc" id="L158">                String valLower = value.toLowerCase();</span>
+<span class="pc bpc" id="L159" title="2 of 3 branches missed.">                return switch (op) {</span>
 <span class="nc" id="L160">                    case &quot;~&quot;  -&gt; cb.like(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
 <span class="nc" id="L161">                    case &quot;!=&quot; -&gt; cb.notLike(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
-<span class="nc" id="L162">                    default   -&gt; cb.like(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
+<span class="fc" id="L162">                    default   -&gt; cb.like(cb.lower(expr), &quot;%&quot; + valLower + &quot;%&quot;);</span>
                 };
             }
 
