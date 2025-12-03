@@ -5,9 +5,9 @@ public class BoxE2EUtils {
     public static String buildValidJson(String bId) {
         return """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "name": "E2E Test Box",
-              "numMax": 100,
+              "num_max": 100,
               "type": 1,
               "comment": "Test box for E2E testing"
             }
@@ -17,7 +17,7 @@ public class BoxE2EUtils {
     public static String buildMinimalJson(String bId) {
         return """
             {
-              "bId": "%s"
+              "b_id": "%s"
             }
             """.formatted(bId);
     }

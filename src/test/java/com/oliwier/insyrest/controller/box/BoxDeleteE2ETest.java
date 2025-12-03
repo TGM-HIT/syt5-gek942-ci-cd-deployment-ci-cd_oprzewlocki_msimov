@@ -14,7 +14,7 @@ class BoxDeleteE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = BoxE2EUtils.buildValidJson(bId);
 
-        rest.postForEntity(baseUrl("/api/boxes"), new HttpEntity<>(json, jsonHeaders()), Map.class);
+        postJson(baseUrl("/api/boxes"), json, Map.class);
 
         ResponseEntity<Void> res = rest.exchange(
                 baseUrl("/api/boxes/" + bId),
@@ -43,7 +43,7 @@ class BoxDeleteE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = BoxE2EUtils.buildValidJson(bId);
 
-        rest.postForEntity(baseUrl("/api/boxes"), new HttpEntity<>(json, jsonHeaders()), Map.class);
+        postJson(baseUrl("/api/boxes"), json, Map.class);
 
         rest.exchange(
                 baseUrl("/api/boxes/" + bId),

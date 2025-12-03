@@ -13,14 +13,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String maxName = "x".repeat(255);
         String json = """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "name": "%s"
             }
             """.formatted(bId, maxName);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -33,14 +33,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String tooLongName = "x".repeat(256);
         String json = """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "name": "%s"
             }
             """.formatted(bId, tooLongName);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -53,14 +53,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String maxComment = "x".repeat(255);
         String json = """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "comment": "%s"
             }
             """.formatted(bId, maxComment);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -73,14 +73,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String tooLongComment = "x".repeat(256);
         String json = """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "comment": "%s"
             }
             """.formatted(bId, tooLongComment);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -92,14 +92,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "bId": "%s",
-              "numMax": -10
+              "b_id": "%s",
+              "num_max": -10
             }
             """.formatted(bId);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -111,14 +111,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "bId": "%s",
-              "numMax": 999999
+              "b_id": "%s",
+              "num_max": 999999
             }
             """.formatted(bId);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 
@@ -130,14 +130,14 @@ class BoxValidationE2ETest extends BaseE2ETest {
         String bId = uniqueId().substring(0, 4);
         String json = """
             {
-              "bId": "%s",
+              "b_id": "%s",
               "type": -1
             }
             """.formatted(bId);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxes"),
-                new HttpEntity<>(json, jsonHeaders()),
+                json,
                 String.class
         );
 

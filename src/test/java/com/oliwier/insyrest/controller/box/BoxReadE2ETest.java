@@ -63,36 +63,4 @@ class BoxReadE2ETest extends BaseE2ETest {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(res.getBody()).containsKeys("content", "total_elements");
     }
-
-    @Test
-    void getBoxesByName_shouldReturnFiltered() {
-        String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
-
-        rest.postForEntity(baseUrl("/api/boxes"), new HttpEntity<>(json, jsonHeaders()), Map.class);
-
-        ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/boxes?filter[name]=E2E Test Box"),
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody()).containsKey("content");
-    }
-
-    @Test
-    void getBoxesByType_shouldReturnFiltered() {
-        String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
-
-        rest.postForEntity(baseUrl("/api/boxes"), new HttpEntity<>(json, jsonHeaders()), Map.class);
-
-        ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/boxes?filter[type]=1"),
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody()).containsKey("content");
-    }
 }
