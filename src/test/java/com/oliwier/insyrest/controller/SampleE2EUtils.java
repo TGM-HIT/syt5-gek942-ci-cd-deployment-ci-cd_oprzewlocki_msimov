@@ -1,6 +1,5 @@
 package com.oliwier.insyrest.controller;
 
-
 public class SampleE2EUtils {
 
     public static String buildValidJson(String sId, String sStamp, String timestamp) {
@@ -14,12 +13,12 @@ public class SampleE2EUtils {
               "weightTar": 2.0,
               "quantity": 1,
               "distance": 0.0,
-              "dateCrumbled": "%s",
-              "sFlags": "-----",
+              "dateCrumbled": %s,
+              "sflags": "-----",
               "lane": 0,
               "comment": "Created for test",
-              "dateExported": "%s"
+              "dateExported": %s
             }
-            """.formatted(sId, sStamp, timestamp, timestamp);
+            """.formatted(sId, sStamp, timestamp == null ? "null" : "\"" + timestamp + "\"", timestamp == null ? "null" : "\"" + timestamp + "\"");
     }
 }
