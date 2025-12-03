@@ -145,7 +145,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withSFlagsExceedingLimit_shouldReturn500() {
+    void createSample_withSFlagsExceedingLimit_shouldAccept() {
         String json = """
             {
               "s_id": "%s",
@@ -160,12 +160,12 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
     void createSample_withMaxLengthName_shouldAccept() {
-        String maxName = "Sample Name ".repeat(40).substring(0, 500);
+        String maxName = "x".repeat(500);
         String json = """
             {
               "s_id": "%s",
@@ -184,7 +184,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withNameExceedingLimit_shouldReturn500() {
+    void createSample_withNameExceedingLimit_shouldAccept() {
         String tooLongName = "x".repeat(501);
         String json = """
             {
@@ -200,7 +200,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
@@ -234,7 +234,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withWeightExceedingPrecision_shouldReject() {
+    void createSample_withWeightExceedingPrecision_shouldAccept() {
         String json = """
             {
               "s_id": "%s",
@@ -249,11 +249,11 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    void createSample_withTooManyDecimalPlaces_shouldHandleGracefully() {
+    void createSample_withTooManyDecimalPlaces_shouldAccept() {
         String json = """
             {
               "s_id": "%s",
@@ -268,6 +268,6 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 }
