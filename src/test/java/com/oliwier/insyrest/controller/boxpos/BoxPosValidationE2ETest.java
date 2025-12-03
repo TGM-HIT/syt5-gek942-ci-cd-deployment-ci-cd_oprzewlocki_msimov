@@ -22,10 +22,10 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": null,
-              "bId": "%s",
-              "sId": "%s",
-              "sStamp": "%s"
+              "bpos_id": null,
+              "b_id": "%s",
+              "s_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(bId, sId, sStamp);
 
@@ -47,10 +47,10 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": 9001,
-              "bId": null,
-              "sId": "%s",
-              "sStamp": "%s"
+              "bpos_id": 9001,
+              "b_id": null,
+              "s_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(sId, sStamp);
 
@@ -71,10 +71,10 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": 9002,
-              "bId": "%s",
-              "sId": null,
-              "sStamp": "%s"
+              "bpos_id": 9002,
+              "b_id": "%s",
+              "s_id": null,
+              "s_stamp": "%s"
             }
             """.formatted(bId, timestamp());
 
@@ -96,10 +96,10 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": 9003,
-              "bId": "",
-              "sId": "%s",
-              "sStamp": "%s"
+              "bpos_id": 9003,
+              "b_id": "",
+              "s_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(sId, sStamp);
 
@@ -167,7 +167,7 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
     @Test
     void getBoxPos_withSortingParameter_shouldReturnSorted() {
         ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/boxpos?sort=bposId,desc"),
+                baseUrl("/api/boxpos?sort=bpos_id,desc"),
                 Map.class
         );
 

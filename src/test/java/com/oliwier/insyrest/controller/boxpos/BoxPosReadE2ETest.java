@@ -44,8 +44,8 @@ class BoxPosReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(fetched.getBody().get("bposId")).isEqualTo(bposId);
-        assertThat(fetched.getBody().get("bId")).isEqualTo(bId);
+        assertThat(fetched.getBody().get("bpos_id")).isEqualTo(bposId);
+        assertThat(fetched.getBody().get("b_id")).isEqualTo(bId);
     }
 
     @Test
@@ -108,7 +108,7 @@ class BoxPosReadE2ETest extends BaseE2ETest {
         postJson(baseUrl("/api/boxpos"), json, Map.class);
 
         ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/boxpos?filter[bId]=" + bId),
+                baseUrl("/api/boxpos?filter[b_id]=" + bId),
                 Map.class
         );
 
@@ -130,7 +130,7 @@ class BoxPosReadE2ETest extends BaseE2ETest {
         postJson(baseUrl("/api/boxpos"), json, Map.class);
 
         ResponseEntity<Map> res = rest.getForEntity(
-                baseUrl("/api/boxpos?filter[sId]=" + sId),
+                baseUrl("/api/boxpos?filter[s_id]=" + sId),
                 Map.class
         );
 

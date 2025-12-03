@@ -40,7 +40,7 @@ class BoxPosUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(updated.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(updated.getBody().get("dateExported")).isNotNull();
+        assertThat(updated.getBody().get("date_exported")).isNotNull();
     }
 
     @Test

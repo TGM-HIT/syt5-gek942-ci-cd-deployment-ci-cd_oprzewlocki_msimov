@@ -30,9 +30,9 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody()).containsKeys("bposId", "bId", "sId", "sStamp", "dateExported");
+        assertThat(res.getBody()).containsKeys("bpos_id", "b_id", "s_id", "s_stamp", "date_exported");
         assertThat(res.getBody().get("bposId")).isEqualTo(bposId);
-        assertThat(res.getBody().get("bId")).isEqualTo(bId);
+        assertThat(res.getBody().get("b_id")).isEqualTo(bId);
     }
 
     @Test
@@ -54,7 +54,7 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("bposId")).isEqualTo(bposId);
+        assertThat(res.getBody().get("bpos_id")).isEqualTo(bposId);
     }
 
     @Test
@@ -87,9 +87,9 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bId": "%s",
-              "sId": "%s",
-              "sStamp": "%s"
+              "bpos_id": "%s",
+              "s_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(bId, sId, sStamp);
 
@@ -111,9 +111,9 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": 5004,
-              "sId": "%s",
-              "sStamp": "%s"
+              "bpos_id": 5004,
+              "s_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(sId, sStamp);
 
@@ -134,9 +134,9 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
 
         String json = """
             {
-              "bposId": 5005,
-              "bId": "%s",
-              "sStamp": "%s"
+              "bpos_id": 5005,
+              "b_id": "%s",
+              "s_stamp": "%s"
             }
             """.formatted(bId, timestamp());
 
@@ -167,7 +167,7 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("bposId")).isEqualTo(0);
+        assertThat(res.getBody().get("bpos_id")).isEqualTo(0);
     }
 
     @Test
