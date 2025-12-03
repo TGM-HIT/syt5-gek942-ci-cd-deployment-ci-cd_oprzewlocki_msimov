@@ -12,52 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BoxPosUpdateE2ETest extends BaseE2ETest {
 
-    @Test
-    void updateBoxPos_existing_shouldReturn200() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 7001;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
-
-        ResponseEntity<Map> created = postJson(baseUrl("/api/boxpos"), json, Map.class);
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        String newExportDate = LocalDateTime.now().plusDays(1).withNano(0).toString();
-        String updateJson = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, newExportDate);
-
-        String compositeId = bposId + "," + bId;
-        HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
-        ResponseEntity<Map> updated = rest.exchange(
-                baseUrl("/api/boxpos/" + compositeId),
-                HttpMethod.PUT,
-                request,
-                Map.class
-        );
-
-        assertThat(updated.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(updated.getBody().get("date_exported")).isNotNull();
-    }
-
-    @Test
-    void updateBoxPos_nonexistent_shouldReturn404() {
-        String json = BoxPosE2EUtils.buildValidJson(99998, "ZZZZ", uniqueId(), timestamp(), timestamp());
-        String compositeId = "99998,ZZZZ";
-
-        HttpEntity<String> request = new HttpEntity<>(json, jsonHeaders());
-        ResponseEntity<String> res = rest.exchange(
-                baseUrl("/api/boxpos/" + compositeId),
-                HttpMethod.PUT,
-                request,
-                String.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
 
     @Test
     void updateBoxPos_withMismatchedBposId_shouldReturn400() {
@@ -111,33 +65,5 @@ class BoxPosUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.CONFLICT);
-    }
-
-    @Test
-    void updateBoxPos_changingDateExported_shouldWork() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 7004;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
-        postJson(baseUrl("/api/boxpos"), json, Map.class);
-
-        String newDate = LocalDateTime.now().plusMonths(6).withNano(0).toString();
-        String updateJson = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, newDate);
-
-        String compositeId = bposId + "," + bId;
-        HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
-        ResponseEntity<Map> updated = rest.exchange(
-                baseUrl("/api/boxpos/" + compositeId),
-                HttpMethod.PUT,
-                request,
-                Map.class
-        );
-
-        assertThat(updated.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

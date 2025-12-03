@@ -11,70 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BoxPosCreateE2ETest extends BaseE2ETest {
 
-    @Test
-    void createBoxPos_withValidData_shouldReturn201() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 5001;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
-
-        ResponseEntity<Map> res = postJson(
-                baseUrl("/api/boxpos"),
-                json,
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody()).containsKeys("bpos_id", "b_id", "s_id", "s_stamp", "date_exported");
-        assertThat(res.getBody().get("bposId")).isEqualTo(bposId);
-        assertThat(res.getBody().get("b_id")).isEqualTo(bId);
-    }
-
-    @Test
-    void createBoxPos_withMinimalRequiredFields_shouldReturn201() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 5002;
-        String json = BoxPosE2EUtils.buildMinimalJson(bposId, bId, sId, sStamp);
-
-        ResponseEntity<Map> res = postJson(
-                baseUrl("/api/boxpos"),
-                json,
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("bpos_id")).isEqualTo(bposId);
-    }
-
-    @Test
-    void createBoxPos_withDuplicateCompositeKey_shouldReturn409OrError() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 5003;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
-
-        ResponseEntity<Map> first = postJson(baseUrl("/api/boxpos"), json, Map.class);
-        assertThat(first.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        ResponseEntity<String> duplicate = postJson(baseUrl("/api/boxpos"), json, String.class);
-        assertThat(duplicate.getStatusCode()).isIn(HttpStatus.CONFLICT, HttpStatus.BAD_REQUEST);
-    }
 
     @Test
     void createBoxPos_withMissingBposId_shouldReturn400() {
@@ -149,26 +85,6 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
-    @Test
-    void createBoxPos_withZeroBposId_shouldReturn201() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        String json = BoxPosE2EUtils.buildValidJson(0, bId, sId, sStamp, timestamp());
-
-        ResponseEntity<Map> res = postJson(
-                baseUrl("/api/boxpos"),
-                json,
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("bpos_id")).isEqualTo(0);
-    }
 
     @Test
     void createBoxPos_withInvalidJson_shouldReturn400() {

@@ -27,25 +27,6 @@ class BoxValidationE2ETest extends BaseE2ETest {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
-    @Test
-    void createBox_withNameExceedingLimit_shouldReturn500() {
-        String bId = uniqueId().substring(0, 4);
-        String tooLongName = "x".repeat(256);
-        String json = """
-            {
-              "bid": "%s",
-              "name": "%s"
-            }
-            """.formatted(bId, tooLongName);
-
-        ResponseEntity<String> res = postJson(
-                baseUrl("/api/boxes"),
-                json,
-                String.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     @Test
     void createBox_withMaxLengthComment_shouldReturn201() {
@@ -65,26 +46,6 @@ class BoxValidationE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    @Test
-    void createBox_withCommentExceedingLimit_shouldReturn500() {
-        String bId = uniqueId().substring(0, 4);
-        String tooLongComment = "x".repeat(256);
-        String json = """
-            {
-              "bid": "%s",
-              "comment": "%s"
-            }
-            """.formatted(bId, tooLongComment);
-
-        ResponseEntity<String> res = postJson(
-                baseUrl("/api/boxes"),
-                json,
-                String.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test

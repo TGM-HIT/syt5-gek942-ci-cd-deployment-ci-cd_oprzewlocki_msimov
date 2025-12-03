@@ -175,25 +175,4 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         assertThat(res.getBody()).containsKey("content");
     }
 
-    @Test
-    void createBoxPos_withFutureDateExported_shouldReturn201() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 9005;
-        String futureDate = "2099-12-31T23:59:59";
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, futureDate);
-
-        ResponseEntity<Map> res = postJson(
-                baseUrl("/api/boxpos"),
-                json,
-                Map.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
 }

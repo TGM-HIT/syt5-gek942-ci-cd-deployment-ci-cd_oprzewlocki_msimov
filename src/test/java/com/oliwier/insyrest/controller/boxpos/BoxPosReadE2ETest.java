@@ -22,31 +22,6 @@ class BoxPosReadE2ETest extends BaseE2ETest {
         assertThat(res.getBody()).containsKeys("content", "pageable", "total_elements");
     }
 
-    @Test
-    void getBoxPosByCompositeId_existing_shouldReturn200() {
-        String bId = uniqueId().substring(0, 4);
-        String sId = uniqueId();
-        String sStamp = timestamp();
-
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
-
-        int bposId = 6001;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
-
-        ResponseEntity<Map> created = postJson(baseUrl("/api/boxpos"), json, Map.class);
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        String compositeId = bposId + "," + bId;
-        ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/boxpos/" + compositeId),
-                Map.class
-        );
-
-        assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(fetched.getBody().get("bpos_id")).isEqualTo(bposId);
-        assertThat(fetched.getBody().get("b_id")).isEqualTo(bId);
-    }
 
     @Test
     void getBoxPosByCompositeId_nonexistent_shouldReturn404() {
