@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SampleValidationE2ETest extends BaseE2ETest {
 
     @Test
-    void createSample_withNegativeWeight_shouldAcceptOrReject() {
+    void createSample_withNegativeWeight_shouldAccept() {
         String json = """
             {
               "s_id": "%s",
@@ -23,7 +23,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
@@ -43,7 +43,47 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withMaxLengthComment_shouldAccept() {
+        String maxComment = "x".repeat(1000);
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "comment": "%s"
+            }
+            """.formatted(uniqueId(), timestamp(), maxComment);
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withCommentExceedingLimit_shouldReturn500() {
+        String tooLongComment = "x".repeat(1001);
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "comment": "%s"
+            }
+            """.formatted(uniqueId(), timestamp(), tooLongComment);
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -67,32 +107,12 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withExtremelyLongComment_shouldReject() {
-        String extremeComment = "x".repeat(10000);
+    void createSample_withValidSFlags_shouldAccept() {
         String json = """
             {
               "s_id": "%s",
               "s_stamp": "%s",
-              "comment": "%s"
-            }
-            """.formatted(uniqueId(), timestamp(), extremeComment);
-
-        ResponseEntity<String> res = rest.postForEntity(
-                baseUrl("/api/samples"),
-                new HttpEntity<>(json, jsonHeaders()),
-                String.class
-        );
-
-        assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @Test
-    void createSample_withInvalidSFlags_shouldAcceptOrReject() {
-        String json = """
-            {
-              "s_id": "%s",
-              "s_stamp": "%s",
-              "sFlags": "TOOLONGTOOLONGTOOLONG"
+              "sFlags": "12345"
             }
             """.formatted(uniqueId(), timestamp());
 
@@ -102,7 +122,85 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withMaxLengthSFlags_shouldAccept() {
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "sFlags": "1234567890"
+            }
+            """.formatted(uniqueId(), timestamp());
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withSFlagsExceedingLimit_shouldReturn500() {
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "sFlags": "12345678901"
+            }
+            """.formatted(uniqueId(), timestamp());
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    void createSample_withMaxLengthName_shouldAccept() {
+        String maxName = "Sample Name ".repeat(40).substring(0, 500);
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "name": "%s"
+            }
+            """.formatted(uniqueId(), timestamp(), maxName);
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withNameExceedingLimit_shouldReturn500() {
+        String tooLongName = "x".repeat(501);
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "name": "%s"
+            }
+            """.formatted(uniqueId(), timestamp(), tooLongName);
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
@@ -121,7 +219,7 @@ class SampleValidationE2ETest extends BaseE2ETest {
               "dateCrumbled": "%s",
               "sFlags": "12345",
               "lane": 3,
-              "comment": "All fields test",
+              "comment": "All fields populated for comprehensive test",
               "dateExported": "%s"
             }
             """.formatted(uniqueId(), ts, ts, ts);
@@ -133,5 +231,43 @@ class SampleValidationE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withWeightExceedingPrecision_shouldReject() {
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "weightNet": 9999999.99
+            }
+            """.formatted(uniqueId(), timestamp());
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    void createSample_withTooManyDecimalPlaces_shouldHandleGracefully() {
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "weightNet": 10.12345
+            }
+            """.formatted(uniqueId(), timestamp());
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

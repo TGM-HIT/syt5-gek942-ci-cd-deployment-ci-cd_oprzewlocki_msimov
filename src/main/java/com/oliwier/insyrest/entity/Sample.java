@@ -26,7 +26,7 @@ public class Sample {
     @JsonUnwrapped   // Damit JSON flach ausgegeben wird
     private SampleId id;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 500)
     private String name;
 
     @Column(name = "weight_net", precision = 8, scale = 2)
@@ -51,6 +51,7 @@ public class Sample {
 
     private Integer lane;
 
+    @Column(length = 1000)
     private String comment;
 
     @Column(name = "date_exported")
@@ -60,4 +61,3 @@ public class Sample {
     @JsonIgnore
     private Set<BoxPos> boxPositions = new HashSet<>();
 }
-
