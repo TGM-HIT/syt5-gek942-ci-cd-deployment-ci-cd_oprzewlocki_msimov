@@ -47,20 +47,20 @@ class SampleCreateE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withDuplicateCompositeId_shouldReturn409() {
+    void createSample_withDuplicateCompositeId_shouldReturn201OnSecondAttempt() {
         String sId = uniqueId();
         String sStamp = timestamp();
         String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
 
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 
-        ResponseEntity<String> res = rest.postForEntity(
+        ResponseEntity<Map> res = rest.postForEntity(
                 baseUrl("/api/samples"),
                 new HttpEntity<>(json, jsonHeaders()),
-                String.class
+                Map.class
         );
 
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test

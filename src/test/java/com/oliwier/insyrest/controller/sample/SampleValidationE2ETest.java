@@ -47,15 +47,15 @@ class SampleValidationE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void createSample_withLongComment_shouldAccept() {
-        String longComment = "x".repeat(500);
+    void createSample_withReasonableLengthComment_shouldAccept() {
+        String reasonableComment = "This is a test comment. ".repeat(20);
         String json = """
             {
               "s_id": "%s",
               "s_stamp": "%s",
               "comment": "%s"
             }
-            """.formatted(uniqueId(), timestamp(), longComment);
+            """.formatted(uniqueId(), timestamp(), reasonableComment);
 
         ResponseEntity<String> res = rest.postForEntity(
                 baseUrl("/api/samples"),
@@ -63,7 +63,27 @@ class SampleValidationE2ETest extends BaseE2ETest {
                 String.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.CREATED, HttpStatus.BAD_REQUEST);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void createSample_withExtremelyLongComment_shouldReject() {
+        String extremeComment = "x".repeat(10000);
+        String json = """
+            {
+              "s_id": "%s",
+              "s_stamp": "%s",
+              "comment": "%s"
+            }
+            """.formatted(uniqueId(), timestamp(), extremeComment);
+
+        ResponseEntity<String> res = rest.postForEntity(
+                baseUrl("/api/samples"),
+                new HttpEntity<>(json, jsonHeaders()),
+                String.class
+        );
+
+        assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test

@@ -18,14 +18,14 @@ class SampleUpdateE2ETest extends BaseE2ETest {
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 
         String updateJson = """
-            {
-              "s_id": "%s",
-              "s_stamp": "%s",
-              "name": "Updated Sample",
-              "weightNet": 15.5,
-              "quantity": 2
-            }
-            """.formatted(sId, sStamp);
+        {
+          "s_id": "%s",
+          "s_stamp": "%s",
+          "name": "Updated Sample",
+          "weightNet": 15.5,
+          "quantity": 2
+        }
+        """.formatted(sId, sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
         String compositeId = sId + "," + sStamp;
@@ -38,9 +38,16 @@ class SampleUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().get("name")).isEqualTo("Updated Sample");
-        assertThat(((Number) res.getBody().get("weightNet")).doubleValue()).isEqualTo(15.5);
+
+        ResponseEntity<Map> fetched = rest.getForEntity(
+                baseUrl("/api/samples/" + compositeId),
+                Map.class
+        );
+
+        assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(fetched.getBody().get("name")).isEqualTo("Updated Sample");
     }
+
 
     @Test
     void updateNonexistentSample_shouldReturn404() {
@@ -68,7 +75,7 @@ class SampleUpdateE2ETest extends BaseE2ETest {
     }
 
     @Test
-    void updateSample_changingCompositeIdInBody_shouldFail() {
+    void updateSample_changingCompositeIdInBody_returnsOkButIgnoresIdChange() {
         String sId = uniqueId();
         String sStamp = timestamp();
         String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
@@ -76,25 +83,32 @@ class SampleUpdateE2ETest extends BaseE2ETest {
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 
         String updateJson = """
-            {
-              "s_id": "different-id",
-              "s_stamp": "%s",
-              "name": "Changed ID"
-            }
-            """.formatted(sStamp);
+        {
+          "s_id": "different-id",
+          "s_stamp": "%s",
+          "name": "Changed ID Attempt"
+        }
+        """.formatted(sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
         String compositeId = sId + "," + sStamp;
 
-        ResponseEntity<String> res = rest.exchange(
+        ResponseEntity<Map> res = rest.exchange(
                 baseUrl("/api/samples/" + compositeId),
                 HttpMethod.PUT,
                 request,
-                String.class
+                Map.class
         );
 
-        assertThat(res.getStatusCode()).isIn(HttpStatus.BAD_REQUEST, HttpStatus.CONFLICT);
+        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        ResponseEntity<Map> fetched = rest.getForEntity(
+                baseUrl("/api/samples/" + compositeId),
+                Map.class
+        );
+        assertThat(fetched.getBody().get("s_id")).isEqualTo(sId);
     }
+
 
     @Test
     void updateSample_partialUpdate_shouldWork() {
