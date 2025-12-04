@@ -1,16 +1,16 @@
 package com.oliwier.insyrest.controller.boxpos;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
-import com.oliwier.insyrest.controller.BoxPosE2EUtils;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
+import com.oliwier.insyrest.controller.BoxPosIntegrationUtils;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
-import java.time.LocalDateTime;
+
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxPosUpdateE2ETest extends BaseE2ETest {
+class BoxPosUpdateIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
@@ -19,14 +19,14 @@ class BoxPosUpdateE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         int bposId = 7002;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
+        String json = BoxPosIntegrationUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
         postJson(baseUrl("/api/boxpos"), json, Map.class);
 
-        String mismatchJson = BoxPosE2EUtils.buildValidJson(9999, bId, sId, sStamp, timestamp());
+        String mismatchJson = BoxPosIntegrationUtils.buildValidJson(9999, bId, sId, sStamp, timestamp());
         String compositeId = bposId + "," + bId;
 
         HttpEntity<String> request = new HttpEntity<>(mismatchJson, jsonHeaders());
@@ -46,14 +46,14 @@ class BoxPosUpdateE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         int bposId = 7003;
-        String json = BoxPosE2EUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
+        String json = BoxPosIntegrationUtils.buildValidJson(bposId, bId, sId, sStamp, timestamp());
         postJson(baseUrl("/api/boxpos"), json, Map.class);
 
-        String mismatchJson = BoxPosE2EUtils.buildValidJson(bposId, "DIFF", sId, sStamp, timestamp());
+        String mismatchJson = BoxPosIntegrationUtils.buildValidJson(bposId, "DIFF", sId, sStamp, timestamp());
         String compositeId = bposId + "," + bId;
 
         HttpEntity<String> request = new HttpEntity<>(mismatchJson, jsonHeaders());

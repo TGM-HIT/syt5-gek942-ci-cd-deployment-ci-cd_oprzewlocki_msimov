@@ -1,18 +1,18 @@
 package com.oliwier.insyrest.controller.box;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxUpdateE2ETest extends BaseE2ETest {
+class BoxUpdateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void updateExistingBox_shouldReturn200() {
         String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
+        String json = BoxIntegrationUtils.buildValidJson(bId);
 
         postJson(baseUrl("/api/boxes"), json, Map.class);
 

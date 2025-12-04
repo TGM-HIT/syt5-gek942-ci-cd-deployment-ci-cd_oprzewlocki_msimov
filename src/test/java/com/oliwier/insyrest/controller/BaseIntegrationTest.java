@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public abstract class BaseE2ETest {
+public abstract class BaseIntegrationTest {
 
     @LocalServerPort
     protected int port;

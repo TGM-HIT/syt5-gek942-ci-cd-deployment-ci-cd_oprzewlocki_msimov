@@ -1,19 +1,19 @@
 package com.oliwier.insyrest.controller.sample;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SampleUpdateE2ETest extends BaseE2ETest {
+class SampleUpdateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void updateExistingSample_shouldReturn200() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 
@@ -78,7 +78,7 @@ class SampleUpdateE2ETest extends BaseE2ETest {
     void updateSample_changingCompositeIdInBody_returnsOkButIgnoresIdChange() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 
@@ -114,7 +114,7 @@ class SampleUpdateE2ETest extends BaseE2ETest {
     void updateSample_partialUpdate_shouldWork() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 

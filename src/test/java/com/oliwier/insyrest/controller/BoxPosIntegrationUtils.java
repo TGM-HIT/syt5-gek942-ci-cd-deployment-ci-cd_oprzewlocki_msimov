@@ -1,6 +1,6 @@
 package com.oliwier.insyrest.controller;
 
-public class BoxPosE2EUtils {
+public class BoxPosIntegrationUtils {
 
     public static String buildValidJson(int bposId, String bId, String sId, String sStamp, String dateExported) {
         return """

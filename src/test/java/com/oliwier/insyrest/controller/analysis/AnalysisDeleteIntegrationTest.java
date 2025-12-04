@@ -1,23 +1,24 @@
 package com.oliwier.insyrest.controller.analysis;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.AnalysisIntegrationUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnalysisDeleteE2ETest extends BaseE2ETest {
+class AnalysisDeleteIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void deleteExistingAnalysis_shouldReturn204() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
@@ -58,10 +59,10 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
     void deleteSameAnalysisTwice_shouldReturn204Then404() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
@@ -90,7 +91,7 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
     void deleteAnalysisWithExistingSampleReference_shouldStillWork() {
         String sid = uniqueId();
         String stamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sid, stamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sid, stamp, timestamp());
         ResponseEntity<Map> sampleRes = rest.postForEntity(
                 baseUrl("/api/samples"),
                 new HttpEntity<>(sampleJson, jsonHeaders()),
@@ -98,7 +99,7 @@ class AnalysisDeleteE2ETest extends BaseE2ETest {
         );
         assertThat(sampleRes.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        String analysisJson = AnalysisE2EUtils.buildValidJson(sid, stamp, timestamp());
+        String analysisJson = AnalysisIntegrationUtils.buildValidJson(sid, stamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(analysisJson, jsonHeaders()),

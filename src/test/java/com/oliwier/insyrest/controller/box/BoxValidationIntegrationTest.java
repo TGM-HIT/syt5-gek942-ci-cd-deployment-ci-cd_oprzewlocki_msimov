@@ -1,11 +1,11 @@
 package com.oliwier.insyrest.controller.box;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxValidationE2ETest extends BaseE2ETest {
+class BoxValidationIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createBox_withMaxLengthName_shouldReturn201() {

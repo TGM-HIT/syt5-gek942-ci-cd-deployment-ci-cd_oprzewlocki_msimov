@@ -1,17 +1,18 @@
 package com.oliwier.insyrest.controller.analysis;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.AnalysisIntegrationUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnalysisCreateE2ETest extends BaseE2ETest {
+class AnalysisCreateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createValidAnalysis_shouldReturn201AndId() {
-        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String json = AnalysisIntegrationUtils.buildValidJson(null, null, timestamp());
 
         ResponseEntity<Map> res = rest.postForEntity(
                 baseUrl("/api/analysis"),
@@ -25,7 +26,7 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createAnalysisWithEmptySample_shouldFail() {
-        String json = AnalysisE2EUtils.buildValidJson(null, null, timestamp());
+        String json = AnalysisIntegrationUtils.buildValidJson(null, null, timestamp());
 
         ResponseEntity<String> res = rest.postForEntity(
                 baseUrl("/api/analysis"),
@@ -40,7 +41,7 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
     void createAnalysisWithExistingSample_shouldSucceed() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         ResponseEntity<Map> sampleRes = rest.postForEntity(
                 baseUrl("/api/samples"),
@@ -50,7 +51,7 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
 
         assertThat(sampleRes.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        String analysisJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String analysisJson = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         ResponseEntity<Map> res = rest.postForEntity(
                 baseUrl("/api/analysis"),
@@ -66,10 +67,10 @@ class AnalysisCreateE2ETest extends BaseE2ETest {
     void createAnalysisWithExtremeWeights_shouldSucceed() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp())
+        String json = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp())
                 .replace("\"weightMea\": 1.0", "\"weightMea\": 999999.99")
                 .replace("\"weightNrm\": 1.0", "\"weightNrm\": 999999.99")
                 .replace("\"weightCur\": 1.0", "\"weightCur\": 999999.99");

@@ -1,6 +1,6 @@
-package com.oliwier.insyrest.controller.analysis;
+package com.oliwier.insyrest.controller;
 
-public class AnalysisE2EUtils {
+public class AnalysisIntegrationUtils {
 
     public static String buildValidJson(String sId, String sStamp, String timestamp) {
         return """

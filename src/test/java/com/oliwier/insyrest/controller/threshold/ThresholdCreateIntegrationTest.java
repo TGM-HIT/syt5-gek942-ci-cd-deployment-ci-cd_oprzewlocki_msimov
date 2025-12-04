@@ -1,19 +1,19 @@
 package com.oliwier.insyrest.controller.threshold;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.ThresholdE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.ThresholdIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ThresholdCreateE2ETest extends BaseE2ETest {
+class ThresholdCreateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createThreshold_withValidData_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "10.5", "99.99", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "10.5", "99.99", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -30,8 +30,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withMinimalRequiredFields_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
-        String json = ThresholdE2EUtils.buildMinimalJson(thId);
+        String thId = ThresholdIntegrationUtils.generateShortThId();
+        String json = ThresholdIntegrationUtils.buildMinimalJson(thId);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -45,9 +45,9 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withEqualMinMax_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "50.0", "50.0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "50.0", "50.0", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -62,9 +62,9 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withZeroValues_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "0", "0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "0", "0", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -79,9 +79,9 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withNegativeValues_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "-50.0", "-10.0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "-50.0", "-10.0", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -96,9 +96,9 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withMaxPrecision_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "123456.78", "999999.99", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "123456.78", "999999.99", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -113,8 +113,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withoutDateChanged_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
-        String json = ThresholdE2EUtils.buildWithoutOptionalFields(thId, "10.0", "20.0");
+        String thId = ThresholdIntegrationUtils.generateShortThId();
+        String json = ThresholdIntegrationUtils.buildWithoutOptionalFields(thId, "10.0", "20.0");
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),
@@ -159,9 +159,9 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withReversedMinMax_shouldReturn201() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "100.0", "10.0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "100.0", "10.0", ts);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/thresholds"),

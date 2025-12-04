@@ -1,20 +1,20 @@
 package com.oliwier.insyrest.controller.threshold;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.ThresholdE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.ThresholdIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.List;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ThresholdReadE2ETest extends BaseE2ETest {
+class ThresholdReadIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void getThreshold_byExistingId_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "15.5", "25.5", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "15.5", "25.5", ts);
 
         postJson(baseUrl("/api/thresholds"), json, Map.class);
 
@@ -52,9 +52,9 @@ class ThresholdReadE2ETest extends BaseE2ETest {
 
     @Test
     void getAllThresholds_withSingleEntry_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts);
 
         postJson(baseUrl("/api/thresholds"), json, Map.class);
 
@@ -70,15 +70,15 @@ class ThresholdReadE2ETest extends BaseE2ETest {
 
     @Test
     void getAllThresholds_withMultipleEntries_shouldReturn200() {
-        String thId1 = ThresholdE2EUtils.generateShortThId();
-        String thId2 = ThresholdE2EUtils.generateShortThId();
+        String thId1 = ThresholdIntegrationUtils.generateShortThId();
+        String thId2 = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
 
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId1, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId1, "10.0", "20.0", ts),
                 Map.class);
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId2, "30.0", "40.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId2, "30.0", "40.0", ts),
                 Map.class);
 
         ResponseEntity<Map> res = rest.getForEntity(

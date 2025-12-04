@@ -1,13 +1,13 @@
 package com.oliwier.insyrest.controller.sample;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SampleReadE2ETest extends BaseE2ETest {
+class SampleReadIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void getAllSamples_shouldReturnList() {
@@ -24,7 +24,7 @@ class SampleReadE2ETest extends BaseE2ETest {
     void getExistingSampleByCompositeId_shouldReturn200AndCorrectData() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         ResponseEntity<Map> created = postJson(
                 baseUrl("/api/samples"),
@@ -82,7 +82,7 @@ class SampleReadE2ETest extends BaseE2ETest {
     void getSamplesByName_shouldReturnFiltered() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String json = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 

@@ -1,15 +1,12 @@
 package com.oliwier.insyrest.controller.boxpos;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
-import com.oliwier.insyrest.controller.BoxPosE2EUtils;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
-import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxPosDeleteE2ETest extends BaseE2ETest {
+class BoxPosDeleteIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void deleteBoxPos_nonexistent_shouldReturn404() {

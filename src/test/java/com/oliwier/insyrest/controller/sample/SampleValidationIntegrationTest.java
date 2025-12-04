@@ -1,11 +1,11 @@
 package com.oliwier.insyrest.controller.sample;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SampleValidationE2ETest extends BaseE2ETest {
+class SampleValidationIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createSample_withNegativeWeight_shouldAccept() {

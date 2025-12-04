@@ -2,7 +2,7 @@ package com.oliwier.insyrest.controller;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ThresholdE2EUtils {
+public class ThresholdIntegrationUtils {
 
     private static final AtomicInteger counter = new AtomicInteger(0);
 

@@ -1,15 +1,14 @@
 package com.oliwier.insyrest.controller.boxpos;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
-import com.oliwier.insyrest.controller.BoxPosE2EUtils;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxPosCreateE2ETest extends BaseE2ETest {
+class BoxPosCreateIntegrationTest extends BaseIntegrationTest {
 
 
     @Test
@@ -18,8 +17,8 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         String json = """
             {
@@ -43,7 +42,7 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         String json = """
             {
@@ -66,7 +65,7 @@ class BoxPosCreateE2ETest extends BaseE2ETest {
     void createBoxPos_withMissingSId_shouldReturn400() {
         String bId = uniqueId().substring(0, 4);
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
 
         String json = """
             {

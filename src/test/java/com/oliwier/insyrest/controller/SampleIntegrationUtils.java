@@ -1,6 +1,6 @@
 package com.oliwier.insyrest.controller;
 
-public class SampleE2EUtils {
+public class SampleIntegrationUtils {
 
     public static String buildValidJson(String sId, String sStamp, String timestamp) {
         return """

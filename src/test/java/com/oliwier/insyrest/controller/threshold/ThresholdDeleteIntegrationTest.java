@@ -1,20 +1,20 @@
 package com.oliwier.insyrest.controller.threshold;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.ThresholdE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.ThresholdIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ThresholdDeleteE2ETest extends BaseE2ETest {
+class ThresholdDeleteIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void deleteThreshold_existing_shouldReturn204() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
         ResponseEntity<Void> res = rest.exchange(
@@ -29,10 +29,10 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_verifyDeleted_shouldReturn404() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
         rest.exchange(
@@ -64,15 +64,15 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_multiple_shouldReturn204ForEach() {
-        String thId1 = ThresholdE2EUtils.generateShortThId();
-        String thId2 = ThresholdE2EUtils.generateShortThId();
+        String thId1 = ThresholdIntegrationUtils.generateShortThId();
+        String thId2 = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
 
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId1, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId1, "10.0", "20.0", ts),
                 Map.class);
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId2, "30.0", "40.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId2, "30.0", "40.0", ts),
                 Map.class);
 
         ResponseEntity<Void> res1 = rest.exchange(
@@ -94,10 +94,10 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_twice_shouldReturn404OnSecond() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
         rest.exchange(

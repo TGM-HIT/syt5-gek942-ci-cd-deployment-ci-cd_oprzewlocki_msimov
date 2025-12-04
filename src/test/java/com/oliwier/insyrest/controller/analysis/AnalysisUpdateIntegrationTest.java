@@ -1,21 +1,23 @@
 package com.oliwier.insyrest.controller.analysis;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
+import com.oliwier.insyrest.controller.AnalysisIntegrationUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnalysisUpdateE2ETest extends BaseE2ETest {
+class AnalysisUpdateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void updateExistingAnalysis_shouldReturn200AndPersistChanges() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String createJson = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),
@@ -40,7 +42,7 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
     void updateNonexistentAnalysis_shouldReturn404() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String fakeUpdate = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String fakeUpdate = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
 
         ResponseEntity<String> res = rest.exchange(
                 baseUrl("/api/analysis/99999999"),
@@ -69,10 +71,10 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
     void partialUpdateWithPatch_shouldSucceed() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String createJson = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),
@@ -109,10 +111,10 @@ class AnalysisUpdateE2ETest extends BaseE2ETest {
     void updateAnalysisWithExtremeValues_shouldStillWork() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = com.oliwier.insyrest.controller.SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String createJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String createJson = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(createJson, jsonHeaders()),

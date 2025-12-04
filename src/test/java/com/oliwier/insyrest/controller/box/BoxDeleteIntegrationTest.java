@@ -1,18 +1,18 @@
 package com.oliwier.insyrest.controller.box;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxDeleteE2ETest extends BaseE2ETest {
+class BoxDeleteIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void deleteExistingBox_shouldReturn204() {
         String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
+        String json = BoxIntegrationUtils.buildValidJson(bId);
 
         postJson(baseUrl("/api/boxes"), json, Map.class);
 
@@ -41,7 +41,7 @@ class BoxDeleteE2ETest extends BaseE2ETest {
     @Test
     void deleteBox_thenGetIt_shouldReturn404() {
         String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
+        String json = BoxIntegrationUtils.buildValidJson(bId);
 
         postJson(baseUrl("/api/boxes"), json, Map.class);
 

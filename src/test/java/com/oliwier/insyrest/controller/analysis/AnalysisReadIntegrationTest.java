@@ -1,13 +1,14 @@
 package com.oliwier.insyrest.controller.analysis;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.AnalysisIntegrationUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class AnalysisReadE2ETest extends BaseE2ETest {
+class AnalysisReadIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void getAllAnalyses_shouldReturnList() {
@@ -24,10 +25,10 @@ class AnalysisReadE2ETest extends BaseE2ETest {
     void getExistingAnalysisById_shouldReturn200AndCorrectData() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String json = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String json = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(json, jsonHeaders()),
@@ -60,10 +61,10 @@ class AnalysisReadE2ETest extends BaseE2ETest {
     void getAnalysisBySampleReference_shouldReturnList() {
         String sId = uniqueId();
         String sStamp = timestamp();
-        String sampleJson = SampleE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String sampleJson = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         rest.postForEntity(baseUrl("/api/samples"), new HttpEntity<>(sampleJson, jsonHeaders()), Map.class);
 
-        String analysisJson = AnalysisE2EUtils.buildValidJson(sId, sStamp, timestamp());
+        String analysisJson = AnalysisIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
         ResponseEntity<Map> created = rest.postForEntity(
                 baseUrl("/api/analysis"),
                 new HttpEntity<>(analysisJson, jsonHeaders()),

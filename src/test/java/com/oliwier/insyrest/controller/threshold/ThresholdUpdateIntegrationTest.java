@@ -1,23 +1,23 @@
 package com.oliwier.insyrest.controller.threshold;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.ThresholdE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.ThresholdIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ThresholdUpdateE2ETest extends BaseE2ETest {
+class ThresholdUpdateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void updateThreshold_changeValues_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
-        String updateJson = ThresholdE2EUtils.buildValidJson(thId, "15.0", "25.0", ts);
+        String updateJson = ThresholdIntegrationUtils.buildValidJson(thId, "15.0", "25.0", ts);
         ResponseEntity<Map> res = rest.exchange(
                 baseUrl("/api/thresholds/" + thId),
                 HttpMethod.PUT,
@@ -32,13 +32,13 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_swapMinAndMax_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "90.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "90.0", ts),
                 Map.class);
 
-        String updateJson = ThresholdE2EUtils.buildValidJson(thId, "90.0", "10.0", ts);
+        String updateJson = ThresholdIntegrationUtils.buildValidJson(thId, "90.0", "10.0", ts);
         ResponseEntity<Map> res = rest.exchange(
                 baseUrl("/api/thresholds/" + thId),
                 HttpMethod.PUT,
@@ -53,13 +53,13 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_increaseValues_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
-        String updateJson = ThresholdE2EUtils.buildValidJson(thId, "100.0", "200.0", ts);
+        String updateJson = ThresholdIntegrationUtils.buildValidJson(thId, "100.0", "200.0", ts);
         ResponseEntity<Map> res = rest.exchange(
                 baseUrl("/api/thresholds/" + thId),
                 HttpMethod.PUT,
@@ -75,7 +75,7 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
     @Test
     void updateThreshold_nonExistent_shouldReturn404() {
         String ts = timestamp();
-        String json = ThresholdE2EUtils.buildValidJson("NONEXIST", "10.0", "20.0", ts);
+        String json = ThresholdIntegrationUtils.buildValidJson("NONEXIST", "10.0", "20.0", ts);
 
         ResponseEntity<String> res = rest.exchange(
                 baseUrl("/api/thresholds/NONEXIST"),
@@ -89,13 +89,13 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_toNullValues_shouldReturn200() {
-        String thId = ThresholdE2EUtils.generateShortThId();
+        String thId = ThresholdIntegrationUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
-                ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
+                ThresholdIntegrationUtils.buildValidJson(thId, "10.0", "20.0", ts),
                 Map.class);
 
-        String updateJson = ThresholdE2EUtils.buildWithNullValues(thId);
+        String updateJson = ThresholdIntegrationUtils.buildWithNullValues(thId);
         ResponseEntity<Map> res = rest.exchange(
                 baseUrl("/api/thresholds/" + thId),
                 HttpMethod.PUT,

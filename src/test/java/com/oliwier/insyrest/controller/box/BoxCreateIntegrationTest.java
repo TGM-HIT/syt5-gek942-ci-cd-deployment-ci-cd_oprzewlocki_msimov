@@ -1,18 +1,18 @@
 package com.oliwier.insyrest.controller.box;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxCreateE2ETest extends BaseE2ETest {
+class BoxCreateIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createBox_withValidData_shouldReturn201() {
         String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
+        String json = BoxIntegrationUtils.buildValidJson(bId);
 
         ResponseEntity<Map> res = postJson(
                 baseUrl("/api/boxes"),
@@ -47,7 +47,7 @@ class BoxCreateE2ETest extends BaseE2ETest {
     @Test
     void createBox_withDuplicateBId_shouldReturn201() {
         String bId = uniqueId().substring(0, 4);
-        String json = BoxE2EUtils.buildValidJson(bId);
+        String json = BoxIntegrationUtils.buildValidJson(bId);
 
         rest.postForEntity(baseUrl("/api/boxes"), new HttpEntity<>(json, jsonHeaders()), Map.class);
 

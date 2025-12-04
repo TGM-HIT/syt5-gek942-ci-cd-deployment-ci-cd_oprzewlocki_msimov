@@ -1,15 +1,15 @@
 package com.oliwier.insyrest.controller.boxpos;
 
-import com.oliwier.insyrest.controller.BaseE2ETest;
-import com.oliwier.insyrest.controller.BoxE2EUtils;
-import com.oliwier.insyrest.controller.BoxPosE2EUtils;
-import com.oliwier.insyrest.controller.SampleE2EUtils;
+import com.oliwier.insyrest.controller.BaseIntegrationTest;
+import com.oliwier.insyrest.controller.BoxIntegrationUtils;
+import com.oliwier.insyrest.controller.BoxPosIntegrationUtils;
+import com.oliwier.insyrest.controller.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class BoxPosValidationE2ETest extends BaseE2ETest {
+class BoxPosValidationIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void createBoxPos_withNullBposId_shouldReturn400() {
@@ -17,8 +17,8 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         String json = """
             {
@@ -43,7 +43,7 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         String json = """
             {
@@ -67,7 +67,7 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
     void createBoxPos_withNullSId_shouldReturn400() {
         String bId = uniqueId().substring(0, 4);
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
 
         String json = """
             {
@@ -92,7 +92,7 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
         String json = """
             {
@@ -118,10 +118,10 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/boxes"), BoxE2EUtils.buildValidJson(bId), Map.class);
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/boxes"), BoxIntegrationUtils.buildValidJson(bId), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
-        String json = BoxPosE2EUtils.buildValidJson(-1, bId, sId, sStamp, timestamp());
+        String json = BoxPosIntegrationUtils.buildValidJson(-1, bId, sId, sStamp, timestamp());
 
         ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxpos"),
@@ -141,9 +141,9 @@ class BoxPosValidationE2ETest extends BaseE2ETest {
         String sId = uniqueId();
         String sStamp = timestamp();
 
-        postJson(baseUrl("/api/samples"), SampleE2EUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
+        postJson(baseUrl("/api/samples"), SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp()), Map.class);
 
-        String json = BoxPosE2EUtils.buildValidJson(9004, "TOOLONG123", sId, sStamp, timestamp());
+        String json = BoxPosIntegrationUtils.buildValidJson(9004, "TOOLONG123", sId, sStamp, timestamp());
 
         ResponseEntity<String> res = postJson(
                 baseUrl("/api/boxpos"),
