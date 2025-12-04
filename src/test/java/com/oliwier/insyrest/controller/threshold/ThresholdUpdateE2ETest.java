@@ -11,7 +11,7 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_changeValues_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
@@ -32,7 +32,7 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_swapMinAndMax_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "90.0", ts),
@@ -53,7 +53,7 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_increaseValues_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
@@ -89,7 +89,7 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
 
     @Test
     void updateThreshold_toNullValues_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),

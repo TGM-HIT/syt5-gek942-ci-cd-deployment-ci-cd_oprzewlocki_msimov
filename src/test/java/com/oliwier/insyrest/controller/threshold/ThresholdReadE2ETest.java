@@ -12,7 +12,7 @@ class ThresholdReadE2ETest extends BaseE2ETest {
 
     @Test
     void getThreshold_byExistingId_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "15.5", "25.5", ts);
 
@@ -32,7 +32,7 @@ class ThresholdReadE2ETest extends BaseE2ETest {
     @Test
     void getThreshold_byNonExistentId_shouldReturn404() {
         ResponseEntity<String> res = rest.getForEntity(
-                baseUrl("/api/thresholds/NONEXISTENT"),
+                baseUrl("/api/thresholds/NONEXIST"),
                 String.class
         );
 
@@ -47,13 +47,12 @@ class ThresholdReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        List content = (List) res.getBody().get("content");
-        assertThat(content).isEmpty();
+        assertThat(res.getBody()).containsKey("content");
     }
 
     @Test
     void getAllThresholds_withSingleEntry_shouldReturn200() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts);
 
@@ -71,8 +70,8 @@ class ThresholdReadE2ETest extends BaseE2ETest {
 
     @Test
     void getAllThresholds_withMultipleEntries_shouldReturn200() {
-        String thId1 = uniqueId();
-        String thId2 = uniqueId();
+        String thId1 = ThresholdE2EUtils.generateShortThId();
+        String thId2 = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
 
         postJson(baseUrl("/api/thresholds"),

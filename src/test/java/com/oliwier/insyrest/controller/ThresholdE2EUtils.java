@@ -1,6 +1,14 @@
 package com.oliwier.insyrest.controller;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ThresholdE2EUtils {
+
+    private static final AtomicInteger counter = new AtomicInteger(0);
+
+    public static String generateShortThId() {
+        return "TH" + counter.incrementAndGet();
+    }
 
     public static String buildValidJson(String thId, String valueMin, String valueMax, String dateChanged) {
         return """

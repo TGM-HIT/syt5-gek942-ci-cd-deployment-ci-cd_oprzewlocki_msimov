@@ -11,7 +11,7 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_existing_shouldReturn204() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
@@ -29,7 +29,7 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_verifyDeleted_shouldReturn404() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),
@@ -53,7 +53,7 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
     @Test
     void deleteThreshold_nonExistent_shouldReturn404() {
         ResponseEntity<String> res = rest.exchange(
-                baseUrl("/api/thresholds/NONEXISTENT"),
+                baseUrl("/api/thresholds/NONEXIST"),
                 HttpMethod.DELETE,
                 null,
                 String.class
@@ -64,8 +64,8 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_multiple_shouldReturn204ForEach() {
-        String thId1 = uniqueId();
-        String thId2 = uniqueId();
+        String thId1 = ThresholdE2EUtils.generateShortThId();
+        String thId2 = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
 
         postJson(baseUrl("/api/thresholds"),
@@ -94,7 +94,7 @@ class ThresholdDeleteE2ETest extends BaseE2ETest {
 
     @Test
     void deleteThreshold_twice_shouldReturn404OnSecond() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         postJson(baseUrl("/api/thresholds"),
                 ThresholdE2EUtils.buildValidJson(thId, "10.0", "20.0", ts),

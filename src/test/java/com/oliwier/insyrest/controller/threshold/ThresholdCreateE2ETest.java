@@ -11,7 +11,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withValidData_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "10.5", "99.99", ts);
 
@@ -30,7 +30,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withMinimalRequiredFields_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String json = ThresholdE2EUtils.buildMinimalJson(thId);
 
         ResponseEntity<Map> res = postJson(
@@ -45,7 +45,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withEqualMinMax_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "50.0", "50.0", ts);
 
@@ -62,7 +62,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withZeroValues_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "0", "0", ts);
 
@@ -79,7 +79,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withNegativeValues_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "-50.0", "-10.0", ts);
 
@@ -96,7 +96,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withMaxPrecision_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "123456.78", "999999.99", ts);
 
@@ -113,7 +113,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withoutDateChanged_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String json = ThresholdE2EUtils.buildWithoutOptionalFields(thId, "10.0", "20.0");
 
         ResponseEntity<Map> res = postJson(
@@ -159,7 +159,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
 
     @Test
     void createThreshold_withReversedMinMax_shouldReturn201() {
-        String thId = uniqueId();
+        String thId = ThresholdE2EUtils.generateShortThId();
         String ts = timestamp();
         String json = ThresholdE2EUtils.buildValidJson(thId, "100.0", "10.0", ts);
 
