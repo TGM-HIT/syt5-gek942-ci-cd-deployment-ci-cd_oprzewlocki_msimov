@@ -26,8 +26,8 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().get("value_min")).isEqualTo(15.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(25.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(15.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(25.0);
     }
 
     @Test
@@ -47,8 +47,8 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().get("value_min")).isEqualTo(90.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(10.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(90.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(10.0);
     }
 
     @Test
@@ -68,8 +68,8 @@ class ThresholdUpdateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().get("value_min")).isEqualTo(100.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(200.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(100.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(200.0);
     }
 
     @Test

@@ -22,10 +22,10 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody()).containsKey("th_id");
-        assertThat(res.getBody().get("th_id")).isEqualTo(thId);
-        assertThat(res.getBody().get("value_min")).isEqualTo(10.5);
-        assertThat(res.getBody().get("value_max")).isEqualTo(99.99);
+        assertThat(res.getBody()).containsKey("thId");
+        assertThat(res.getBody().get("thId")).isEqualTo(thId);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(10.5);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(99.99);
     }
 
     @Test
@@ -40,7 +40,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("th_id")).isEqualTo(thId);
+        assertThat(res.getBody().get("thId")).isEqualTo(thId);
     }
 
     @Test
@@ -56,8 +56,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("value_min")).isEqualTo(50.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(50.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(50.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(50.0);
     }
 
     @Test
@@ -73,8 +73,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("value_min")).isEqualTo(0.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(0.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(0.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(0.0);
     }
 
     @Test
@@ -90,8 +90,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("value_min")).isEqualTo(-50.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(-10.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(-50.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(-10.0);
     }
 
     @Test
@@ -107,8 +107,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("value_min")).isEqualTo(123456.78);
-        assertThat(res.getBody().get("value_max")).isEqualTo(999999.99);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(123456.78);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(999999.99);
     }
 
     @Test
@@ -123,7 +123,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("th_id")).isEqualTo(thId);
+        assertThat(res.getBody().get("thId")).isEqualTo(thId);
     }
 
     @Test
@@ -170,7 +170,7 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("value_min")).isEqualTo(100.0);
-        assertThat(res.getBody().get("value_max")).isEqualTo(10.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(100.0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(10.0);
     }
 }

@@ -24,9 +24,9 @@ class ThresholdReadE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(res.getBody().get("th_id")).isEqualTo(thId);
-        assertThat(res.getBody().get("value_min")).isEqualTo(15.5);
-        assertThat(res.getBody().get("value_max")).isEqualTo(25.5);
+        assertThat(res.getBody().get("thId")).isEqualTo(thId);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(15.5);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(25.5);
     }
 
     @Test
