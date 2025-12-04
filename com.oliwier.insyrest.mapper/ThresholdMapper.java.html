@@ -10,30 +10,30 @@ import org.springframework.stereotype.Component;
 
     @Override
     public Threshold toEntity(ThresholdRequest request) {
-<span class="nc" id="L13">        Threshold threshold = new Threshold();</span>
-<span class="nc" id="L14">        threshold.setThId(request.getThId());</span>
-<span class="nc" id="L15">        threshold.setValueMin(request.getValueMin());</span>
-<span class="nc" id="L16">        threshold.setValueMax(request.getValueMax());</span>
-<span class="nc" id="L17">        threshold.setDateChanged(request.getDateChanged());</span>
-<span class="nc" id="L18">        return threshold;</span>
+<span class="fc" id="L13">        Threshold threshold = new Threshold();</span>
+<span class="fc" id="L14">        threshold.setThId(request.getThId());</span>
+<span class="fc" id="L15">        threshold.setValueMin(request.getValueMin());</span>
+<span class="fc" id="L16">        threshold.setValueMax(request.getValueMax());</span>
+<span class="fc" id="L17">        threshold.setDateChanged(request.getDateChanged());</span>
+<span class="fc" id="L18">        return threshold;</span>
     }
 
     @Override
     public ThresholdResponse toResponse(Threshold entity) {
-<span class="nc" id="L23">        ThresholdResponse response = new ThresholdResponse();</span>
-<span class="nc" id="L24">        response.setThId(entity.getThId());</span>
-<span class="nc" id="L25">        response.setValueMin(entity.getValueMin());</span>
-<span class="nc" id="L26">        response.setValueMax(entity.getValueMax());</span>
-<span class="nc" id="L27">        response.setDateChanged(entity.getDateChanged());</span>
-<span class="nc" id="L28">        return response;</span>
+<span class="fc" id="L23">        ThresholdResponse response = new ThresholdResponse();</span>
+<span class="fc" id="L24">        response.setThId(entity.getThId());</span>
+<span class="fc" id="L25">        response.setValueMin(entity.getValueMin());</span>
+<span class="fc" id="L26">        response.setValueMax(entity.getValueMax());</span>
+<span class="fc" id="L27">        response.setDateChanged(entity.getDateChanged());</span>
+<span class="fc" id="L28">        return response;</span>
     }
 
     @Override
     public void updateEntity(Threshold entity, ThresholdRequest request) {
         // Don't update thId - it's the primary key
-<span class="nc" id="L34">        entity.setValueMin(request.getValueMin());</span>
-<span class="nc" id="L35">        entity.setValueMax(request.getValueMax());</span>
-<span class="nc" id="L36">        entity.setDateChanged(request.getDateChanged());</span>
-<span class="nc" id="L37">    }</span>
+<span class="fc" id="L34">        entity.setValueMin(request.getValueMin());</span>
+<span class="fc" id="L35">        entity.setValueMax(request.getValueMax());</span>
+<span class="fc" id="L36">        entity.setDateChanged(request.getDateChanged());</span>
+<span class="fc" id="L37">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
