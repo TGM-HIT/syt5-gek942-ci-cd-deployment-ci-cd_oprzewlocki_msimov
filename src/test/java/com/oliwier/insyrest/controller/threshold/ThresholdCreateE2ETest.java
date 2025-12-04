@@ -73,8 +73,8 @@ class ThresholdCreateE2ETest extends BaseE2ETest {
         );
 
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(res.getBody().get("valueMin")).isEqualTo(0.0);
-        assertThat(res.getBody().get("valueMax")).isEqualTo(0.0);
+        assertThat(res.getBody().get("valueMin")).isEqualTo(0);
+        assertThat(res.getBody().get("valueMax")).isEqualTo(0);
     }
 
     @Test
