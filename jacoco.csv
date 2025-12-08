@@ -6,7 +6,7 @@ INSY-REST,com.oliwier.insyrest.controller,SampleController,122,17,17,0,27,6,10,1
 INSY-REST,com.oliwier.insyrest.controller,BoxPosController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,ThresholdController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,LogController,0,5,0,0,0,2,0,1,0,1
-INSY-REST,com.oliwier.insyrest.controller,SampleBoxPosViewController,38,0,0,0,10,0,2,0,2,0
+INSY-REST,com.oliwier.insyrest.controller,SampleBoxPosViewController,0,38,0,0,0,10,0,2,0,2
 INSY-REST,com.oliwier.insyrest.controller,AbstractCrudController,19,193,2,8,5,42,2,11,0,8
 INSY-REST,com.oliwier.insyrest.controller,BoxController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,AnalysisController,0,36,0,0,0,9,0,2,0,2
@@ -16,7 +16,7 @@ INSY-REST,com.oliwier.insyrest.converter,StringToSampleIdConverter,5,45,0,2,2,11
 INSY-REST,com.oliwier.insyrest.converter,StringToBoxPosIdConverter,0,34,0,2,0,7,0,3,0,2
 INSY-REST,com.oliwier.insyrest.mapper,EntityMapper,0,14,0,0,0,4,0,2,0,2
 INSY-REST,com.oliwier.insyrest.mapper,LogMapper,0,177,4,12,0,41,4,8,0,4
-INSY-REST,com.oliwier.insyrest.mapper,SampleMapper,26,180,4,2,5,45,3,5,0,5
+INSY-REST,com.oliwier.insyrest.mapper,SampleMapper,0,206,0,6,0,50,0,8,0,5
 INSY-REST,com.oliwier.insyrest.mapper,BoxMapper,0,84,0,0,0,23,0,4,0,4
 INSY-REST,com.oliwier.insyrest.mapper,BoxPosMapper,17,140,0,0,0,27,2,6,2,6
 INSY-REST,com.oliwier.insyrest.mapper,ThresholdMapper,0,60,0,0,0,17,0,4,0,4

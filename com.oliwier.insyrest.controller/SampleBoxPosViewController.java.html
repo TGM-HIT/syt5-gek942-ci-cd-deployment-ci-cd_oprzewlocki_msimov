@@ -23,20 +23,20 @@ public class SampleBoxPosViewController {
             @RequestParam(defaultValue = &quot;0&quot;) int page,
             @RequestParam(defaultValue = &quot;25&quot;) int size
     ) {
-<span class="nc" id="L26">        Sort sortObj = Sort.by(Sort.Direction.DESC, &quot;sStamp&quot;);</span>
+<span class="fc" id="L26">        Sort sortObj = Sort.by(Sort.Direction.DESC, &quot;sStamp&quot;);</span>
 
-<span class="nc" id="L28">        Pageable pageable = PageRequest.of(page, size, sortObj);</span>
-<span class="nc" id="L29">        Page&lt;SampleBoxPosView&gt; result = repository.findAll(pageable);</span>
+<span class="fc" id="L28">        Pageable pageable = PageRequest.of(page, size, sortObj);</span>
+<span class="fc" id="L29">        Page&lt;SampleBoxPosView&gt; result = repository.findAll(pageable);</span>
 
-<span class="nc" id="L31">        Page&lt;SampleBoxPosViewDTO&gt; dtoPage = result.map(entity -&gt;</span>
-<span class="nc" id="L32">                SampleBoxPosViewDTO.builder()</span>
-<span class="nc" id="L33">                        .sId(entity.getSId())</span>
-<span class="nc" id="L34">                        .sStamp(entity.getSStamp())</span>
-<span class="nc" id="L35">                        .boxpos(entity.getBoxpos())</span>
-<span class="nc" id="L36">                        .build()</span>
+<span class="fc" id="L31">        Page&lt;SampleBoxPosViewDTO&gt; dtoPage = result.map(entity -&gt;</span>
+<span class="fc" id="L32">                SampleBoxPosViewDTO.builder()</span>
+<span class="fc" id="L33">                        .sId(entity.getSId())</span>
+<span class="fc" id="L34">                        .sStamp(entity.getSStamp())</span>
+<span class="fc" id="L35">                        .boxpos(entity.getBoxpos())</span>
+<span class="fc" id="L36">                        .build()</span>
         );
 
-<span class="nc" id="L39">        return ResponseEntity.ok(dtoPage);</span>
+<span class="fc" id="L39">        return ResponseEntity.ok(dtoPage);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -70,14 +70,14 @@ import java.util.Set;
 <span class="fc" id="L70">    }</span>
 
     private String computeBoxposString(Set&lt;BoxPos&gt; positions) {
-<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (positions == null || positions.isEmpty()) {</span>
+<span class="fc bfc" id="L73" title="All 4 branches covered.">        if (positions == null || positions.isEmpty()) {</span>
 <span class="fc" id="L74">            return &quot;-&quot;;</span>
         }
-<span class="nc" id="L76">        var first = positions.iterator().next();</span>
-<span class="nc" id="L77">        var bid = first.getId().getBId();</span>
-<span class="nc" id="L78">        var pos = first.getId().getBposId();</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">        var sep = positions.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
-<span class="nc" id="L80">        return bid + sep + pos;</span>
+<span class="fc" id="L76">        var first = positions.iterator().next();</span>
+<span class="fc" id="L77">        var bid = first.getId().getBId();</span>
+<span class="fc" id="L78">        var pos = first.getId().getBposId();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        var sep = positions.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
+<span class="fc" id="L80">        return bid + sep + pos;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
