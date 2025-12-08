@@ -36,12 +36,12 @@ public class AnalysisController extends AbstractCrudController&lt;Analysis, Long
             @RequestParam String s_stamp
     ) {
         try {
-<span class="nc" id="L39">            LocalDateTime stamp = LocalDateTime.parse(s_stamp);</span>
-<span class="nc" id="L40">            SampleId id = new SampleId(s_id, stamp);</span>
-<span class="nc" id="L41">            boolean exists = sampleService.findById(id).isPresent();</span>
-<span class="nc" id="L42">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
-<span class="nc" id="L43">        } catch (DateTimeParseException e) {</span>
-<span class="nc" id="L44">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
+<span class="fc" id="L39">            LocalDateTime stamp = LocalDateTime.parse(s_stamp);</span>
+<span class="fc" id="L40">            SampleId id = new SampleId(s_id, stamp);</span>
+<span class="fc" id="L41">            boolean exists = sampleService.findById(id).isPresent();</span>
+<span class="fc" id="L42">            return ResponseEntity.ok(Map.of(&quot;valid&quot;, exists));</span>
+<span class="fc" id="L43">        } catch (DateTimeParseException e) {</span>
+<span class="fc" id="L44">            return ResponseEntity.badRequest().body(Map.of(&quot;error&quot;, &quot;Invalid timestamp format&quot;));</span>
         }
     }
 }

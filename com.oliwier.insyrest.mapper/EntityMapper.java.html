@@ -33,9 +33,9 @@ public interface EntityMapper&lt;ENTITY, REQUEST, RESPONSE&gt; {
      * Convert list of entities to list of response DTOs
      */
     default List&lt;RESPONSE&gt; toResponseList(List&lt;ENTITY&gt; entities) {
-<span class="nc" id="L36">        return entities.stream()</span>
-<span class="nc" id="L37">                .map(this::toResponse)</span>
-<span class="nc" id="L38">                .collect(Collectors.toList());</span>
+<span class="fc" id="L36">        return entities.stream()</span>
+<span class="fc" id="L37">                .map(this::toResponse)</span>
+<span class="fc" id="L38">                .collect(Collectors.toList());</span>
     }
 
     /**

@@ -23,23 +23,23 @@ public class AnalysisService extends AbstractCrudService&lt;Analysis, Long&gt;{
 
     @Transactional
     public void deleteAllBySample(SampleId id) {
-<span class="nc" id="L26">        sampleRepository.findById(id).ifPresent(analysisRepository::deleteAllBySample);</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L26">        sampleRepository.findById(id).ifPresent(analysisRepository::deleteAllBySample);</span>
+<span class="fc" id="L27">    }</span>
 
     @Transactional
     public void detachSampleReferences(SampleId id) {
-<span class="nc" id="L31">        sampleRepository.findById(id).ifPresent(sample -&gt; {</span>
-<span class="nc" id="L32">            List&lt;Analysis&gt; analyses = analysisRepository.findBySample(sample);</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">            for (Analysis a : analyses) {</span>
-<span class="nc" id="L34">                a.setSample(null);</span>
-<span class="nc" id="L35">            }</span>
-<span class="nc" id="L36">            analysisRepository.saveAll(analyses);</span>
-<span class="nc" id="L37">        });</span>
-<span class="nc" id="L38">    }</span>
+<span class="fc" id="L31">        sampleRepository.findById(id).ifPresent(sample -&gt; {</span>
+<span class="fc" id="L32">            List&lt;Analysis&gt; analyses = analysisRepository.findBySample(sample);</span>
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            for (Analysis a : analyses) {</span>
+<span class="fc" id="L34">                a.setSample(null);</span>
+<span class="fc" id="L35">            }</span>
+<span class="fc" id="L36">            analysisRepository.saveAll(analyses);</span>
+<span class="fc" id="L37">        });</span>
+<span class="fc" id="L38">    }</span>
 
     @Transactional(readOnly = true)
     public boolean existsForSample(SampleId id) {
-<span class="nc" id="L42">        return analysisRepository.existsBySampleId(id);</span>
+<span class="fc" id="L42">        return analysisRepository.existsBySampleId(id);</span>
     }
 
 }

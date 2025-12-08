@@ -24,10 +24,10 @@ public class AnalysisMapper implements EntityMapper&lt;Analysis, AnalysisRequest
     public Analysis toEntity(AnalysisRequest request) {
 <span class="fc" id="L25">        Analysis analysis = new Analysis();</span>
 
-<span class="pc bpc" id="L27" title="3 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
-<span class="nc" id="L28">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
-<span class="nc" id="L29">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
-<span class="nc" id="L30">            analysis.setSample(sample);</span>
+<span class="pc bpc" id="L27" title="1 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
+<span class="fc" id="L28">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
+<span class="fc" id="L29">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
+<span class="fc" id="L30">            analysis.setSample(sample);</span>
         }
 
 <span class="fc" id="L33">        analysis.setPol(request.getPol());</span>
@@ -57,10 +57,10 @@ public class AnalysisMapper implements EntityMapper&lt;Analysis, AnalysisRequest
 
 <span class="fc" id="L58">        response.setAId(entity.getAId());</span>
 
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (entity.getSample() != null) {</span>
-<span class="nc" id="L61">            response.setSId(entity.getSample().getId().getsId());</span>
-<span class="nc" id="L62">            response.setSStamp(entity.getSample().getId().getsStamp());</span>
-<span class="nc" id="L63">            response.setBoxposString(computeBoxposString(entity.getSample().getBoxPositions()));</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (entity.getSample() != null) {</span>
+<span class="fc" id="L61">            response.setSId(entity.getSample().getId().getsId());</span>
+<span class="fc" id="L62">            response.setSStamp(entity.getSample().getId().getsStamp());</span>
+<span class="fc" id="L63">            response.setBoxposString(computeBoxposString(entity.getSample().getBoxPositions()));</span>
         } else {
 <span class="fc" id="L65">            response.setBoxposString(&quot;-&quot;);</span>
         }
@@ -88,10 +88,10 @@ public class AnalysisMapper implements EntityMapper&lt;Analysis, AnalysisRequest
 
     @Override
     public void updateEntity(Analysis entity, AnalysisRequest request) {
-<span class="pc bpc" id="L91" title="3 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
-<span class="nc" id="L92">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
-<span class="nc" id="L93">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
-<span class="nc" id="L94">            entity.setSample(sample);</span>
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
+<span class="fc" id="L92">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
+<span class="fc" id="L93">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
+<span class="fc" id="L94">            entity.setSample(sample);</span>
         }
 
 <span class="fc" id="L97">        entity.setPol(request.getPol());</span>
@@ -114,14 +114,14 @@ public class AnalysisMapper implements EntityMapper&lt;Analysis, AnalysisRequest
 <span class="fc" id="L114">    }</span>
 
     private String computeBoxposString(Set&lt;BoxPos&gt; positions) {
-<span class="nc bnc" id="L117" title="All 4 branches missed.">        if (positions == null || positions.isEmpty()) {</span>
-<span class="nc" id="L118">            return &quot;-&quot;;</span>
+<span class="fc bfc" id="L117" title="All 4 branches covered.">        if (positions == null || positions.isEmpty()) {</span>
+<span class="fc" id="L118">            return &quot;-&quot;;</span>
         }
-<span class="nc" id="L120">        var first = positions.iterator().next();</span>
-<span class="nc" id="L121">        var bid = first.getId().getBId();</span>
-<span class="nc" id="L122">        var pos = first.getId().getBposId();</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">        var sep = positions.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
-<span class="nc" id="L124">        return bid + sep + pos;</span>
+<span class="fc" id="L120">        var first = positions.iterator().next();</span>
+<span class="fc" id="L121">        var bid = first.getId().getBId();</span>
+<span class="fc" id="L122">        var pos = first.getId().getBposId();</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        var sep = positions.size() == 1 ? &quot;/&quot; : &quot;!&quot;;</span>
+<span class="fc" id="L124">        return bid + sep + pos;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
