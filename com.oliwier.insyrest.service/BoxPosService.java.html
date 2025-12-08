@@ -29,14 +29,14 @@ public class BoxPosService extends AbstractCrudService&lt;BoxPos, BoxPosId&gt;{
 
     @Transactional
     public void deleteAllBySample(SampleId id) {
-<span class="nc" id="L32">        sampleRepository.findById(id).ifPresent(boxPosRepository::deleteAllBySample);</span>
-<span class="nc" id="L33">    }</span>
+<span class="fc" id="L32">        sampleRepository.findById(id).ifPresent(boxPosRepository::deleteAllBySample);</span>
+<span class="fc" id="L33">    }</span>
 
     @Transactional(readOnly = true)
     public boolean existsForSample(SampleId id) {
-<span class="nc" id="L37">        return sampleRepository.findById(id)</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">                .map(s -&gt; !boxPosRepository.findBySample(s).isEmpty())</span>
-<span class="nc" id="L39">                .orElse(false);</span>
+<span class="fc" id="L37">        return sampleRepository.findById(id)</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">                .map(s -&gt; !boxPosRepository.findBySample(s).isEmpty())</span>
+<span class="fc" id="L39">                .orElse(false);</span>
     }
 
 
@@ -45,7 +45,7 @@ public class BoxPosService extends AbstractCrudService&lt;BoxPos, BoxPosId&gt;{
     public BoxPos save(BoxPos pos) {
 
         // ===== PATCH ID FROM FLAT FIELDS =====
-<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (pos.getId() == null) {</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (pos.getId() == null) {</span>
 <span class="nc" id="L49">            Integer bposId = null;</span>
 <span class="nc" id="L50">            String bId = null;</span>
 
@@ -65,12 +65,12 @@ public class BoxPosService extends AbstractCrudService&lt;BoxPos, BoxPosId&gt;{
         }
 
         // ===== RESOLVE BOX =====
-<span class="nc" id="L68">        var box = boxRepository.findById(pos.getId().getBId())</span>
-<span class="nc" id="L69">                .orElseThrow(() -&gt; new RuntimeException(&quot;Box not found: &quot; + pos.getId().getBId()));</span>
-<span class="nc" id="L70">        pos.setBox(box);</span>
+<span class="fc" id="L68">        var box = boxRepository.findById(pos.getId().getBId())</span>
+<span class="fc" id="L69">                .orElseThrow(() -&gt; new RuntimeException(&quot;Box not found: &quot; + pos.getId().getBId()));</span>
+<span class="fc" id="L70">        pos.setBox(box);</span>
 
         // ===== RESOLVE SAMPLE =====
-<span class="nc bnc" id="L73" title="All 4 branches missed.">        if (pos.getSample() == null || pos.getSample().getId() == null) {</span>
+<span class="pc bpc" id="L73" title="2 of 4 branches missed.">        if (pos.getSample() == null || pos.getSample().getId() == null) {</span>
             // We must build SampleId manually from flat fields
 <span class="nc" id="L75">            String sId = null;</span>
 <span class="nc" id="L76">            String sStamp = null;</span>
@@ -88,7 +88,7 @@ public class BoxPosService extends AbstractCrudService&lt;BoxPos, BoxPosId&gt;{
             }
         }
 
-<span class="nc" id="L91">        return boxPosRepository.save(pos);</span>
+<span class="fc" id="L91">        return boxPosRepository.save(pos);</span>
     }
 
 }
