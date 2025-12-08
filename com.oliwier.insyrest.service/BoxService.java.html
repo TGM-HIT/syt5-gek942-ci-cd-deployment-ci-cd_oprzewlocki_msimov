@@ -27,48 +27,48 @@ public class BoxService extends AbstractCrudService&lt;Box, String&gt;{
 
     @Transactional(readOnly = true)
     public boolean existsLinkedToSample(SampleId id) {
-<span class="nc" id="L30">        return boxPosRepository.existsBySampleId(id);</span>
+<span class="fc" id="L30">        return boxPosRepository.existsBySampleId(id);</span>
     }
 
     @Transactional
     public void deleteEmptyBoxes() {
-<span class="nc" id="L35">        var all = boxRepository.findAll();</span>
-<span class="nc" id="L36">        all.stream()</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">                .filter(box -&gt; boxPosRepository.countByBox(box) == 0)</span>
-<span class="nc" id="L38">                .forEach(boxRepository::delete);</span>
-<span class="nc" id="L39">    }</span>
+<span class="fc" id="L35">        var all = boxRepository.findAll();</span>
+<span class="fc" id="L36">        all.stream()</span>
+<span class="fc bfc" id="L37" title="All 2 branches covered.">                .filter(box -&gt; boxPosRepository.countByBox(box) == 0)</span>
+<span class="fc" id="L38">                .forEach(boxRepository::delete);</span>
+<span class="fc" id="L39">    }</span>
 
     @Transactional
     public void deleteBoxesBySample(SampleId id) {
-<span class="nc" id="L43">        Sample sample = sampleRepository.findById(id)</span>
-<span class="nc" id="L44">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Sample not found: &quot; + id));</span>
+<span class="fc" id="L43">        Sample sample = sampleRepository.findById(id)</span>
+<span class="fc" id="L44">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Sample not found: &quot; + id));</span>
 
-<span class="nc" id="L46">        List&lt;BoxPos&gt; boxPositions = boxPosRepository.findBySample(sample);</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (boxPositions.isEmpty()) return;</span>
+<span class="fc" id="L46">        List&lt;BoxPos&gt; boxPositions = boxPosRepository.findBySample(sample);</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (boxPositions.isEmpty()) return;</span>
 
-<span class="nc" id="L49">        List&lt;Box&gt; boxes = boxPositions.stream()</span>
-<span class="nc" id="L50">                .map(BoxPos::getBox)</span>
-<span class="nc" id="L51">                .distinct()</span>
-<span class="nc" id="L52">                .toList();</span>
+<span class="fc" id="L49">        List&lt;Box&gt; boxes = boxPositions.stream()</span>
+<span class="fc" id="L50">                .map(BoxPos::getBox)</span>
+<span class="fc" id="L51">                .distinct()</span>
+<span class="fc" id="L52">                .toList();</span>
 
-<span class="nc" id="L54">        boxPosRepository.deleteAll(boxPositions);</span>
+<span class="fc" id="L54">        boxPosRepository.deleteAll(boxPositions);</span>
 
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (Box box : boxes) {</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (boxPosRepository.countByBox(box) == 0) {</span>
-<span class="nc" id="L58">                boxRepository.delete(box);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (Box box : boxes) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (boxPosRepository.countByBox(box) == 0) {</span>
+<span class="fc" id="L58">                boxRepository.delete(box);</span>
             }
-<span class="nc" id="L60">        }</span>
-<span class="nc" id="L61">    }</span>
+<span class="fc" id="L60">        }</span>
+<span class="fc" id="L61">    }</span>
 
     @Transactional(readOnly = true)
     public boolean hasBoxPos(String bId) {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        return !boxPosRepository.findAllByBoxId(bId).isEmpty();</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        return !boxPosRepository.findAllByBoxId(bId).isEmpty();</span>
     }
 
     @Transactional
     public void cascadeDeleteBox(String bId) {
-<span class="nc" id="L70">        boxPosRepository.deleteAllByBoxId(bId);</span>
-<span class="nc" id="L71">        boxRepository.deleteById(bId);</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L70">        boxPosRepository.deleteAllByBoxId(bId);</span>
+<span class="fc" id="L71">        boxRepository.deleteById(bId);</span>
+<span class="fc" id="L72">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

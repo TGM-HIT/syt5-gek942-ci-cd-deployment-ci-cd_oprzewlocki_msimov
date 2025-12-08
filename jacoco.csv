@@ -26,5 +26,5 @@ INSY-REST,com.oliwier.insyrest.service,LogService,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.service,AbstractCrudService,491,250,65,25,92,48,54,12,6,8
 INSY-REST,com.oliwier.insyrest.service,SampleService,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.service,BoxPosService,185,14,16,0,30,5,14,1,6,1
-INSY-REST,com.oliwier.insyrest.service,BoxService,111,14,10,0,24,5,12,1,7,1
+INSY-REST,com.oliwier.insyrest.service,BoxService,0,125,0,10,0,29,0,13,0,8
 INSY-REST,com.oliwier.insyrest.service,ThresholdService,0,5,0,0,0,2,0,1,0,1
