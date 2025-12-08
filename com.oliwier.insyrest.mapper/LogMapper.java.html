@@ -23,68 +23,68 @@ public class LogMapper implements EntityMapper&lt;Log, LogRequest, LogResponse&g
 
     @Override
     public Log toEntity(LogRequest request) {
-<span class="nc" id="L26">        Log log = new Log();</span>
-<span class="nc" id="L27">        log.setDateCreated(request.getDateCreated());</span>
-<span class="nc" id="L28">        log.setLevel(request.getLevel());</span>
-<span class="nc" id="L29">        log.setInfo(request.getInfo());</span>
-<span class="nc" id="L30">        log.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L26">        Log log = new Log();</span>
+<span class="fc" id="L27">        log.setDateCreated(request.getDateCreated());</span>
+<span class="fc" id="L28">        log.setLevel(request.getLevel());</span>
+<span class="fc" id="L29">        log.setInfo(request.getInfo());</span>
+<span class="fc" id="L30">        log.setDateExported(request.getDateExported());</span>
 
         // Set sample reference if provided
-<span class="nc bnc" id="L33" title="All 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
-<span class="nc" id="L34">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
-<span class="nc" id="L35">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
-<span class="nc" id="L36">            log.setSample(sample);</span>
+<span class="pc bpc" id="L33" title="1 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
+<span class="fc" id="L34">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
+<span class="fc" id="L35">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
+<span class="fc" id="L36">            log.setSample(sample);</span>
         }
 
         // Set analysis reference if provided
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (request.getAId() != null) {</span>
-<span class="nc" id="L41">            Analysis analysis = analysisRepository.findById(request.getAId()).orElse(null);</span>
-<span class="nc" id="L42">            log.setAnalysis(analysis);</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (request.getAId() != null) {</span>
+<span class="fc" id="L41">            Analysis analysis = analysisRepository.findById(request.getAId()).orElse(null);</span>
+<span class="fc" id="L42">            log.setAnalysis(analysis);</span>
         }
 
-<span class="nc" id="L45">        return log;</span>
+<span class="fc" id="L45">        return log;</span>
     }
 
     @Override
     public LogResponse toResponse(Log entity) {
-<span class="nc" id="L50">        LogResponse response = new LogResponse();</span>
-<span class="nc" id="L51">        response.setLogId(entity.getLogId());</span>
-<span class="nc" id="L52">        response.setDateCreated(entity.getDateCreated());</span>
-<span class="nc" id="L53">        response.setLevel(entity.getLevel());</span>
-<span class="nc" id="L54">        response.setInfo(entity.getInfo());</span>
-<span class="nc" id="L55">        response.setDateExported(entity.getDateExported());</span>
+<span class="fc" id="L50">        LogResponse response = new LogResponse();</span>
+<span class="fc" id="L51">        response.setLogId(entity.getLogId());</span>
+<span class="fc" id="L52">        response.setDateCreated(entity.getDateCreated());</span>
+<span class="fc" id="L53">        response.setLevel(entity.getLevel());</span>
+<span class="fc" id="L54">        response.setInfo(entity.getInfo());</span>
+<span class="fc" id="L55">        response.setDateExported(entity.getDateExported());</span>
 
-<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (entity.getSample() != null) {</span>
-<span class="nc" id="L58">            response.setSId(entity.getSample().getId().getsId());</span>
-<span class="nc" id="L59">            response.setSStamp(entity.getSample().getId().getsStamp());</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (entity.getSample() != null) {</span>
+<span class="fc" id="L58">            response.setSId(entity.getSample().getId().getsId());</span>
+<span class="fc" id="L59">            response.setSStamp(entity.getSample().getId().getsStamp());</span>
         }
 
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (entity.getAnalysis() != null) {</span>
-<span class="nc" id="L63">            response.setAId(entity.getAnalysis().getAId());</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (entity.getAnalysis() != null) {</span>
+<span class="fc" id="L63">            response.setAId(entity.getAnalysis().getAId());</span>
         }
 
-<span class="nc" id="L66">        return response;</span>
+<span class="fc" id="L66">        return response;</span>
     }
 
     @Override
     public void updateEntity(Log entity, LogRequest request) {
-<span class="nc" id="L71">        entity.setDateCreated(request.getDateCreated());</span>
-<span class="nc" id="L72">        entity.setLevel(request.getLevel());</span>
-<span class="nc" id="L73">        entity.setInfo(request.getInfo());</span>
-<span class="nc" id="L74">        entity.setDateExported(request.getDateExported());</span>
+<span class="fc" id="L71">        entity.setDateCreated(request.getDateCreated());</span>
+<span class="fc" id="L72">        entity.setLevel(request.getLevel());</span>
+<span class="fc" id="L73">        entity.setInfo(request.getInfo());</span>
+<span class="fc" id="L74">        entity.setDateExported(request.getDateExported());</span>
 
         // Update sample reference if provided
-<span class="nc bnc" id="L77" title="All 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
-<span class="nc" id="L78">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
-<span class="nc" id="L79">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
-<span class="nc" id="L80">            entity.setSample(sample);</span>
+<span class="pc bpc" id="L77" title="2 of 4 branches missed.">        if (request.getSId() != null &amp;&amp; request.getSStamp() != null) {</span>
+<span class="fc" id="L78">            SampleId sampleId = new SampleId(request.getSId(), request.getSStamp());</span>
+<span class="fc" id="L79">            Sample sample = sampleRepository.findById(sampleId).orElse(null);</span>
+<span class="fc" id="L80">            entity.setSample(sample);</span>
         }
 
         // Update analysis reference if provided
-<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (request.getAId() != null) {</span>
-<span class="nc" id="L85">            Analysis analysis = analysisRepository.findById(request.getAId()).orElse(null);</span>
-<span class="nc" id="L86">            entity.setAnalysis(analysis);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (request.getAId() != null) {</span>
+<span class="fc" id="L85">            Analysis analysis = analysisRepository.findById(request.getAId()).orElse(null);</span>
+<span class="fc" id="L86">            entity.setAnalysis(analysis);</span>
         }
-<span class="nc" id="L88">    }</span>
+<span class="fc" id="L88">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

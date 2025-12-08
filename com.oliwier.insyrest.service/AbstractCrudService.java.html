@@ -32,7 +32,7 @@ public abstract class AbstractCrudService&lt;T, ID&gt; implements CrudService&lt
     @Override
     @Transactional(readOnly = true)
     public Page&lt;T&gt; findAll(Pageable pageable) {
-<span class="nc" id="L35">        return repository.findAll(pageable);</span>
+<span class="fc" id="L35">        return repository.findAll(pageable);</span>
     }
 
     @Override
