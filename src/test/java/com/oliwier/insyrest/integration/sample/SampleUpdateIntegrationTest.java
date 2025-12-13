@@ -4,6 +4,8 @@ import com.oliwier.insyrest.integration.BaseIntegrationTest;
 import com.oliwier.insyrest.integration.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,10 +30,10 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
         """.formatted(sId, sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
-        String compositeId = sId + "," + sStamp;
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
 
         ResponseEntity<Map> res = rest.exchange(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 HttpMethod.PUT,
                 request,
                 Map.class
@@ -40,7 +42,7 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 Map.class
         );
 
@@ -62,10 +64,10 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
             """.formatted(sId, sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(json, jsonHeaders());
-        String compositeId = sId + "," + sStamp;
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
 
         ResponseEntity<String> res = rest.exchange(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 HttpMethod.PUT,
                 request,
                 String.class
@@ -91,10 +93,10 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
         """.formatted(sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
-        String compositeId = sId + "," + sStamp;
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
 
         ResponseEntity<Map> res = rest.exchange(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 HttpMethod.PUT,
                 request,
                 Map.class
@@ -103,7 +105,7 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
         assertThat(res.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 Map.class
         );
         assertThat(fetched.getBody().get("s_id")).isEqualTo(sId);
@@ -127,10 +129,10 @@ class SampleUpdateIntegrationTest extends BaseIntegrationTest {
             """.formatted(sId, sStamp);
 
         HttpEntity<String> request = new HttpEntity<>(updateJson, jsonHeaders());
-        String compositeId = sId + "," + sStamp;
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
 
         ResponseEntity<Map> res = rest.exchange(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 HttpMethod.PUT,
                 request,
                 Map.class

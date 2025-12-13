@@ -4,6 +4,8 @@ import com.oliwier.insyrest.integration.BaseIntegrationTest;
 import com.oliwier.insyrest.integration.SampleIntegrationUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,9 +36,9 @@ class SampleReadIntegrationTest extends BaseIntegrationTest {
 
         assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-        String compositeId = sId + "," + sStamp;
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
         ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 Map.class
         );
 
@@ -47,10 +49,12 @@ class SampleReadIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void getNonexistentSample_shouldReturn404() {
-        String compositeId = uniqueId() + "," + timestamp();
+        String sId = uniqueId();
+        String sStamp = timestamp();
+        String encodedCompositeId = URLEncoder.encode(sId + "," + sStamp, StandardCharsets.UTF_8);
 
         ResponseEntity<String> res = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
+                baseUrl("/api/samples/" + encodedCompositeId),
                 String.class
         );
 
