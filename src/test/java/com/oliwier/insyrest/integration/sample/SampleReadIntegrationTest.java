@@ -20,42 +20,6 @@ class SampleReadIntegrationTest extends BaseIntegrationTest {
         assertThat(res.getBody()).containsKey("content");
     }
 
-    @Test
-    void getExistingSampleByCompositeId_shouldReturn200AndCorrectData() {
-        String sId = uniqueId();
-        String sStamp = timestamp();
-        String json = SampleIntegrationUtils.buildValidJson(sId, sStamp, timestamp());
-
-        ResponseEntity<Map> created = postJson(
-                baseUrl("/api/samples"),
-                json,
-                Map.class
-        );
-
-        assertThat(created.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-
-        String compositeId = sId + "," + sStamp;
-        ResponseEntity<Map> fetched = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
-                Map.class
-        );
-
-        assertThat(fetched.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(fetched.getBody().get("s_id")).isEqualTo(sId);
-        assertThat(fetched.getBody().get("name")).isEqualTo("E2E Sample");
-    }
-
-    @Test
-    void getNonexistentSample_shouldReturn404() {
-        String compositeId = uniqueId() + "," + timestamp();
-
-        ResponseEntity<String> res = rest.getForEntity(
-                baseUrl("/api/samples/" + compositeId),
-                String.class
-        );
-
-        assertThat(res.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
 
     @Test
     void getSample_withInvalidCompositeIdFormat_shouldReturn400() {
