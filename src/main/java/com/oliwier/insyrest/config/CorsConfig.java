@@ -14,12 +14,17 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
+                        // Add both dev and preview origins
+                        .allowedOrigins(
+                                "http://localhost:5173",  // Dev server
+                                "http://localhost:4173"   // Preview server (PWA testing)
+                                // Add production URL here later: "https://your-app.com"
+                        )
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(true)
+                        .exposedHeaders("*");  // Allow frontend to read response headers
             }
         };
     }
 }
-
