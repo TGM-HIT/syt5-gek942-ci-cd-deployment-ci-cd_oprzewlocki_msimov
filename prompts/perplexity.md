@@ -1,0 +1,1 @@
+Du bist ein professioneller DevOps engineer. Vergleiche CI/CD workflows. Insbesondere Github actions vs. GitLab, Jenkins und Atlassian-Tools. Füg alles in eine "Research.md" Datei. Nutz IEEE Zitierung und gib entsprechend sources
