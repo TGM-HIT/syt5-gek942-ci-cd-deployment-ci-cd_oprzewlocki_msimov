@@ -1,6 +1,7 @@
 package com.oliwier.insyrest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oliwier.insyrest.config.TestSecurityConfig;
 import com.oliwier.insyrest.entity.SampleBoxPosView;
 import com.oliwier.insyrest.repository.SampleBoxPosViewRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,9 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +30,8 @@ import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(SampleBoxPosViewController.class)
 @DisplayName("SampleBoxPosViewController Unit Tests")
+@ActiveProfiles("test")
+@Import(TestSecurityConfig.class)
 class SampleBoxPosViewControllerTest {
 
     @Autowired

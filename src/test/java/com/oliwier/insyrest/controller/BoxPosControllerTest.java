@@ -3,6 +3,7 @@ package com.oliwier.insyrest.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.oliwier.insyrest.config.TestSecurityConfig;
 import com.oliwier.insyrest.dto.request.BoxPosRequest;
 import com.oliwier.insyrest.dto.response.BoxPosResponse;
 import com.oliwier.insyrest.entity.Box;
@@ -17,9 +18,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,6 +38,8 @@ import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(BoxPosController.class)
 @DisplayName("BoxPosController Unit Tests")
+@ActiveProfiles("test")
+@Import(TestSecurityConfig.class)
 class BoxPosControllerTest {
 
     @Autowired
