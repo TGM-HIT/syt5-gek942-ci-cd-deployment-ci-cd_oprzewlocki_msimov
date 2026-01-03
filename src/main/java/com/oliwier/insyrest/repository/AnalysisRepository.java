@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,4 +25,7 @@ public interface AnalysisRepository extends JpaRepository<Analysis, Long>, JpaSp
     """)
     boolean existsBySampleId(@Param("id") SampleId id);
 
+
+    @Query("SELECT a FROM Analysis a LEFT JOIN FETCH a.sample WHERE a.dateIn BETWEEN :start AND :end")
+    List<Analysis> findAllByDateInBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 }

@@ -18,11 +18,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${app.jwt.secret}") // <--- Injected from .env
+    @Value("${app.jwt.secret}")
     private String secretKey;
-
-    @Value("${app.jwt.expiration}")
-    private long jwtExpiration;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

@@ -21,7 +21,8 @@ public class Analysis {
     @Column(name = "a_id")
     private Long aId;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     @JoinColumns({
             @JoinColumn(name = "s_id", referencedColumnName = "s_id"),
             @JoinColumn(name = "s_stamp", referencedColumnName = "s_stamp")
