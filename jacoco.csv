@@ -16,7 +16,7 @@ INSY-REST,com.oliwier.insyrest.controller,SampleBoxPosViewController,0,38,0,0,0,
 INSY-REST,com.oliwier.insyrest.controller,AbstractCrudController,19,193,2,8,5,42,2,11,0,8
 INSY-REST,com.oliwier.insyrest.controller,BoxController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,AnalysisController,0,36,0,0,0,9,0,2,0,2
-INSY-REST,com.oliwier.insyrest.config,CorsConfig.new WebMvcConfigurer() {...},0,65,0,0,0,8,0,2,0,2
+INSY-REST,com.oliwier.insyrest.config,CorsConfig.new WebMvcConfigurer() {...},0,73,0,0,0,8,0,2,0,2
 INSY-REST,com.oliwier.insyrest.config,TestSecurityConfig,0,23,0,0,0,6,0,4,0,4
 INSY-REST,com.oliwier.insyrest.config,ApplicationConfig,13,24,0,0,1,7,2,4,2,4
 INSY-REST,com.oliwier.insyrest.config,CorsConfig,0,8,0,0,0,2,0,2,0,2

@@ -17,14 +17,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                         // Add both dev and preview origins
 <span class="fc" id="L18">                        .allowedOrigins(</span>
                                 &quot;http://localhost:5173&quot;,  // Dev server
-                                &quot;http://localhost:4173&quot;   // Preview server (PWA testing)
-                                // Add production URL here later: &quot;https://your-app.com&quot;
+                                &quot;http://localhost:4173&quot;,   // Preview server (PWA testing)
+                                &quot;https://venlab.net&quot;,
+                                &quot;https://www.venlab.net&quot;
                         )
-<span class="fc" id="L23">                        .allowedMethods(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;PATCH&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;)</span>
-<span class="fc" id="L24">                        .allowedHeaders(&quot;*&quot;)</span>
-<span class="fc" id="L25">                        .allowCredentials(true)</span>
-<span class="fc" id="L26">                        .exposedHeaders(&quot;*&quot;);  // Allow frontend to read response headers</span>
-<span class="fc" id="L27">            }</span>
+<span class="fc" id="L24">                        .allowedMethods(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;PATCH&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;)</span>
+<span class="fc" id="L25">                        .allowedHeaders(&quot;*&quot;)</span>
+<span class="fc" id="L26">                        .allowCredentials(true)</span>
+<span class="fc" id="L27">                        .exposedHeaders(&quot;*&quot;);  // Allow frontend to read response headers</span>
+<span class="fc" id="L28">            }</span>
         };
     }
 }
