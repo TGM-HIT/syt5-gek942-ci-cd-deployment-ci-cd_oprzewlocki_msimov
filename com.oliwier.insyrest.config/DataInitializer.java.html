@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DataInitializer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.config</a> &gt; <span class="el_source">DataInitializer.java</span></div><h1>DataInitializer.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.config;
+
+import com.oliwier.insyrest.entity.User;
+import com.oliwier.insyrest.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DataInitializer implements CommandLineRunner {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+<span class="fc" id="L16">    public DataInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {</span>
+<span class="fc" id="L17">        this.userRepository = userRepository;</span>
+<span class="fc" id="L18">        this.passwordEncoder = passwordEncoder;</span>
+<span class="fc" id="L19">    }</span>
+
+    @Value(&quot;${app.admin.username:admin}&quot;)
+    private String adminUsername;
+
+    @Value(&quot;${app.admin.password:admin123}&quot;)
+    private String adminPassword;
+
+    @Value(&quot;${app.admin.email:admin@company.com}&quot;)
+    private String adminEmail;
+
+    @Override
+    public void run(String... args) {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (userRepository.findByUsername(adminUsername).isEmpty()) {</span>
+<span class="fc" id="L33">            User admin = User.builder()</span>
+<span class="fc" id="L34">                    .username(adminUsername)</span>
+<span class="fc" id="L35">                    .password(passwordEncoder.encode(adminPassword))</span>
+<span class="fc" id="L36">                    .email(adminEmail)</span>
+<span class="fc" id="L37">                    .role(&quot;ADMIN&quot;)</span>
+<span class="fc" id="L38">                    .enabled(true)</span>
+<span class="fc" id="L39">                    .build();</span>
+
+<span class="fc" id="L41">            userRepository.save(admin);</span>
+<span class="fc" id="L42">            System.out.println(&quot;&gt;&gt;&gt; Created default admin user: &quot; + adminUsername);</span>
+        }
+<span class="fc" id="L44">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

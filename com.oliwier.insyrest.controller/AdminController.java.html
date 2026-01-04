@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">INSY-REST</a> &gt; <a href="index.source.html" class="el_package">com.oliwier.insyrest.controller</a> &gt; <span class="el_source">AdminController.java</span></div><h1>AdminController.java</h1><pre class="source lang-java linenums">package com.oliwier.insyrest.controller;
+
+import com.oliwier.insyrest.entity.User;
+import com.oliwier.insyrest.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/api/admin&quot;)
+public class AdminController {
+
+    private final UserRepository userRepository;
+
+<span class="fc" id="L17">    public AdminController(UserRepository userRepository) {</span>
+<span class="fc" id="L18">        this.userRepository = userRepository;</span>
+<span class="fc" id="L19">    }</span>
+
+    @GetMapping(&quot;/pending-users&quot;)
+    public ResponseEntity&lt;List&lt;User&gt;&gt; getPendingUsers() {
+<span class="nc" id="L23">        return ResponseEntity.ok(userRepository.findByEnabledFalse());</span>
+    }
+
+    @GetMapping(&quot;/pending-users/count&quot;)
+    public ResponseEntity&lt;Map&lt;String, Integer&gt;&gt; getPendingCount() {
+<span class="nc" id="L28">        int count = userRepository.findByEnabledFalse().size();</span>
+<span class="nc" id="L29">        return ResponseEntity.ok(Map.of(&quot;count&quot;, count));</span>
+    }
+
+    @PostMapping(&quot;/approve/{id}&quot;)
+    public ResponseEntity&lt;?&gt; approveUser(@PathVariable Integer id) {
+<span class="nc" id="L34">        return userRepository.findById(id)</span>
+<span class="nc" id="L35">                .map(user -&gt; {</span>
+<span class="nc" id="L36">                    user.setEnabled(true);</span>
+<span class="nc" id="L37">                    userRepository.save(user);</span>
+<span class="nc" id="L38">                    return ResponseEntity.ok().body(Map.of(&quot;message&quot;, &quot;User approved&quot;));</span>
+                })
+<span class="nc" id="L40">                .orElse(ResponseEntity.notFound().build());</span>
+    }
+
+    @DeleteMapping(&quot;/users/{id}&quot;)
+    public ResponseEntity&lt;?&gt; declineUser(@PathVariable Integer id) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (userRepository.existsById(id)) {</span>
+<span class="nc" id="L46">            userRepository.deleteById(id);</span>
+<span class="nc" id="L47">            return ResponseEntity.ok().body(Map.of(&quot;message&quot;, &quot;User deleted&quot;));</span>
+        }
+<span class="nc" id="L49">        return ResponseEntity.notFound().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

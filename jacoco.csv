@@ -1,10 +1,16 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+INSY-REST,com.oliwier.insyrest.security,JwtAuthenticationFilter,77,19,9,1,21,6,5,1,0,1
+INSY-REST,com.oliwier.insyrest.security,JwtService,95,3,4,0,22,1,11,1,9,1
 INSY-REST,com.oliwier.insyrest,InsyRestApplication,5,3,0,0,2,1,1,1,1,1
+INSY-REST,com.oliwier.insyrest.entity,User,23,0,0,0,7,0,7,0,7,0
 INSY-REST,com.oliwier.insyrest.entity.id,BoxPosId,2,68,1,7,0,14,1,11,0,8
 INSY-REST,com.oliwier.insyrest.entity.id,SampleId,8,20,0,0,4,8,2,4,2,4
+INSY-REST,com.oliwier.insyrest.controller,AdminController,60,6,2,0,13,3,6,1,5,1
 INSY-REST,com.oliwier.insyrest.controller,SampleController,122,17,17,0,27,6,10,1,1,1
+INSY-REST,com.oliwier.insyrest.controller,AuthenticationController,12,0,0,0,2,0,2,0,2,0
 INSY-REST,com.oliwier.insyrest.controller,BoxPosController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,ThresholdController,0,5,0,0,0,2,0,1,0,1
+INSY-REST,com.oliwier.insyrest.controller,ReportController,29,0,0,0,6,0,1,0,1,0
 INSY-REST,com.oliwier.insyrest.controller,LogController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,SampleBoxPosViewController,0,38,0,0,0,10,0,2,0,2
 INSY-REST,com.oliwier.insyrest.controller,AbstractCrudController,19,193,2,8,5,42,2,11,0,8
@@ -12,10 +18,10 @@ INSY-REST,com.oliwier.insyrest.controller,BoxController,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.controller,AnalysisController,0,36,0,0,0,9,0,2,0,2
 INSY-REST,com.oliwier.insyrest.config,CorsConfig.new WebMvcConfigurer() {...},0,65,0,0,0,8,0,2,0,2
 INSY-REST,com.oliwier.insyrest.config,TestSecurityConfig,0,23,0,0,0,6,0,4,0,4
+INSY-REST,com.oliwier.insyrest.config,ApplicationConfig,13,24,0,0,1,7,2,4,2,4
 INSY-REST,com.oliwier.insyrest.config,CorsConfig,0,8,0,0,0,2,0,2,0,2
-INSY-REST,com.oliwier.insyrest.config,SecurityConfig,37,23,0,0,11,6,3,4,3,4
-INSY-REST,com.oliwier.insyrest.converter,StringToSampleIdConverter,5,45,0,2,2,11,0,4,0,3
-INSY-REST,com.oliwier.insyrest.converter,StringToBoxPosIdConverter,0,34,0,2,0,7,0,3,0,2
+INSY-REST,com.oliwier.insyrest.config,DataInitializer,0,46,1,1,0,15,1,2,0,2
+INSY-REST,com.oliwier.insyrest.config,SecurityConfig,82,20,0,0,14,5,4,3,4,3
 INSY-REST,com.oliwier.insyrest.mapper,EntityMapper,0,14,0,0,0,4,0,2,0,2
 INSY-REST,com.oliwier.insyrest.mapper,LogMapper,0,177,4,12,0,41,4,8,0,4
 INSY-REST,com.oliwier.insyrest.mapper,SampleMapper,0,206,0,6,0,50,0,8,0,5
@@ -23,7 +29,11 @@ INSY-REST,com.oliwier.insyrest.mapper,BoxMapper,0,84,0,0,0,23,0,4,0,4
 INSY-REST,com.oliwier.insyrest.mapper,BoxPosMapper,17,140,0,0,0,27,2,6,2,6
 INSY-REST,com.oliwier.insyrest.mapper,ThresholdMapper,0,60,0,0,0,17,0,4,0,4
 INSY-REST,com.oliwier.insyrest.mapper,AnalysisMapper,0,336,2,14,0,80,2,11,0,5
+INSY-REST,com.oliwier.insyrest.converter,StringToSampleIdConverter,5,45,0,2,2,11,0,4,0,3
+INSY-REST,com.oliwier.insyrest.converter,StringToBoxPosIdConverter,0,34,0,2,0,7,0,3,0,2
 INSY-REST,com.oliwier.insyrest.service,AnalysisService,0,61,0,2,0,15,0,6,0,5
+INSY-REST,com.oliwier.insyrest.service,ReportService,594,22,22,0,91,3,35,1,23,1
+INSY-REST,com.oliwier.insyrest.service,AuthenticationService,61,0,0,0,20,0,2,0,2,0
 INSY-REST,com.oliwier.insyrest.service,LogService,0,5,0,0,0,2,0,1,0,1
 INSY-REST,com.oliwier.insyrest.service,AbstractCrudService,486,255,65,25,91,49,53,13,5,9
 INSY-REST,com.oliwier.insyrest.service,SampleService,0,5,0,0,0,2,0,1,0,1
