@@ -1,5 +1,6 @@
 package com.oliwier.insyrest.config;
 
+import com.oliwier.insyrest.security.JwtService;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,5 +20,10 @@ public class TestSecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public JwtService jwtService() {
+        return Mockito.mock(JwtService.class);
     }
 }

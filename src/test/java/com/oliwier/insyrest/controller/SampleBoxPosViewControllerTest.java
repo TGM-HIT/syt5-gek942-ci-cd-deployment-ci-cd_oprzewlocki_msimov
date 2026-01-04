@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oliwier.insyrest.config.TestSecurityConfig;
 import com.oliwier.insyrest.entity.SampleBoxPosView;
 import com.oliwier.insyrest.repository.SampleBoxPosViewRepository;
+import com.oliwier.insyrest.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +37,9 @@ class SampleBoxPosViewControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private SampleBoxPosViewRepository repository;

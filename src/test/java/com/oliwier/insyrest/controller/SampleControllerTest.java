@@ -7,6 +7,7 @@ import com.oliwier.insyrest.dto.response.SampleResponse;
 import com.oliwier.insyrest.entity.Sample;
 import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.mapper.SampleMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,9 @@ class SampleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private SampleService sampleService;

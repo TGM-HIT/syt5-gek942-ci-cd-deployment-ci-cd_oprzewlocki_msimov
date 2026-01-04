@@ -9,6 +9,7 @@ import com.oliwier.insyrest.entity.Analysis;
 import com.oliwier.insyrest.entity.Sample;
 import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.mapper.AnalysisMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.AnalysisService;
 import com.oliwier.insyrest.service.SampleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,6 +47,9 @@ class AnalysisControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private AnalysisService analysisService;

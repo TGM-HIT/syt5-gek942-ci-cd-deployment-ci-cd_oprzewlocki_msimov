@@ -6,6 +6,7 @@ import com.oliwier.insyrest.dto.request.LogRequest;
 import com.oliwier.insyrest.dto.response.LogResponse;
 import com.oliwier.insyrest.entity.Log;
 import com.oliwier.insyrest.mapper.LogMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.LogService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,9 @@ class LogControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private LogService logService;
