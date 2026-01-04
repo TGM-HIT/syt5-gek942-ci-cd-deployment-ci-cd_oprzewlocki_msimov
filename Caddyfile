@@ -1,0 +1,3 @@
+venlab.net, www.venlab.net {
+    reverse_proxy frontend:80
+}
