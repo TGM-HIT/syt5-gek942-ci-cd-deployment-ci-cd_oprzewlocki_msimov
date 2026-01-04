@@ -12,6 +12,7 @@ import com.oliwier.insyrest.entity.Sample;
 import com.oliwier.insyrest.entity.id.BoxPosId;
 import com.oliwier.insyrest.entity.id.SampleId;
 import com.oliwier.insyrest.mapper.BoxPosMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.BoxPosService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,9 @@ class BoxPosControllerTest {
 
     @MockitoBean
     private BoxPosService boxPosService;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private BoxPosMapper boxPosMapper;

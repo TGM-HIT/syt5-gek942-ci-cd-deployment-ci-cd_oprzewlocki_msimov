@@ -6,6 +6,7 @@ import com.oliwier.insyrest.dto.request.ThresholdRequest;
 import com.oliwier.insyrest.dto.response.ThresholdResponse;
 import com.oliwier.insyrest.entity.Threshold;
 import com.oliwier.insyrest.mapper.ThresholdMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.ThresholdService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,9 @@ class ThresholdControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private ThresholdService thresholdService;

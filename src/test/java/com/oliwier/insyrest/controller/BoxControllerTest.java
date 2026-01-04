@@ -7,6 +7,7 @@ import com.oliwier.insyrest.dto.request.BoxRequest;
 import com.oliwier.insyrest.dto.response.BoxResponse;
 import com.oliwier.insyrest.entity.Box;
 import com.oliwier.insyrest.mapper.BoxMapper;
+import com.oliwier.insyrest.security.JwtService;
 import com.oliwier.insyrest.service.BoxService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,9 @@ class BoxControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @MockitoBean
     private BoxService boxService;
