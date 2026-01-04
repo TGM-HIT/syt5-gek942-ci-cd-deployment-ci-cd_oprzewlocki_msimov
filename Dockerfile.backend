@@ -1,0 +1,17 @@
+# Dockerfile.backend
+
+# Stage 1: Build
+FROM maven:3.9-amazoncorretto-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+# Build the JAR
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run
+FROM amazoncorretto:21-alpine-jdk
+WORKDIR /app
+RUN apk add --no-cache fontconfig freetype
+# Copy the built jar from the previous stage
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

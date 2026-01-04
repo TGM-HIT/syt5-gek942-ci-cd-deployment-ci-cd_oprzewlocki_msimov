@@ -33,7 +33,9 @@ build/
 .vscode/
 
 ### MISC ###
-db/*
+db/backupdir
+db/backups
+db/wal_archive
 .env
 application.properties
 
