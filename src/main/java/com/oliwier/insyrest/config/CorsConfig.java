@@ -17,8 +17,9 @@ public class CorsConfig {
                         // Add both dev and preview origins
                         .allowedOrigins(
                                 "http://localhost:5173",  // Dev server
-                                "http://localhost:4173"   // Preview server (PWA testing)
-                                // Add production URL here later: "https://your-app.com"
+                                "http://localhost:4173",   // Preview server (PWA testing)
+                                "https://venlab.net",
+                                "https://www.venlab.net"
                         )
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
