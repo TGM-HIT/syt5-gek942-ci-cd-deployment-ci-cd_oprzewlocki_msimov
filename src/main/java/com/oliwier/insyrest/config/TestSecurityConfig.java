@@ -21,9 +21,4 @@ public class TestSecurityConfig {
 
         return http.build();
     }
-
-    @Bean
-    public JwtService jwtService() {
-        return Mockito.mock(JwtService.class);
-    }
 }
