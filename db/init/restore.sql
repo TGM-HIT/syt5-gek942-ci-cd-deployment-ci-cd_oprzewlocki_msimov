@@ -778,13 +778,15 @@ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO venlab_app;
 -- Grant read access to backup schema tables (no write access needed for backups)
 GRANT SELECT ON ALL TABLES IN SCHEMA backup TO venlab_app;
 
--- Set default privileges for future objects created in venlab schema
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO venlab_app;
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT USAGE, SELECT ON SEQUENCES TO venlab_app;
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO venlab_app;
+-- Set default privileges for future objects created in venlab schema by postgres role
+-- This ensures that objects created by Hibernate (via postgres user) also get proper permissions
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO venlab_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT USAGE, SELECT ON SEQUENCES TO venlab_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO venlab_app;
 
 -- For compatibility: also grant these permissions directly to the postgres user if it exists
--- This ensures that regardless of which user the application uses, it will work
+-- This provides explicit permissions in addition to role inheritance, ensuring compatibility
+-- with applications that may not properly use role membership for permission checks
 DO $$
 BEGIN
     IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
