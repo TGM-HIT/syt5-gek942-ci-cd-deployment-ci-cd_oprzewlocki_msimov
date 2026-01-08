@@ -40,6 +40,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/samples/**").permitAll() // TODO REMOVE TS LATER
+                        .requestMatchers(HttpMethod.GET, "/api/boxpos/**").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
