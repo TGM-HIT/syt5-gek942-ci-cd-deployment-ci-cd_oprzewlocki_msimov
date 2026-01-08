@@ -737,30 +737,52 @@ ALTER TABLE ONLY venlab.log
 
 
 --
--- Grant permissions to all database users
+-- Grant permissions to application users
 -- This ensures that the application user has full access to all tables, sequences, and functions
+-- Note: The POSTGRES_USER is typically 'postgres' but may vary in different deployments (e.g., AWS RDS)
 --
 
+-- Create a role for the application if it doesn't exist
+-- This allows granting permissions to a specific role instead of PUBLIC
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'venlab_app') THEN
+        CREATE ROLE venlab_app;
+    END IF;
+END
+$$;
+
+-- Grant the application role to the current database owner (postgres by default)
+-- This ensures the owner can act as the application user
+GRANT venlab_app TO postgres;
+
 -- Grant usage on schemas
-GRANT USAGE ON SCHEMA venlab TO PUBLIC;
-GRANT USAGE ON SCHEMA backup TO PUBLIC;
+GRANT USAGE ON SCHEMA venlab TO venlab_app;
+GRANT USAGE ON SCHEMA backup TO venlab_app;
 
--- Grant all privileges on all existing tables in venlab schema
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA venlab TO PUBLIC;
+-- Grant CRUD privileges (not ALL) on all existing tables in venlab schema
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO venlab_app;
 
--- Grant all privileges on all existing sequences in venlab schema
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA venlab TO PUBLIC;
+-- Grant usage on all existing sequences in venlab schema (for auto-increment columns)
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO venlab_app;
 
 -- Grant execute on all existing functions in venlab schema
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO PUBLIC;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO venlab_app;
 
--- Grant privileges on backup schema tables (for potential backup operations)
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA backup TO PUBLIC;
+-- Grant read access to backup schema tables (no write access needed for backups)
+GRANT SELECT ON ALL TABLES IN SCHEMA backup TO venlab_app;
 
 -- Set default privileges for future objects created in venlab schema
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT ALL ON TABLES TO PUBLIC;
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT ALL ON SEQUENCES TO PUBLIC;
-ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO venlab_app;
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT USAGE, SELECT ON SEQUENCES TO venlab_app;
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO venlab_app;
+
+-- For compatibility: also grant these permissions directly to the postgres user
+-- This ensures that regardless of which user the application uses, it will work
+GRANT USAGE ON SCHEMA venlab TO postgres;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO postgres;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO postgres;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO postgres;
 
 --
 -- PostgreSQL database dump complete
