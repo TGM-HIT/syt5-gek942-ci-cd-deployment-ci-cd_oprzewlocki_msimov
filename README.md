@@ -1,129 +1,104 @@
-# INSY REST API (Spring Boot + PostgreSQL)
+# INSY E2E Tests
 
-[![coverage](https://tgm-hit.github.io/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/badges/jacoco.svg)](https://tgm-hit.github.io/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/)
-![CI](https://github.com/TGM-HIT/syt5-gek942-ci-cd-deployment-ci-cd_oprzewlocki_msimov/actions/workflows/ci.yml/badge.svg)
+**Verfasser:** Arbel Itach, Oliwier Przewklocki
+**Datum:** 8.1.2026
 
-REST-Backend für das VENLAB-System.
-CRUD für `Sample`, `Analysis`, `BoxPos` inklusive **Composite IDs**.  
-Swagger UI verfügbar. CI Pipeline auf GitHub Actions vorhanden.
 
----
+## 1. Einführung
 
-## Features
+In dieser Übung werden E2E-Tests für eine  CRUD-Webapplikation  implementiert. Ziel ist es, das vollständige Programm inklusive Benutzeroberfläche in Kombination mit der vorhandenen ReST-Schnittstelle zu testen.
 
-- Spring Boot 3 + JPA (Hibernate)
-- PostgreSQL mit Schema `venlab`
-- `.env` Variablen für DB-Verbindung
-- **Composite Keys** (`SampleId`, `BoxPosId`)
-- REST Controller über `AbstractCrudController`
-- Swagger UI Dokumentation
-- E2E Tests mit realer PostgreSQL-Datenbank
-- GitHub Actions CI Pipeline (build + test)
+Die Tests überprüfen reale Benutzerinteraktionen im Browser und stellen sicher, dass alle CRUD-Operationen (Create, Read, Update, Delete) wie erwartet funktionieren. Dabei wird das Programm als Gesamtsystem verwendet und nicht isoliert.
 
----
 
-## Umgebungsvariablen (`.env`)
+## 2. Zielsetzung
 
-Das Projekt liest DB Credentials aus `.env`.
+Ziel dieser Übung ist das Überprüfen des Frontensd mithilfe automatisierter E2E-Tests.
 
-Erstelle eine `.env` im Projekt-Root mit:
-```env
+Tabellen die getestet werden sind zB:
+
+- **Analysis** (CRUD)
+- **Sample** (CRUD)
+- **BoxPos** (CRUD)
+
+Die Tests sollen reproduzierbar über die Konsole gestartet werden können und eine transparente output zum Test liefern.
+
+## 3. Voraussetzungen
+
+- Docker & Docker Compose
+- Node.js (npm oder yarn)
+- Funktionstüchtiges ReST-Backend
+- Funktionstüchtige Vue-Frontend
+- Grundlagen zu E2E-Tests
+
+
+
+## 4.  Arbeitsschritte
+
+### 4.1 Implementierte Features
+
+Im Rahmen dieser Übung wurden folgende Komponenten und Features eingesetzt bzw. erweitert:
+
+- Bestehendes ReST-Backend als Datenquelle
+- Vue.js Frontend mit bestehenden CRUD-Views
+- E2E-Tests zur Überprüfung der Benutzeroberfläche
+- Automatisierte Testausführung über npm/yarn
+
+
+### 4.2 Umgebungsvariablen
+
+Für den Betrieb des Systems werden Umgebungsvariablen verwendet, um Datenbank- und Servicekonfigurationen flexibel zu halten. Diese Variablen werden über eine `.env`-Datei im Projekt-Root definiert.
+
+Beispiel:
+
 POSTGRES_DB=venlab  
 POSTGRES_USER=postgres  
 POSTGRES_PASSWORD=postgres
-```
 
----
+Dadurch kann das Programm lokal als auch in einem Container ohne Änderungen laufen ohne Passwörter oder Usernames öffentlich zu machen.
 
-## Lokale Entwicklung
 
-PostgreSQL starten (Beispiel mit Docker):
-```bash
-docker run -d --name venlab-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=venlab -p 5432:5432 postgres:13-alpine
-```
-Schema anlegen: `psql -h localhost -U postgres -d venlab -c "CREATE SCHEMA IF NOT EXISTS venlab;`
 
-Back-End starten:
-mvn spring-boot:run
+### 4.3 Server & API-Dokumentation
 
----
+Zusätzlich zu den E2E Tests steht eine Swagger UI zur Verfügung, welche alle Endpoints dokumentiert. Diese dient als Referenz für die Entwicklung der Tests sowie zur manuellen Überprüfung der API-Funktionalität.
 
-## Server & Swagger UI
 
-API läuft nach dem Start unter:
-http://localhost:8040/api
+### 4.4 Umsetzung der E2E-Tests
 
-Swagger UI erreichbar unter:
-http://localhost:8040/swagger-ui/index.html
+Die End-to-End-Tests simulieren reale Benutzeraktionen im Browser. Für Tabellen wie **Analysis**, **Sample**, **Box** und **BoxPos** werden vollständige CRUD-Abläufe getestet:
 
----
+- Anlegen neuer Datensätze
+- Bearbeiten bestehender Einträge
+- Löschen von Datensätzen
+- Überprüfung der korrekten Daten nach jeder Veränderung
 
-## Modellierung: Composite IDs
 
-### SampleId
-Sample hat eine zusammengesetzte ID bestehend aus:
-- `s_id` (String)
-- `s_stamp` (LocalDateTime)
 
-Bei GET `/api/samples/{id}` wird die ID nicht als JSON übergeben, sondern als einzelner String im Format:
-`s_id,s_stamp`
+### 4.5 Testausführung & Testbasis
 
-Beispiel:
-`2122900311111,2023-07-27T12:37:06`
+Die Tests laufen natürlich gegen eine echte Datenbank. Dadurch wird garantiert dass das Ergebnis auch bei der richtigen Nutzung gleich ausfallen wird.
+Die Testausführung dabei über die Konsole.
 
-Dies gilt für alle Endpoints mit SampleId als Path-Parameter.
 
----
 
-### BoxPosId
-BoxPos hat eine zusammengesetzte ID bestehend aus:
-- `bPosId` (Integer)
-- `bId` (String)
+### 4.6 Testprotokolle & Reports
 
-Swagger Format:
-`bPosId,bId`
+Zur Dokumentation des Testfortschritts werden automatisch Feedback generiert. Diese enthalten Informationen wie:
 
-Beispiel:
-`3,BOX-44`
+- Erfolgreiche Testfälle
+- Fehlgeschlagene Tests
+- Laufzeiten der einzelnen Szenarien
 
----
+## 5. Zusammenfassung
 
-## E2E Tests
+Die implementierten E2E-Tests stellen sicher, dass das Frontend als auch das Backend von einem Ende zum anderen komplett funktioniert ohne einen Teil zu isolieren und alle relevanten Funktionen abgedeckt sind.
 
-Die End-to-End Tests laufen gegen eine echte PostgreSQL Instanz.
-Dies wird über die CI Pipeline & lokale Docker-Datenbank ermöglicht.
 
-Testbasis:
-- `BaseE2ETest` stellt:
-    - Random Port
-    - `TestRestTemplate`
-    - `uniqueId()`, `timestamp()`, `baseUrl()` Helper bereit
+## 6. Quellen
 
-Jeder E2E Test ruft echte Endpoints auf, z.B. `/api/analysis`.
+[1] Vue.js, “Testing — End-to-End (E2E) Testing,” Vue.js Official Guide. [Online]. Available: https://vuejs.org/guide/scaling-up/testing.html. [Accessed: 20.12.2025].
 
----
+[2] Cypress.io, “Writing Your First End-to-End Test,” Cypress Documentation. [Online]. Available: https://docs.cypress.io/guides/end-to-end-testing/writing-your-first-end-to-end-test. [Accessed: 27.12.2025].
 
-## Projektstruktur
-
-src/main/java/com/.../controller     → REST Controller  
-src/main/java/com/.../service       → Geschäftslogik  
-src/main/java/com/.../repository    → JPA Repositories  
-src/main/java/com/.../entity        → Entities & Composite IDs  
-src/test/java/.../controller        → E2E Tests
-
----
-
-## CI Pipeline (GitHub Actions)
-
-Die CI Pipeline führt Folgendes aus:
-1) Startet PostgreSQL (Docker Service)
-2) Legt Schema `venlab` an
-3) Führt `mvn clean verify` aus
-4) Lädt Testreports als Artifact hoch
-
-Damit wird sichergestellt, dass:
-- E2E Tests zuverlässig laufen
-- keine lokal-spezifischen DB Abhängigkeiten bestehen
-- Build fehlschlägt, wenn CRUD- oder API-Verhalten bricht
-
----
+[3] Cypress.io, “Best Practices,” Cypress Documentation, 2024. [Online]. Available: https://docs.cypress.io/guides/references/best-practices. [Accessed: 8.1.2026].
