@@ -738,7 +738,7 @@ ALTER TABLE ONLY venlab.log
 
 --
 -- Grant permissions to application users
--- This ensures that the application user has full access to all tables, sequences, and functions
+-- This ensures that the application user has CRUD access to all tables, sequences, and functions
 -- Note: The POSTGRES_USER is typically 'postgres' but may vary in different deployments (e.g., AWS RDS)
 --
 
@@ -752,9 +752,15 @@ BEGIN
 END
 $$;
 
--- Grant the application role to the current database owner (postgres by default)
+-- Grant the application role to the postgres user if it exists
 -- This ensures the owner can act as the application user
-GRANT venlab_app TO postgres;
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
+        GRANT venlab_app TO postgres;
+    END IF;
+END
+$$;
 
 -- Grant usage on schemas
 GRANT USAGE ON SCHEMA venlab TO venlab_app;
@@ -777,12 +783,18 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT SELECT, INSERT, UPDATE, DELETE O
 ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT USAGE, SELECT ON SEQUENCES TO venlab_app;
 ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO venlab_app;
 
--- For compatibility: also grant these permissions directly to the postgres user
+-- For compatibility: also grant these permissions directly to the postgres user if it exists
 -- This ensures that regardless of which user the application uses, it will work
-GRANT USAGE ON SCHEMA venlab TO postgres;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO postgres;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO postgres;
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO postgres;
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
+        EXECUTE 'GRANT USAGE ON SCHEMA venlab TO postgres';
+        EXECUTE 'GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO postgres';
+        EXECUTE 'GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO postgres';
+        EXECUTE 'GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO postgres';
+    END IF;
+END
+$$;
 
 --
 -- PostgreSQL database dump complete
