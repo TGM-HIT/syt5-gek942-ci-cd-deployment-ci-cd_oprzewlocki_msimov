@@ -737,6 +737,32 @@ ALTER TABLE ONLY venlab.log
 
 
 --
+-- Grant permissions to all database users
+-- This ensures that the application user has full access to all tables, sequences, and functions
+--
+
+-- Grant usage on schemas
+GRANT USAGE ON SCHEMA venlab TO PUBLIC;
+GRANT USAGE ON SCHEMA backup TO PUBLIC;
+
+-- Grant all privileges on all existing tables in venlab schema
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA venlab TO PUBLIC;
+
+-- Grant all privileges on all existing sequences in venlab schema
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA venlab TO PUBLIC;
+
+-- Grant execute on all existing functions in venlab schema
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO PUBLIC;
+
+-- Grant privileges on backup schema tables (for potential backup operations)
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA backup TO PUBLIC;
+
+-- Set default privileges for future objects created in venlab schema
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT ALL ON TABLES TO PUBLIC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT ALL ON SEQUENCES TO PUBLIC;
+ALTER DEFAULT PRIVILEGES IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO PUBLIC;
+
+--
 -- PostgreSQL database dump complete
 --
 
