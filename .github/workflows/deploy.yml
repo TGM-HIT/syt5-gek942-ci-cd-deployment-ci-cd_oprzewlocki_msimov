@@ -2,8 +2,7 @@ name: CD Pipeline
 
 on:
   workflow_run:
-    # This MUST match the 'name:' from your CI file exactly
-    workflows: ["CI - Spring Boot + Postgres E2E"]
+    workflows: ["CI"]
     types:
       - completed
 
