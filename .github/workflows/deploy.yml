@@ -1,0 +1,33 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    # This MUST match the 'name:' from your CI file exactly
+    workflows: ["CI - Spring Boot + Postgres E2E"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    # Only run if the CI workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Lightsail via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.LIGHTSAIL_IP }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_KEY }}
+          port: 22
+          script: |
+            # Update this path to where your project is on the server
+            cd /home/ubuntu/venlab-app
+            
+            # Pull latest changes (from master, since your CI runs on master)
+            git pull origin master
+            
+            # Restart services
+            docker compose down
+            docker compose up -d --build
