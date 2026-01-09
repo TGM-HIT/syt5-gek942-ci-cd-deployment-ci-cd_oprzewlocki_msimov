@@ -39,6 +39,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/samples/**").permitAll() // TODO REMOVE TS LATER
+
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
