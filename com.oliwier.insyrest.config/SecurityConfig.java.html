@@ -39,15 +39,17 @@ public class SecurityConfig {
                                 &quot;/swagger-ui.html&quot;
 <span class="nc" id="L40">                        ).permitAll()</span>
 
-<span class="nc" id="L42">                        .requestMatchers(&quot;/api/admin/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+<span class="nc" id="L42">                        .requestMatchers(HttpMethod.GET, &quot;/api/samples/**&quot;).permitAll() // TODO REMOVE TS LATER</span>
 
-<span class="nc" id="L44">                        .anyRequest().authenticated()</span>
+<span class="nc" id="L44">                        .requestMatchers(&quot;/api/admin/**&quot;).hasRole(&quot;ADMIN&quot;)</span>
+
+<span class="nc" id="L46">                        .anyRequest().authenticated()</span>
                 )
-<span class="nc" id="L46">                .sessionManagement(sess -&gt; sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
-<span class="nc" id="L47">                .authenticationProvider(authenticationProvider)</span>
-<span class="nc" id="L48">                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);</span>
+<span class="nc" id="L48">                .sessionManagement(sess -&gt; sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))</span>
+<span class="nc" id="L49">                .authenticationProvider(authenticationProvider)</span>
+<span class="nc" id="L50">                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);</span>
 
-<span class="nc" id="L50">        return http.build();</span>
+<span class="nc" id="L52">        return http.build();</span>
     }
 
 
@@ -55,13 +57,13 @@ public class SecurityConfig {
     @Bean
     @Profile(&quot;test&quot;)
     public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
-<span class="fc" id="L58">        http</span>
-<span class="fc" id="L59">                .csrf(csrf -&gt; csrf.disable())</span>
-<span class="fc" id="L60">                .authorizeHttpRequests(authorize -&gt; authorize</span>
-<span class="fc" id="L61">                        .anyRequest().permitAll()</span>
+<span class="fc" id="L60">        http</span>
+<span class="fc" id="L61">                .csrf(csrf -&gt; csrf.disable())</span>
+<span class="fc" id="L62">                .authorizeHttpRequests(authorize -&gt; authorize</span>
+<span class="fc" id="L63">                        .anyRequest().permitAll()</span>
                 );
 
-<span class="fc" id="L64">        return http.build();</span>
+<span class="fc" id="L66">        return http.build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

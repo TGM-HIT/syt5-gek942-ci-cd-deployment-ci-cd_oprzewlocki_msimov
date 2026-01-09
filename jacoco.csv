@@ -21,7 +21,7 @@ INSY-REST,com.oliwier.insyrest.config,TestSecurityConfig,0,23,0,0,0,6,0,4,0,4
 INSY-REST,com.oliwier.insyrest.config,ApplicationConfig,13,24,0,0,1,7,2,4,2,4
 INSY-REST,com.oliwier.insyrest.config,CorsConfig,0,8,0,0,0,2,0,2,0,2
 INSY-REST,com.oliwier.insyrest.config,DataInitializer,0,46,1,1,0,15,1,2,0,2
-INSY-REST,com.oliwier.insyrest.config,SecurityConfig,72,20,0,0,13,5,4,3,4,3
+INSY-REST,com.oliwier.insyrest.config,SecurityConfig,82,20,0,0,14,5,4,3,4,3
 INSY-REST,com.oliwier.insyrest.mapper,EntityMapper,0,14,0,0,0,4,0,2,0,2
 INSY-REST,com.oliwier.insyrest.mapper,LogMapper,0,177,4,12,0,41,4,8,0,4
 INSY-REST,com.oliwier.insyrest.mapper,SampleMapper,0,206,0,6,0,50,0,8,0,5
