@@ -737,6 +737,74 @@ ALTER TABLE ONLY venlab.log
 
 
 --
+-- Grant permissions to application users
+-- This ensures that the application user has CRUD access to all tables, sequences, and functions
+-- Note: The POSTGRES_USER is typically 'postgres' but may vary in different deployments (e.g., AWS RDS)
+--
+
+-- Create a role for the application if it doesn't exist
+-- This allows granting permissions to a specific role instead of PUBLIC
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'venlab_app') THEN
+        CREATE ROLE venlab_app;
+    END IF;
+END
+$$;
+
+-- Grant the application role to the postgres user if it exists
+-- This ensures the owner can act as the application user
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
+        GRANT venlab_app TO postgres;
+    END IF;
+END
+$$;
+
+-- Grant usage on schemas
+GRANT USAGE ON SCHEMA venlab TO venlab_app;
+GRANT USAGE ON SCHEMA backup TO venlab_app;
+
+-- Grant CRUD privileges (not ALL) on all existing tables in venlab schema
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO venlab_app;
+
+-- Grant usage on all existing sequences in venlab schema (for auto-increment columns)
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO venlab_app;
+
+-- Grant execute on all existing functions in venlab schema
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO venlab_app;
+
+-- Grant read access to backup schema tables (no write access needed for backups)
+GRANT SELECT ON ALL TABLES IN SCHEMA backup TO venlab_app;
+
+-- Set default privileges for future objects created in venlab schema by postgres role
+-- This ensures that objects created by Hibernate (via postgres user) also get proper permissions
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
+        ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO venlab_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT USAGE, SELECT ON SEQUENCES TO venlab_app;
+        ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA venlab GRANT EXECUTE ON FUNCTIONS TO venlab_app;
+    END IF;
+END
+$$;
+
+-- For compatibility: also grant these permissions directly to the postgres user if it exists
+-- This provides explicit permissions in addition to role inheritance, ensuring compatibility
+-- with applications that may not properly use role membership for permission checks
+DO $$
+BEGIN
+    IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'postgres') THEN
+        GRANT USAGE ON SCHEMA venlab TO postgres;
+        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA venlab TO postgres;
+        GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA venlab TO postgres;
+        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA venlab TO postgres;
+    END IF;
+END
+$$;
+
+--
 -- PostgreSQL database dump complete
 --
 
